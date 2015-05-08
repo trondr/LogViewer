@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using github.trondr.LogViewer.Library.Common.UI;
@@ -10,39 +11,13 @@ namespace github.trondr.LogViewer.Library.ViewModels
     {
         public MainViewModel()
         {
-            ProductDescriptionLabelText = "Product Description:";
-            MaxLabelWidth = 200 ;
-            OkCommand = new CommandHandler(this.Exit, true);
+            LogItems = new ObservableCollection<LogItemViewModel>();
+            ExitCommand = new CommandHandler(this.Exit, true);
         }
 
-        public static readonly DependencyProperty ProductDescriptionProperty = DependencyProperty.Register(
-            "ProductDescription", typeof(string), typeof(MainViewModel), new PropertyMetadata(default(string)));
+        public ObservableCollection<LogItemViewModel> LogItems { get; set; }
 
-        public string ProductDescription
-        {
-            get { return (string)GetValue(ProductDescriptionProperty); }
-            set { SetValue(ProductDescriptionProperty, value); }
-        }
-
-        public static readonly DependencyProperty ProductDescriptionLabelTextProperty = DependencyProperty.Register(
-            "ProductDescriptionLabelText", typeof(string), typeof(MainViewModel), new PropertyMetadata(default(string)));
-
-        public string ProductDescriptionLabelText
-        {
-            get { return (string)GetValue(ProductDescriptionLabelTextProperty); }
-            set { SetValue(ProductDescriptionLabelTextProperty, value); }
-        }
-
-        public static readonly DependencyProperty MaxLabelWidthProperty = DependencyProperty.Register(
-            "MaxLabelWidth", typeof(int), typeof(MainViewModel), new PropertyMetadata(default(int)));
-
-        public int MaxLabelWidth
-        {
-            get { return (int)GetValue(MaxLabelWidthProperty); }
-            set { SetValue(MaxLabelWidthProperty, value); }
-        }
-
-        public ICommand OkCommand { get; set; }
+        public ICommand ExitCommand { get; set; }
 
         private void Exit()
         {

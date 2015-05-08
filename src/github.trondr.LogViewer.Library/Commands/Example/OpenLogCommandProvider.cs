@@ -6,19 +6,19 @@ using github.trondr.LogViewer.Library.Views;
 
 namespace github.trondr.LogViewer.Library.Commands.Example
 {
-    public class ExampleCommandProvider : CommandProvider, IExampleCommandProvider
+    public class OpenLogCommandProvider : CommandProvider, IOpenLogCommandProvider
     {
         private readonly MainWindow _mainWindow;        
         private readonly ILog _logger;
 
-        public ExampleCommandProvider(MainWindow mainWindow, ILog logger)
+        public OpenLogCommandProvider(MainWindow mainWindow, ILog logger)
         {
             _mainWindow = mainWindow;
             _logger = logger;
         }
 
 
-        public int Create(string targetRootFolder)
+        public int OpenLog(string logFile)
         {
             var returnValue = 0;
             _logger.Info("Showing main window as an example user interface.");
@@ -27,7 +27,7 @@ namespace github.trondr.LogViewer.Library.Commands.Example
             var viewModel = _mainWindow.View.ViewModel as MainViewModel;
             if (viewModel != null)
             {
-                _logger.Info("Getting info from the user interface and do something with it: " + viewModel.ProductDescription);
+                _logger.Info("Getting info from the user interface and do something with it: " + viewModel.LogItems.Count);
             }
             else
             {

@@ -7,6 +7,7 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Common.Logging;
+using github.trondr.LogViewer.Library.Commands.Example;
 using NCmdLiner;
 using github.trondr.LogViewer.Library.Infrastructure;
 using github.trondr.LogViewer.Library.ViewModels;
@@ -41,18 +42,13 @@ namespace github.trondr.LogViewer.Infrastructure
 
             //Factory registrations example:
 
-            //container.Register(Component.For<ITeamProviderFactory>().AsFactory());
-            //container.Register(
-            //    Component.For<ITeamProvider>()
-            //        .ImplementedBy<CsvTeamProvider>()
-            //        .Named("CsvTeamProvider")
-            //        .LifeStyle.Transient);
-            //container.Register(
-            //    Component.For<ITeamProvider>()
-            //        .ImplementedBy<SqlTeamProvider>()
-            //        .Named("SqlTeamProvider")
-            //        .LifeStyle.Transient);
-
+            container.Register(Component.For<IOpenLogCommandProviderFactory>().AsFactory());
+            container.Register(
+                Component.For<IOpenLogCommandProvider>()
+                    .ImplementedBy<OpenLogCommandProvider>()
+                    .Named("OpenLogCommandProvider")
+                    .LifeStyle.Transient);
+            
             container.Register(Component.For<IInvocationLogStringBuilder>().ImplementedBy<InvocationLogStringBuilder>().LifestyleSingleton());
             container.Register(Component.For<ILogFactory>().ImplementedBy<LogFactory>().LifestyleSingleton());
             ///////////////////////////////////////////////////////////////////

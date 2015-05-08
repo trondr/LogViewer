@@ -1,12 +1,11 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace github.trondr.LogViewer.Library.ViewModels
 {
     public interface IMainViewModel
     {
-        int MaxLabelWidth { get; set; }
-        string ProductDescription { get; set; }
-        string ProductDescriptionLabelText { get; set; }
-        ICommand OkCommand { get; set; }
+        ObservableCollection<LogItemViewModel> LogItems { get; set; }
+        ICommand ExitCommand { get; set; }
     }
 }

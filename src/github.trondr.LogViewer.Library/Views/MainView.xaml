@@ -8,17 +8,20 @@
              xmlns:diag ="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              xmlns:ui="clr-namespace:github.trondr.LogViewer.Library.Common.UI"
              mc:Ignorable="d" 
-             d:DesignHeight="330" d:DesignWidth="500">
+             d:DesignHeight="330" d:DesignWidth="700">
     <DockPanel d:DataContext="{d:DesignInstance Type=viewModels:DesignTimeMainViewModel, IsDesignTimeCreatable=True}" Margin="5" >
-        <DockPanel DockPanel.Dock="Left">
-            <DockPanel Dock="Top" Margin="2">
-                <Label Content="{Binding Path=ProductDescriptionLabelText, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Width="{Binding Path=MaxLabelWidth, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBox Text="{Binding Path=ProductDescription, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-            </DockPanel>
-            <DockPanel Dock="Bottom" Margin="2">                
-                <Button Command="{Binding OkCommand}" Width="50">OK</Button>                
-            </DockPanel>
-            <Label></Label>
-        </DockPanel>
+        <TreeView DockPanel.Dock="Right" Width="100">
+        </TreeView>
+        <ListView ItemsSource="{Binding LogItems}" DockPanel.Dock="Top">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" Header="Time" DisplayMemberBinding="{Binding Path=Time}"/>
+                    <GridViewColumn Width="Auto" Header="Level" DisplayMemberBinding="{Binding Path=Level.Level}"/>
+                    <GridViewColumn Width="Auto" Header="Logger" DisplayMemberBinding="{Binding Path=Logger}"/>
+                    <GridViewColumn Width="Auto" Header="Thread" DisplayMemberBinding="{Binding Path=ThreadId}"/>
+                    <GridViewColumn Width="Auto" Header="Message" DisplayMemberBinding="{Binding Path=Message}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>                
     </DockPanel>
 </ui:ViewBase>
