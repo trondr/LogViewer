@@ -74,6 +74,9 @@
     <Compile Include="Infrastructure\ToDoPriority.cs" />
     <Compile Include="Common\UI\CommandHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\ILoggerViewModelProvider.cs" />
+    <Compile Include="ViewModels\LoggerViewModel.cs" />
+    <Compile Include="ViewModels\LoggerViewModelProvider.cs" />
     <Compile Include="ViewModels\LogLevel.cs" />
     <Compile Include="ViewModels\DesignTimeMainViewModel.cs" />
     <Compile Include="ViewModels\IMainViewModel.cs" />

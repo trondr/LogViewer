@@ -17,8 +17,17 @@ namespace github.trondr.LogViewer.Library.ViewModels
             LogItems.Add(new LogItemViewModel(){Time = DateTime.Now.AddSeconds(-31),Level = new LogLevelViewModel(){Level = LogLevel.Info, Color = Colors.DarkSeaGreen}, Logger = "Test.SomeClass",ThreadId = 1, Message = "Some info message"});
             LogItems.Add(new LogItemViewModel(){Time = DateTime.Now.AddSeconds(-31),Level = new LogLevelViewModel(){Level = LogLevel.Trace, Color = Colors.DarkGray}, Logger = "Test.SomeClass",ThreadId = 1, Message = "Some trace message"});
             LogItems.Add(new LogItemViewModel(){Time = DateTime.Now.AddSeconds(-31),Level = new LogLevelViewModel(){Level = LogLevel.Debug, Color = Colors.Blue}, Logger = "Test.SomeClass",ThreadId = 1, Message = "Some debug message"});
+
+            var loggerViewModelProvider = new LoggerViewModelProvider();
+            loggerViewModelProvider.GetLogger("Company.Product.Class1");
+            loggerViewModelProvider.GetLogger("Company.Product.Class2");
+            loggerViewModelProvider.GetLogger("Company.Product.Class3");
+            loggerViewModelProvider.GetLogger("Company.Product.Class4");
+            Loggers = new ObservableCollection<LoggerViewModel>();
+            Loggers.Add(loggerViewModelProvider.Root);
         }
         public ObservableCollection<LogItemViewModel> LogItems { get; set; }
+        public ObservableCollection<LoggerViewModel> Loggers { get; set; }
         public ICommand ExitCommand { get; set; }
 
     }

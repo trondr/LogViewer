@@ -9,8 +9,29 @@
              xmlns:ui="clr-namespace:github.trondr.LogViewer.Library.Common.UI"
              mc:Ignorable="d" 
              d:DesignHeight="330" d:DesignWidth="700">
+    <UserControl.Resources>
+
+        <Style TargetType="TreeViewItem">
+            <Setter Property="IsExpanded" Value="True" />
+        </Style>
+
+
+    </UserControl.Resources>
+    
+    
     <DockPanel d:DataContext="{d:DesignInstance Type=viewModels:DesignTimeMainViewModel, IsDesignTimeCreatable=True}" Margin="5" >
-        <TreeView DockPanel.Dock="Right" Width="100">
+        <TreeView DockPanel.Dock="Right" Width="200" ItemsSource="{Binding Loggers}">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type viewModels:LoggerViewModel}">
+                    <StackPanel>
+                        <CheckBox IsChecked="{Binding IsVisible}">
+                            <TextBlock Text="{Binding DisplayName}"></TextBlock>
+                        </CheckBox>
+                    </StackPanel>
+                    
+                    <!--<TreeViewItem Header="{Binding DisplayName}" />-->
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
         </TreeView>
         <ListView ItemsSource="{Binding LogItems}" DockPanel.Dock="Top">
             <ListView.View>
