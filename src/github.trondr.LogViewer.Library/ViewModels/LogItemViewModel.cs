@@ -24,11 +24,11 @@ namespace github.trondr.LogViewer.Library.ViewModels
         }
 
         public static readonly DependencyProperty LoggerProperty = DependencyProperty.Register(
-            "Logger", typeof (string), typeof (LogItemViewModel), new PropertyMetadata(default(string)));
+            "Logger", typeof (LoggerViewModel), typeof (LogItemViewModel), new PropertyMetadata(default(LoggerViewModel)));
 
-        public string Logger
+        public LoggerViewModel Logger
         {
-            get { return (string) GetValue(LoggerProperty); }
+            get { return (LoggerViewModel) GetValue(LoggerProperty); }
             set { SetValue(LoggerProperty, value); }
         }
 

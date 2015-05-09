@@ -15,6 +15,16 @@
             <Setter Property="IsExpanded" Value="True" />
         </Style>
 
+        <Style TargetType="{x:Type ListViewItem}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Level.Color}" Value="Red">
+                    <Setter Property="Foreground" Value="Red"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Level.Color}" Value="Orange">
+                    <Setter Property="Foreground" Value="Orange"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
     </UserControl.Resources>
     
@@ -38,7 +48,7 @@
                 <GridView>
                     <GridViewColumn Width="Auto" Header="Time" DisplayMemberBinding="{Binding Path=Time}"/>
                     <GridViewColumn Width="Auto" Header="Level" DisplayMemberBinding="{Binding Path=Level.Level}"/>
-                    <GridViewColumn Width="Auto" Header="Logger" DisplayMemberBinding="{Binding Path=Logger}"/>
+                    <GridViewColumn Width="Auto" Header="Logger" DisplayMemberBinding="{Binding Path=Logger.Name}"/>
                     <GridViewColumn Width="Auto" Header="Thread" DisplayMemberBinding="{Binding Path=ThreadId}"/>
                     <GridViewColumn Width="Auto" Header="Message" DisplayMemberBinding="{Binding Path=Message}"/>
                 </GridView>
