@@ -1,6 +1,6 @@
 ﻿using Common.Logging;
+using github.trondr.LogViewer.Library.Commands.OpenLog;
 using NCmdLiner.Attributes;
-using github.trondr.LogViewer.Library.Commands.Example;
 using github.trondr.LogViewer.Library.Infrastructure;
 
 namespace github.trondr.LogViewer.Commands

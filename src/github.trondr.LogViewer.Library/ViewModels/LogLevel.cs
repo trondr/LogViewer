@@ -5,7 +5,7 @@
         Trace,
         Debug,
         Info,
-        Warning,
+        Warn,
         Error,
         Fatal
     }

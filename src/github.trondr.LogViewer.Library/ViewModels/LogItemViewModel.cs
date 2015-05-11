@@ -49,5 +49,14 @@ namespace github.trondr.LogViewer.Library.ViewModels
             get { return (string) GetValue(MessageProperty); }
             set { SetValue(MessageProperty, value); }
         }
+
+        public static readonly DependencyProperty IsVisibleProperty = DependencyProperty.Register(
+            "IsVisible", typeof (bool), typeof (LogItemViewModel), new PropertyMetadata(default(bool)));
+
+        public bool IsVisible
+        {
+            get { return (bool) GetValue(IsVisibleProperty); }
+            set { SetValue(IsVisibleProperty, value); }
+        }
     }
 }

@@ -7,7 +7,7 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Common.Logging;
-using github.trondr.LogViewer.Library.Commands.Example;
+using github.trondr.LogViewer.Library.Commands.OpenLog;
 using NCmdLiner;
 using github.trondr.LogViewer.Library.Infrastructure;
 using github.trondr.LogViewer.Library.ViewModels;

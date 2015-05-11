@@ -1,4 +1,4 @@
-﻿namespace github.trondr.LogViewer.Library.Commands.Example
+﻿namespace github.trondr.LogViewer.Library.Commands.OpenLog
 {
     public interface IOpenLogCommandProvider
     {

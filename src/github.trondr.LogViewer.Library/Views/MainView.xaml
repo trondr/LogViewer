@@ -10,24 +10,44 @@
              mc:Ignorable="d" 
              d:DesignHeight="330" d:DesignWidth="700">
     <UserControl.Resources>
-
+        <viewModels:IsVisibleConverter x:Key="VisibleConverter"></viewModels:IsVisibleConverter>
+        
         <Style TargetType="TreeViewItem">
             <Setter Property="IsExpanded" Value="True" />
         </Style>
 
         <Style TargetType="{x:Type ListViewItem}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=Level.Color}" Value="Red">
+                <DataTrigger Binding="{Binding Path=Level.Level}" Value="Trace">
+                    <Setter Property="Foreground" Value="DarkGray"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Level.Level}" Value="Debug">
+                    <Setter Property="Foreground" Value="LightSeaGreen"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Level.Level}" Value="Info">
+                    <Setter Property="Foreground" Value="Blue"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Level.Level}" Value="Warn">
+                    <Setter Property="Foreground" Value="LightSalmon"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Level.Level}" Value="Error">
+                    <Setter Property="Foreground" Value="PaleVioletRed"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Level.Level}" Value="Fatal">
                     <Setter Property="Foreground" Value="Red"></Setter>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Path=Level.Color}" Value="Orange">
-                    <Setter Property="Foreground" Value="Orange"></Setter>
+                <DataTrigger Value="false">
+                    <DataTrigger.Binding>
+                        <MultiBinding Converter="{StaticResource VisibleConverter}">
+                            <Binding Path="Level.IsVisible" />
+                            <Binding Path="Logger.IsVisible" />
+                        </MultiBinding>                        
+                    </DataTrigger.Binding>
+                    <Setter Property="Visibility" Value="Collapsed" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-
     </UserControl.Resources>
-    
     
     <DockPanel d:DataContext="{d:DesignInstance Type=viewModels:DesignTimeMainViewModel, IsDesignTimeCreatable=True}" Margin="5" >
         <TreeView DockPanel.Dock="Right" Width="200" ItemsSource="{Binding Loggers}">

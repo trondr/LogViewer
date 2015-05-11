@@ -4,7 +4,7 @@ using github.trondr.LogViewer.Library.Infrastructure;
 using github.trondr.LogViewer.Library.ViewModels;
 using github.trondr.LogViewer.Library.Views;
 
-namespace github.trondr.LogViewer.Library.Commands.Example
+namespace github.trondr.LogViewer.Library.Commands.OpenLog
 {
     public class OpenLogCommandProvider : CommandProvider, IOpenLogCommandProvider
     {
