@@ -22,15 +22,27 @@ namespace github.trondr.LogViewer.Library.ViewModels
             _logItemService = logItemService;
             LogItems = new ObservableCollection<LogItemViewModel>();
             Loggers = new ObservableCollection<LoggerViewModel>();
+            LogLevels = new ObservableCollection<LogLevelViewModel>();
             Loggers.Add(loggerViewModelProvider.Root);
+            
+            var logLevelViewModelProvider = new LogLevelViewModelProvider();
+            var traceLogLevel = logLevelViewModelProvider.GetLevel("Trace");
+            var debugLogLevel = logLevelViewModelProvider.GetLevel("Debug");
+            var infoLogLevel = logLevelViewModelProvider.GetLevel("Info");
+            var warnLogLevel = logLevelViewModelProvider.GetLevel("Warn");
+            var errorLogLevel = logLevelViewModelProvider.GetLevel("Error");
+            var fatalLogLevel = logLevelViewModelProvider.GetLevel("Fatal");
+            LogLevels = new ObservableCollection<LogLevelViewModel>() { traceLogLevel, debugLogLevel, infoLogLevel, warnLogLevel, errorLogLevel, fatalLogLevel };
+            
             ExitCommand = new CommandHandler(this.Exit, true);
             _autoResetEvent = new AutoResetEvent(false);
-            _testDataTimer = new Timer(TestDataCallback, _autoResetEvent, 1000, Timeout.Infinite);   
+            _testDataTimer = new Timer(TestDataCallback, _autoResetEvent, 1000, Timeout.Infinite);
+
         }
 
         private void TestDataCallback(object state)
         {        
-            Console.WriteLine(".");
+            Console.Write(".");
             MainWindow.Closing -= MainWindow_Closing;
             MainWindow.Closing += MainWindow_Closing;
             var autoResetEvent = (AutoResetEvent) state;            
@@ -50,8 +62,8 @@ namespace github.trondr.LogViewer.Library.ViewModels
         }
 
         public ObservableCollection<LogItemViewModel> LogItems { get; set; }
-
         public ObservableCollection<LoggerViewModel> Loggers { get; set; }
+        public ObservableCollection<LogLevelViewModel> LogLevels { get; set; }
 
         public ICommand ExitCommand { get; set; }
 

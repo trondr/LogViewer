@@ -16,7 +16,7 @@
             <Setter Property="IsExpanded" Value="True" />
         </Style>
 
-        <Style TargetType="{x:Type ListViewItem}">
+        <!--<Style TargetType="{x:Type ListViewItem}" >
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=Level.Level}" Value="Trace">
                     <Setter Property="Foreground" Value="DarkGray"></Setter>
@@ -46,24 +46,68 @@
                     <Setter Property="Visibility" Value="Collapsed" />
                 </DataTrigger>
             </Style.Triggers>
-        </Style>
+        </Style>-->
     </UserControl.Resources>
     
     <DockPanel d:DataContext="{d:DesignInstance Type=viewModels:DesignTimeMainViewModel, IsDesignTimeCreatable=True}" Margin="5" >
-        <TreeView DockPanel.Dock="Right" Width="200" ItemsSource="{Binding Loggers}">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type viewModels:LoggerViewModel}">
-                    <StackPanel>
-                        <CheckBox IsChecked="{Binding IsVisible}">
-                            <TextBlock Text="{Binding DisplayName}"></TextBlock>
-                        </CheckBox>
-                    </StackPanel>
-                    
-                    <!--<TreeViewItem Header="{Binding DisplayName}" />-->
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
+        <StackPanel DockPanel.Dock="Right">
+            <TreeView DockPanel.Dock="Right" Width="200" ItemsSource="{Binding LogLevels}" >
+                <TreeView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <CheckBox IsChecked="{Binding IsVisible}">
+                                <TextBlock Text="{Binding Level}"></TextBlock>
+                            </CheckBox>
+                        </StackPanel>                        
+                    </DataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            <TreeView DockPanel.Dock="Right" Width="200" ItemsSource="{Binding Loggers}" >
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type viewModels:LoggerViewModel}">
+                        <StackPanel>
+                            <CheckBox IsChecked="{Binding IsVisible}">
+                                <TextBlock Text="{Binding DisplayName}"></TextBlock>
+                            </CheckBox>
+                        </StackPanel>            
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </StackPanel>
         <ListView ItemsSource="{Binding LogItems}" DockPanel.Dock="Top">
+            <ListView.Resources>
+                <Style TargetType="{x:Type ListViewItem}" >
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=Level.Level}" Value="Trace">
+                            <Setter Property="Foreground" Value="DarkGray"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Level.Level}" Value="Debug">
+                            <Setter Property="Foreground" Value="LightSeaGreen"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Level.Level}" Value="Info">
+                            <Setter Property="Foreground" Value="Blue"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Level.Level}" Value="Warn">
+                            <Setter Property="Foreground" Value="LightSalmon"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Level.Level}" Value="Error">
+                            <Setter Property="Foreground" Value="PaleVioletRed"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Level.Level}" Value="Fatal">
+                            <Setter Property="Foreground" Value="Red"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Value="false">
+                            <DataTrigger.Binding>
+                                <MultiBinding Converter="{StaticResource VisibleConverter}">
+                                    <Binding Path="Level.IsVisible" />
+                                    <Binding Path="Logger.IsVisible" />
+                                </MultiBinding>
+                            </DataTrigger.Binding>
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Resources>
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="Auto" Header="Time" DisplayMemberBinding="{Binding Path=Time}"/>
@@ -71,7 +115,7 @@
                     <GridViewColumn Width="Auto" Header="Logger" DisplayMemberBinding="{Binding Path=Logger.Name}"/>
                     <GridViewColumn Width="Auto" Header="Thread" DisplayMemberBinding="{Binding Path=ThreadId}"/>
                     <GridViewColumn Width="Auto" Header="Message" DisplayMemberBinding="{Binding Path=Message}"/>
-                </GridView>
+                </GridView>                
             </ListView.View>
         </ListView>                
     </DockPanel>

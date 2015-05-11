@@ -9,6 +9,8 @@ namespace github.trondr.LogViewer.Library.ViewModels
 
         ObservableCollection<LoggerViewModel> Loggers { get; set; }
 
+        ObservableCollection<LogLevelViewModel> LogLevels { get; set; }
+            
         ICommand ExitCommand { get; set; }
     }
 }
