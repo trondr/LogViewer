@@ -9,6 +9,8 @@ namespace github.trondr.LogViewer.Library.ViewModels
     {
         private readonly Dictionary<string, LoggerViewModel> _loggers;
         private LoggerViewModel _root;
+        private static readonly object Synch = new object();
+
 
         public LoggerViewModelProvider()
         {
@@ -17,30 +19,33 @@ namespace github.trondr.LogViewer.Library.ViewModels
 
         public LoggerViewModel GetLogger(string logger)
         {
-            if(_loggers.ContainsKey(logger))
+            lock (Synch)
             {
-                return _loggers[logger];
-            }
-            var loggerViewModel = new LoggerViewModel(logger);
-            _loggers.Add(logger,loggerViewModel);
-            var parentLogger = GetParent(logger);
-            if(parentLogger != null)
-            {
-                loggerViewModel.Parent = GetLogger(parentLogger);
-                if(loggerViewModel.Parent.Children.All(model => model.Name != loggerViewModel.Name))
-                { 
-                    loggerViewModel.Parent.Children.Add(loggerViewModel);
+                if (_loggers.ContainsKey(logger))
+                {
+                    return _loggers[logger];
                 }
-            }
-            else
-            {
-                loggerViewModel.Parent = Root;
-                if(Root.Children.All(model => model.Name != loggerViewModel.Name))
-                { 
-                    Root.Children.Add(loggerViewModel);
+                var loggerViewModel = new LoggerViewModel(logger);
+                _loggers.Add(logger, loggerViewModel);
+                var parentLogger = GetParent(logger);
+                if (parentLogger != null)
+                {
+                    loggerViewModel.Parent = GetLogger(parentLogger);
+                    if (loggerViewModel.Parent.Children.All(model => model.Name != loggerViewModel.Name))
+                    {
+                        loggerViewModel.Parent.Children.Add(loggerViewModel);
+                    }
                 }
+                else
+                {
+                    loggerViewModel.Parent = Root;
+                    if (Root.Children.All(model => model.Name != loggerViewModel.Name))
+                    {
+                        Root.Children.Add(loggerViewModel);
+                    }
+                }
+                return loggerViewModel;
             }
-            return loggerViewModel;
         }
 
         public LoggerViewModel Root

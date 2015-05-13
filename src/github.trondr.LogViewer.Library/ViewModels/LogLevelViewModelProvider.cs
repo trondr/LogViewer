@@ -8,22 +8,26 @@ namespace github.trondr.LogViewer.Library.ViewModels
     public class LogLevelViewModelProvider : ILogLevelViewModelProvider
     {
         private readonly Dictionary<string, LogLevelViewModel> _logLevels;
+        private static readonly object Synch = new object();
 
         public LogLevelViewModelProvider()
         {
-            _logLevels = new Dictionary<string, LogLevelViewModel>();
+            _logLevels = new Dictionary<string, LogLevelViewModel>();            
         }
 
         public LogLevelViewModel GetLevel(string logLevel)
         {
-            if(_logLevels.ContainsKey(logLevel))
+            lock (Synch)
             {
-                return  _logLevels[logLevel];
+                if (_logLevels.ContainsKey(logLevel))
+                {
+                    return _logLevels[logLevel];
+                }
+                var logLevelValue = (LogLevel)Enum.Parse(typeof(LogLevel), logLevel);
+                var logLevelViewModel = new LogLevelViewModel { Level = logLevelValue };
+                _logLevels.Add(logLevel, logLevelViewModel);
+                return logLevelViewModel;
             }
-            var logLevelValue = (LogLevel)Enum.Parse(typeof(LogLevel), logLevel);
-            var logLevelViewModel = new LogLevelViewModel { Level = logLevelValue };
-            _logLevels.Add(logLevel, logLevelViewModel);
-            return logLevelViewModel;
         }
     }
 }

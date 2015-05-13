@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 
 namespace github.trondr.LogViewer.Library.ViewModels
@@ -9,7 +8,7 @@ namespace github.trondr.LogViewer.Library.ViewModels
         public LogLevelViewModel()
         {
             IsVisible = true;
-            Level = LogLevel.Trace;
+            Level = LogLevel.Trace;            
         }
         
         public static readonly DependencyProperty LevelProperty = DependencyProperty.Register(
@@ -31,19 +30,7 @@ namespace github.trondr.LogViewer.Library.ViewModels
         }
 
         public static readonly DependencyProperty IsVisibleProperty = DependencyProperty.Register(
-            "IsVisible", typeof (bool), typeof (LogLevelViewModel), new FrameworkPropertyMetadata(default(bool),PropertyChangedCallback));
-
-        private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
-        {
-            if(dependencyPropertyChangedEventArgs.OldValue == dependencyPropertyChangedEventArgs.NewValue) return;
-            var logLevelViewModel = dependencyObject as LogLevelViewModel;
-            if(logLevelViewModel == null)
-            { 
-                Console.WriteLine("logLevelViewModel is null");
-                return;
-            }
-            Console.WriteLine("{0}:IsVisble:{1}",logLevelViewModel.Level,logLevelViewModel.IsVisible);
-        }
+            "IsVisible", typeof (bool), typeof (LogLevelViewModel), new PropertyMetadata(default(bool)));
 
         public bool IsVisible
         {
