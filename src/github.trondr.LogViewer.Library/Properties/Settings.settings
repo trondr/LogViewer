@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="github.trondr.LogViewer.Library.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DebugColor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#FF20B2AA</Value>
+    </Setting>
+    <Setting Name="TraceColor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#FFA9A9A9</Value>
+    </Setting>
+    <Setting Name="InfoColor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#FF0000FF</Value>
+    </Setting>
+    <Setting Name="WarnColor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#FFFFA07A</Value>
+    </Setting>
+    <Setting Name="ErrorColor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#FFDB7093</Value>
+    </Setting>
+    <Setting Name="FatalColor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#FFFF0000</Value>
+    </Setting>
+    <Setting Name="SearchFilter" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>

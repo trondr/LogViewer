@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 
@@ -62,11 +63,12 @@ namespace github.trondr.LogViewer.Library.ViewModels
 
         private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            var loggerViewModel = (LoggerViewModel) dependencyObject;
-            if((bool)dependencyPropertyChangedEventArgs.NewValue != (bool)dependencyPropertyChangedEventArgs.OldValue)
-            { 
+            var loggerViewModel = (LoggerViewModel)dependencyObject;
+            if ((bool)dependencyPropertyChangedEventArgs.NewValue != (bool)dependencyPropertyChangedEventArgs.OldValue)
+            {                
                 loggerViewModel.Children.Select(model => model.IsVisible = (bool)dependencyPropertyChangedEventArgs.NewValue).ToList();
             }
+ 
         }
     }
 }

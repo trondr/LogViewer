@@ -14,13 +14,13 @@ namespace github.trondr.LogViewer.Library.ViewModels
             set { SetValue(TimeProperty, value); }
         }
 
-        public static readonly DependencyProperty LevelProperty = DependencyProperty.Register(
-            "Level", typeof (LogLevelViewModel), typeof (LogItemViewModel), new PropertyMetadata(default(LogLevelViewModel)));
+        public static readonly DependencyProperty LogLevelProperty = DependencyProperty.Register(
+            "LogLevel", typeof (LogLevelViewModel), typeof (LogItemViewModel), new PropertyMetadata(default(LogLevelViewModel)));
 
-        public LogLevelViewModel Level
+        public LogLevelViewModel LogLevel
         {
-            get { return (LogLevelViewModel) GetValue(LevelProperty); }
-            set { SetValue(LevelProperty, value); }
+            get { return (LogLevelViewModel) GetValue(LogLevelProperty); }
+            set { SetValue(LogLevelProperty, value); }
         }
 
         public static readonly DependencyProperty LoggerProperty = DependencyProperty.Register(

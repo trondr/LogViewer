@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 
 namespace github.trondr.LogViewer.Library.ViewModels
@@ -9,6 +8,7 @@ namespace github.trondr.LogViewer.Library.ViewModels
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            Console.Write("v");
             var isVisible1 = (bool)values[0];
             var isVisible2 = (bool)values[1];
             return isVisible1 && isVisible2;
