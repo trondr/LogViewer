@@ -21,7 +21,7 @@ namespace github.trondr.LogViewer.Library.ViewModels
             var logger3 = loggerViewModelProvider.GetLogger("Company.Product.Class3");
             var logger4 = loggerViewModelProvider.GetLogger("Company.Product.Class4");
 
-            var logLevelViewModelProvider = new LogLevelViewModelProvider();
+            var logLevelViewModelProvider = new LogLevelViewModelProvider(new LogLevelSettings());
             
             var traceLogLevel = logLevelViewModelProvider.GetLevel("Trace");
             var debugLogLevel = logLevelViewModelProvider.GetLevel("Debug");

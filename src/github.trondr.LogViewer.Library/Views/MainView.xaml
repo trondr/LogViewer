@@ -5,16 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:github.trondr.LogViewer.Library.ViewModels"
              xmlns:ui="clr-namespace:github.trondr.LogViewer.Library.Common.UI"
-             xmlns:properties="clr-namespace:github.trondr.LogViewer.Library.Properties"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="330" d:DesignWidth="700">
     <UserControl.Resources>
-        <SolidColorBrush x:Key="TraceColor" Color="{Binding Source={x:Static properties:Settings.Default},Path=TraceColor, Mode=TwoWay}"/>
-        <SolidColorBrush x:Key="DebugColor" Color="{Binding Source={x:Static properties:Settings.Default},Path=DebugColor, Mode=TwoWay}"/>
-        <SolidColorBrush x:Key="InfoColor" Color="{Binding Source={x:Static properties:Settings.Default},Path=InfoColor, Mode=TwoWay}"/>
-        <SolidColorBrush x:Key="WarnColor" Color="{Binding Source={x:Static properties:Settings.Default},Path=WarnColor, Mode=TwoWay}"/>
-        <SolidColorBrush x:Key="ErrorColor" Color="{Binding Source={x:Static properties:Settings.Default},Path=ErrorColor, Mode=TwoWay}"/>
-        <SolidColorBrush x:Key="FatalColor" Color="{Binding Source={x:Static properties:Settings.Default},Path=FatalColor, Mode=TwoWay}"/>
+        <viewModels:Brush2ColorConverter x:Key="Brush2ColorConverter" />
         <Style TargetType="TreeViewItem">
             <Setter Property="IsExpanded" Value="True" />
         </Style>
@@ -24,17 +19,24 @@
         <DockPanel DockPanel.Dock="Right">
             <DockPanel DockPanel.Dock="Top">
                 <Button DockPanel.Dock="Right" Content="X" Command="{Binding ClearSearchFilterCommand}" ToolTip="Clear message filter" Margin="2,2,2,2"/>
-                <TextBox Text="{Binding SearchFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" ToolTip="Message filter" Margin="2,2,2,2"/>
-                
+                <TextBox Text="{Binding SearchFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" ToolTip="Message filter" Margin="2,2,2,2"/>                
             </DockPanel>
             <TreeView DockPanel.Dock="Top" Width="200" ItemsSource="{Binding LogLevels}" ToolTip="Log level filter" Margin="2,2,2,2">
                 <TreeView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding IsVisible}" Command="{Binding RelativeSource={RelativeSource AncestorType=DockPanel},Path=DataContext.UpdateCommand}">
-                                <TextBlock Text="{Binding Level}"/>                                
-                            </CheckBox>                            
-                        </StackPanel>                        
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Grid.Column="0" IsChecked="{Binding IsVisible}" 
+                                      Command="{Binding RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=2},Path=DataContext.UpdateCommand}"
+                                      Margin="0,0,5,0"
+                                      >
+                                <TextBlock Text="{Binding Level}" Foreground="{Binding Color}"/>                                
+                            </CheckBox>
+                            <xctk:ColorPicker Grid.Column="1" DockPanel.Dock="Right" SelectedColor="{Binding Color, Converter={StaticResource Brush2ColorConverter}}" Width="50" ColorMode="ColorCanvas"/>
+                        </Grid>                        
                     </DataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
@@ -57,22 +59,22 @@
                     <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Recycling"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Trace">
-                            <Setter Property="Foreground" Value="{StaticResource TraceColor}"></Setter>
+                            <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Debug">
-                            <Setter Property="Foreground" Value="{StaticResource DebugColor}" />
+                            <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Info">
-                            <Setter Property="Foreground" Value="{StaticResource InfoColor}"></Setter>
+                            <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"></Setter>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Warn">
-                            <Setter Property="Foreground" Value="{StaticResource WarnColor}"></Setter>
+                            <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"></Setter>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Error">
-                            <Setter Property="Foreground" Value="{StaticResource ErrorColor}"></Setter>
+                            <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"></Setter>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Fatal">
-                            <Setter Property="Foreground" Value="{StaticResource FatalColor}"></Setter>
+                            <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"></Setter>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Media;
 
 namespace github.trondr.LogViewer.Library.ViewModels
 {
@@ -8,6 +9,7 @@ namespace github.trondr.LogViewer.Library.ViewModels
         {
             IsVisible = true;
             Level = LogLevel.Trace;
+            Color = new SolidColorBrush(){Color = Colors.LightSeaGreen};            
         }
         
         public static readonly DependencyProperty LevelProperty = DependencyProperty.Register(
@@ -26,6 +28,15 @@ namespace github.trondr.LogViewer.Library.ViewModels
         {
             get { return (bool) GetValue(IsVisibleProperty); }
             set { SetValue(IsVisibleProperty, value); }
+        }
+
+        public static readonly DependencyProperty ColorProperty = DependencyProperty.Register(
+            "Color", typeof (Brush), typeof (LogLevelViewModel), new PropertyMetadata(default(Brush)));
+
+        public Brush Color
+        {
+            get { return (Brush) GetValue(ColorProperty); }
+            set { SetValue(ColorProperty, value); }
         }
     }
 }

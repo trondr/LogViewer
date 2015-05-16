@@ -7,12 +7,14 @@ namespace github.trondr.LogViewer.Library.ViewModels
     [Singleton]
     public class LogLevelViewModelProvider : ILogLevelViewModelProvider
     {
+        private readonly ILogLevelSettings _logLevelSettings;
         private readonly Dictionary<string, LogLevelViewModel> _logLevels;
         private static readonly object Synch = new object();
 
-        public LogLevelViewModelProvider()
+        public LogLevelViewModelProvider(ILogLevelSettings logLevelSettings)
         {
-            _logLevels = new Dictionary<string, LogLevelViewModel>();            
+            _logLevelSettings = logLevelSettings;
+            _logLevels = new Dictionary<string, LogLevelViewModel>();
         }
 
         public LogLevelViewModel GetLevel(string logLevel)
@@ -24,7 +26,7 @@ namespace github.trondr.LogViewer.Library.ViewModels
                     return _logLevels[logLevel];
                 }
                 var logLevelValue = (LogLevel)Enum.Parse(typeof(LogLevel), logLevel);
-                var logLevelViewModel = new LogLevelViewModel { Level = logLevelValue };
+                var logLevelViewModel = new LogLevelViewModel { Level = logLevelValue, Color = _logLevelSettings.LoadForegroundColor(logLevelValue)};
                 _logLevels.Add(logLevel, logLevelViewModel);
                 return logLevelViewModel;
             }
