@@ -1,2 +1,4 @@
 ﻿Help
-CreateSomething /exampleParameter="c:\temp"
+License
+Credits
+OpenLog /logFile="c:\temp\logFile.log"

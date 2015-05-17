@@ -3,6 +3,7 @@ using System.Windows;
 
 namespace github.trondr.LogViewer.Library.ViewModels
 {
+    
     public class LogItemViewModel : DependencyObject
     {
         public static readonly DependencyProperty TimeProperty = DependencyProperty.Register(

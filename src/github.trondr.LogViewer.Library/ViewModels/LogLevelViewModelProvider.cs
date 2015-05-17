@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using github.trondr.LogViewer.Library.Infrastructure;
+using github.trondr.LogViewer.Library.Model;
 
 namespace github.trondr.LogViewer.Library.ViewModels
 {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CreditInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ProductName>Log2Console</ProductName>
+  <ProductHome>http://log2console.codeplex.com</ProductHome>
+  <CreditText>LogViewer uses source code from Log2Console to provide Log4j log file parsing.</CreditText>
+</CreditInfo>

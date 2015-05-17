@@ -1,4 +1,5 @@
 using System.Windows.Media;
+using github.trondr.LogViewer.Library.Model;
 
 namespace github.trondr.LogViewer.Library.ViewModels
 {

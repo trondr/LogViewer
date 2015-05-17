@@ -143,16 +143,20 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Credits\1. Castle Windsor Credit.xml" />
-    <Content Include="Credits\2. NCmdLiner Credit.xml" />
-    <Content Include="Credits\3. Common.Logging Credit.xml" />
-    <Content Include="Credits\4. Log4Net Credit.xml" />
+    <EmbeddedResource Include="Credits\1. Castle Windsor Credit.xml" />
+    <EmbeddedResource Include="Credits\2. NCmdLiner Solution Creator Credit.xml" />
+    <EmbeddedResource Include="Credits\3. Common.Logging Credit.xml" />
+    <EmbeddedResource Include="Credits\4. Log4Net Credit - Copy.xml" />
+    <EmbeddedResource Include="Credits\5. Log2Console Credit.xml" />
+    <EmbeddedResource Include="Credits\2. NCmdLiner Credit.xml" />
     <Content Include="Debug.txt" />
-    <Content Include="License\0 github.trondr.LogViewer License.xml" />
-    <Content Include="License\1 Castle Project License.xml" />
-    <Content Include="License\2 NCmLiner License.xml" />
-    <Content Include="License\3 Common.Logging License.xml" />
-    <Content Include="License\4 Log4Net License.xml" />
+    <EmbeddedResource Include="License\0 LogViewer License.xml" />
+    <EmbeddedResource Include="License\1 Castle Project License.xml" />
+    <EmbeddedResource Include="License\2 NCmLiner License.xml" />
+    <EmbeddedResource Include="License\2 NCmLiner Solution Creator License.xml" />
+    <EmbeddedResource Include="License\3 Common.Logging License.xml" />
+    <EmbeddedResource Include="License\4 Log4Net License - Copy.xml" />
+    <EmbeddedResource Include="License\5 Log2Console License.xml" />
     <Content Include="NCmdLiner.ico" />
     <Content Include="References.txt" />
   </ItemGroup>

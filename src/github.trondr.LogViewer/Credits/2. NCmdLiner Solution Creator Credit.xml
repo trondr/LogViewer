@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CreditInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ProductName>NCmdLiner</ProductName>
+  <ProductName>NCmdLiner Solution Creator</ProductName>
   <ProductHome>https://github.com/trondr</ProductHome>
-  <CreditText>LogViewer uses NCmdLiner to provide command line parsing and this automatic documentation.</CreditText>
+  <CreditText>LogViewer uses NCmdLiner Solution Creator to provide the intial solution and the for the initial application infrastructure.</CreditText>
 </CreditInfo>
