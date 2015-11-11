@@ -3,6 +3,6 @@
     public interface IFileLogItemReceiver : ILogItemReceiver
     {
         string LogFileName { get; set; }
-        bool ShowFromBegining { get; set; }
+        bool ShowFromBeginning { get; set; }
     }
 }

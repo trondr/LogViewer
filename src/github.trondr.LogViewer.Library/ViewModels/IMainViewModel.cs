@@ -6,6 +6,7 @@ namespace github.trondr.LogViewer.Library.ViewModels
 {
     public interface IMainViewModel
     {
+        void Initialize();
         ICollectionView LogItemsView { get; }
         ObservableCollection<LogItemViewModel> LogItems { get; set; }
         ObservableCollection<LoggerViewModel> Loggers { get; set; }

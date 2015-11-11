@@ -43,6 +43,11 @@ namespace github.trondr.LogViewer.Library.ViewModels
             SearchFilter = "some search text";
         }
 
+        public void Initialize()
+        {
+            throw new NotImplementedException();
+        }
+
         public ICollectionView LogItemsView
         {
             get { return _logItemsViewSource.View; }            

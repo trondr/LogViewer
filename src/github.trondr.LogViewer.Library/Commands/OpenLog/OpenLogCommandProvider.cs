@@ -22,18 +22,19 @@ namespace github.trondr.LogViewer.Library.Commands.OpenLog
         {
             var returnValue = 0;
             _logger.Info("Showing main window as an example user interface.");
-            var application = new Application();
-            application.Run(_mainWindow);
             var viewModel = _mainWindow.View.ViewModel as MainViewModel;
-            if (viewModel != null)
+            if (viewModel != null) 
             {
-                _logger.Info("Getting info from the user interface and do something with it: " + viewModel.LogItems.Count);
+                viewModel.Initialize();
+                var application = new Application();
+                application.Run(_mainWindow);
+                viewModel.Terminate();
             }
             else
-            {
-                _logger.Fatal("Fatal error. MainView model returned from dialog was null");
-                returnValue = 2;
-            }            
+            { 
+                _logger.Fatal("Main view model is null");                
+                returnValue = 1;
+            }
             return returnValue;
         }
     }

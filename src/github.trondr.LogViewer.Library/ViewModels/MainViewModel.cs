@@ -7,24 +7,27 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using github.trondr.LogViewer.Library.Common.UI;
+using github.trondr.LogViewer.Library.Model;
 using github.trondr.LogViewer.Library.Services;
 
 namespace github.trondr.LogViewer.Library.ViewModels
 {
-    public class MainViewModel : ViewModelBase, IMainViewModel
+    public class MainViewModel : ViewModelBase, IMainViewModel, ILogItemNotifiable
     {
-        private readonly ILogItemService _logItemService;        
-        private readonly Timer _testDataTimer;
-        bool _cancelTestDataTimer;
-        private readonly AutoResetEvent _autoResetEvent;
+        private readonly IFileLogItemReceiver _fileLogItemReceiver;
+        private readonly IMapper _mapper;
+        //private readonly Timer _testDataTimer;
+        //bool _cancelTestDataTimer;
+        //private readonly AutoResetEvent _autoResetEvent;
         private bool _callBackRegistered;
-        private int _count;
+        //private int _count;
         private readonly CollectionViewSource _logItemsViewSource;
 
 
-        public MainViewModel(ILoggerViewModelProvider loggerViewModelProvider,ILogLevelViewModelProvider logLevelViewModelProvider, ILogItemService logItemService)
+        public MainViewModel(ILoggerViewModelProvider loggerViewModelProvider, ILogLevelViewModelProvider logLevelViewModelProvider, IFileLogItemReceiver fileLogItemReceiver, IMapper mapper)
         {
-            _logItemService = logItemService;
+            _fileLogItemReceiver = fileLogItemReceiver;
+            _mapper = mapper;
             LogItems = new ObservableCollection<LogItemViewModel>();
             _logItemsViewSource = new CollectionViewSource { Source = LogItems };
             _logItemsViewSource.Filter+=LogItemsViewSourceOnFilter;
@@ -43,8 +46,8 @@ namespace github.trondr.LogViewer.Library.ViewModels
             ExitCommand = new CommandHandler(this.Exit, true);
             UpdateCommand = new AsyncCommand(Update, () => !IsBusy);
             ClearSearchFilterCommand = new CommandHandler(delegate { SearchFilter = string.Empty; }, true);
-            _autoResetEvent = new AutoResetEvent(false);
-            _testDataTimer = new Timer(TestDataCallback, _autoResetEvent, 1000, Timeout.Infinite);
+            //_autoResetEvent = new AutoResetEvent(false);
+            //_testDataTimer = new Timer(TestDataCallback, _autoResetEvent, 1000, Timeout.Infinite);
             SearchFilter = Properties.Settings.Default.SearchFilter;
         }
 
@@ -82,32 +85,48 @@ namespace github.trondr.LogViewer.Library.ViewModels
             }
         }
 
-        private void TestDataCallback(object state)
-        {        
-            Console.Write(".");
-            if(!_callBackRegistered && MainWindow != null)
-            { 
+        //private void TestDataCallback(object state)
+        //{        
+        //    Console.Write(".");
+        //    if(!_callBackRegistered && MainWindow != null)
+        //    { 
+        //        MainWindow.Closing += MainWindow_Closing;
+        //        _callBackRegistered = true;
+        //    }
+        //    var autoResetEvent = (AutoResetEvent) state;            
+        //    Dispatcher.Invoke(() =>
+        //    {
+        //        foreach (var logItemViewModel in _logItemService.GetLogs())
+        //        {
+        //            LogItems.Add(logItemViewModel);
+        //        }
+        //    });
+        //    if(_cancelTestDataTimer)
+        //    {
+        //        autoResetEvent.Set();
+        //        return;
+        //    }
+        //    if(_count < 10)
+        //    { 
+        //        _testDataTimer.Change(100, Timeout.Infinite);
+        //        _count++;
+        //    }
+        //}
+
+        public void Initialize()
+        {
+            if (!_callBackRegistered && MainWindow != null)
+            {
                 MainWindow.Closing += MainWindow_Closing;
                 _callBackRegistered = true;
             }
-            var autoResetEvent = (AutoResetEvent) state;            
-            Dispatcher.Invoke(() =>
-            {
-                foreach (var logItemViewModel in _logItemService.GetLogs())
-                {
-                    LogItems.Add(logItemViewModel);
-                }
-            });
-            if(_cancelTestDataTimer)
-            {
-                autoResetEvent.Set();
-                return;
-            }
-            if(_count < 10)
-            { 
-                _testDataTimer.Change(100, Timeout.Infinite);
-                _count++;
-            }
+            
+            _fileLogItemReceiver.LogFileName = @"C:\Users\Public\SKALA\Logs\Ito.Tools.SharedFolder.Client\Ito.Tools.SharedFolder.Client.eta410.log";
+            _fileLogItemReceiver.Terminate();
+            _fileLogItemReceiver.Initialize();
+            _fileLogItemReceiver.ShowFromBeginning = true;
+            _fileLogItemReceiver.Attach(this);
+            
         }
 
         public ICollectionView LogItemsView { get{return _logItemsViewSource.View;} }
@@ -156,14 +175,37 @@ namespace github.trondr.LogViewer.Library.ViewModels
 
         void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if(!_cancelTestDataTimer)
+            //if(!_cancelTestDataTimer)
             {
                 Properties.Settings.Default.SearchFilter = SearchFilter;
                 Properties.Settings.Default.Save();
-                _cancelTestDataTimer = true;
-                _autoResetEvent.WaitOne(5000);
-                _testDataTimer.Dispose();
+                this.Terminate();
+                //_cancelTestDataTimer = true;
+                //_autoResetEvent.WaitOne(5000);
+                //_testDataTimer.Dispose();
             }
-        }        
+        }
+
+        public void Notify(LogItem[] logItems)
+        {
+            foreach (var logItem in logItems)
+            {
+                var item = logItem;
+                Dispatcher.Invoke(() =>
+                {
+                    LogItems.Add(_mapper.Map<LogItemViewModel>(item));
+                });
+            }
+        }
+
+        public void Notify(LogItem logItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Terminate()
+        {
+            _fileLogItemReceiver.Terminate();
+        }
     }
 }

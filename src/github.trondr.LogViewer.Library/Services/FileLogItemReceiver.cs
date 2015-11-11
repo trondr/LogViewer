@@ -19,6 +19,7 @@ namespace github.trondr.LogViewer.Library.Services
         private FileSystemWatcher _fileSystemWatcher;
         private string _fullLoggerName;
         private string _logFileName;
+        private bool _showFromBeginning;
 
         public FileLogItemReceiver(ILog4JLogItemParser log4JLogItemParser, ILog logger)
         {
@@ -39,7 +40,7 @@ namespace github.trondr.LogViewer.Library.Services
                 {
                     using(var sr = new StreamReader(fileStream))
                     {
-                        _lastFileLength = ShowFromBegining ? 0 : sr.BaseStream.Length;
+                        _lastFileLength = ShowFromBeginning ? 0 : sr.BaseStream.Length;
                     }
                 }
             }
@@ -48,8 +49,10 @@ namespace github.trondr.LogViewer.Library.Services
             var file = Path.GetFileName(fullFileName);
             if (folder != null) 
             {
-                _fileSystemWatcher = new FileSystemWatcher(folder,file);
-                _fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+                _fileSystemWatcher = new FileSystemWatcher(folder,file)
+                {
+                    NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size
+                };
                 _fileSystemWatcher.Changed+=OnFileChanged;
                 _fileSystemWatcher.Deleted+=OnFileDeleted;
                 _fileSystemWatcher.Renamed+=OnFileRenamed;     
@@ -75,6 +78,8 @@ namespace github.trondr.LogViewer.Library.Services
         public void Attach(ILogItemNotifiable logItemNotifiable)
         {
             _logItemNotifiable = logItemNotifiable;
+            if(ShowFromBeginning)
+                ReadFile();
         }
 
         public void Detach()
@@ -99,7 +104,18 @@ namespace github.trondr.LogViewer.Library.Services
             }
         }
 
-        public bool ShowFromBegining { get; set; }
+        public bool ShowFromBeginning
+        {
+            get { return _showFromBeginning; }
+            set
+            {
+                _showFromBeginning = value;
+                if(_showFromBeginning && _lastFileLength == 0)
+                {
+                    ReadFile();
+                }
+            }
+        }
 
         private void ReadFile()
         {
