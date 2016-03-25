@@ -48,8 +48,6 @@ namespace github.trondr.LogViewer.Library.ViewModels
             ExitCommand = new CommandHandler(this.Exit, true);
             UpdateCommand = new AsyncCommand(Update, () => !IsBusy);
             ClearSearchFilterCommand = new CommandHandler(delegate { SearchFilter = string.Empty; }, true);
-            //_autoResetEvent = new AutoResetEvent(false);
-            //_testDataTimer = new Timer(TestDataCallback, _autoResetEvent, 1000, Timeout.Infinite);
             SearchFilter = Properties.Settings.Default.SearchFilter;
         }
 
@@ -76,44 +74,16 @@ namespace github.trondr.LogViewer.Library.ViewModels
                 {
                     filterEventArgs.Accepted = true;
                 }
-                else if(logItem.Message.Contains(SearchFilter.ToLower()))
+                else if(logItem.Message.Contains(SearchFilter))
                 {
                     filterEventArgs.Accepted = true;
                 }
                 else
                 {
-                    filterEventArgs.Accepted = false;    
+                    filterEventArgs.Accepted = false;
                 }                
             }
         }
-
-        //private void TestDataCallback(object state)
-        //{        
-        //    Console.Write(".");
-        //    if(!_callBackRegistered && MainWindow != null)
-        //    { 
-        //        MainWindow.Closing += MainWindow_Closing;
-        //        _callBackRegistered = true;
-        //    }
-        //    var autoResetEvent = (AutoResetEvent) state;            
-        //    Dispatcher.Invoke(() =>
-        //    {
-        //        foreach (var logItemViewModel in _logItemService.GetLogs())
-        //        {
-        //            LogItems.Add(logItemViewModel);
-        //        }
-        //    });
-        //    if(_cancelTestDataTimer)
-        //    {
-        //        autoResetEvent.Set();
-        //        return;
-        //    }
-        //    if(_count < 10)
-        //    { 
-        //        _testDataTimer.Change(100, Timeout.Infinite);
-        //        _count++;
-        //    }
-        //}
 
         public void Initialize()
         {
@@ -179,15 +149,9 @@ namespace github.trondr.LogViewer.Library.ViewModels
 
         void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //if(!_cancelTestDataTimer)
-            {
-                Properties.Settings.Default.SearchFilter = SearchFilter;
-                Properties.Settings.Default.Save();
-                this.Terminate();
-                //_cancelTestDataTimer = true;
-                //_autoResetEvent.WaitOne(5000);
-                //_testDataTimer.Dispose();
-            }
+            Properties.Settings.Default.SearchFilter = SearchFilter;
+            Properties.Settings.Default.Save();
+            this.Terminate();
         }
 
         public void Notify(LogItem[] logItems)
