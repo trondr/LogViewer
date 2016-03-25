@@ -14,14 +14,49 @@
             <Setter Property="IsExpanded" Value="True" />
         </Style>
     </UserControl.Resources>
-    
-    <DockPanel d:DataContext="{d:DesignInstance Type=viewModels:DesignTimeMainViewModel, IsDesignTimeCreatable=True}" Margin="5" >
-        <DockPanel DockPanel.Dock="Right">
-            <DockPanel DockPanel.Dock="Top">
+
+    <Grid d:DataContext="{d:DesignInstance Type=viewModels:DesignTimeMainViewModel, IsDesignTimeCreatable=True}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <DockPanel Grid.Row="0" Grid.Column="0">
                 <Button DockPanel.Dock="Right" Content="X" Command="{Binding ClearSearchFilterCommand}" ToolTip="Clear message filter" Margin="2,2,2,2"/>
-                <TextBox Text="{Binding SearchFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" ToolTip="Message filter" Margin="2,2,2,2"/>                
+                <TextBox Text="{Binding SearchFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" ToolTip="Message filter" Margin="2,2,2,2"/>
             </DockPanel>
-            <TreeView DockPanel.Dock="Top" Width="200" ItemsSource="{Binding LogLevels}" ToolTip="Log level filter" Margin="2,2,2,2">
+            
+
+            <TreeView Grid.Column="0" Grid.Row="1" DockPanel.Dock="Top" ItemsSource="{Binding Loggers}" ToolTip="Logger name filter" Margin="2,2,2,2">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type viewModels:LoggerViewModel}">
+                        <StackPanel>
+                            <CheckBox IsChecked="{Binding IsVisible}" Command="{Binding RelativeSource={RelativeSource AncestorType=TreeView},Path=DataContext.UpdateCommand}">
+                                <TextBlock Text="{Binding DisplayName}"></TextBlock>
+                            </CheckBox>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            
+            <GridSplitter Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="5" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"/>
+
+            <TreeView Grid.Row="3" Grid.Column="0"  ItemsSource="{Binding LogLevels}" ToolTip="Log level filter" Margin="2,2,2,2">
                 <TreeView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -30,29 +65,21 @@
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <CheckBox Grid.Column="0" IsChecked="{Binding IsVisible}" 
-                                      Command="{Binding RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=2},Path=DataContext.UpdateCommand}"
+                                      Command="{Binding RelativeSource={RelativeSource AncestorType=TreeView,AncestorLevel=1},Path=DataContext.UpdateCommand}"
                                       Margin="0,0,5,0"
                                       >
-                                <TextBlock Text="{Binding Level}" Foreground="{Binding Color}"/>                                
+                                <TextBlock Text="{Binding Level}" Foreground="{Binding Color}"/>
                             </CheckBox>
                             <xctk:ColorPicker Grid.Column="1" DockPanel.Dock="Right" SelectedColor="{Binding Color, Converter={StaticResource Brush2ColorConverter}}" Width="50" ColorMode="ColorCanvas"/>
-                        </Grid>                        
+                        </Grid>
                     </DataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-            <TreeView DockPanel.Dock="Top" Width="200" ItemsSource="{Binding Loggers}" ToolTip="Logger name filter" Margin="2,2,2,2">
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type viewModels:LoggerViewModel}">
-                        <StackPanel>
-                            <CheckBox IsChecked="{Binding IsVisible}" Command="{Binding RelativeSource={RelativeSource AncestorType=DockPanel},Path=DataContext.UpdateCommand}">
-                                <TextBlock Text="{Binding DisplayName}"></TextBlock>
-                            </CheckBox>
-                        </StackPanel>            
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>            
-        </DockPanel>
-        <ListView ItemsSource="{Binding LogItemsView}" DockPanel.Dock="Top" Margin="2,2,2,2">
+        </Grid>
+        
+        <GridSplitter Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext"/>
+        
+        <ListView Grid.Column="0" Grid.Row="0" ItemsSource="{Binding LogItemsView}" Margin="2,2,2,2">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}" >
                     <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True"/>
@@ -82,12 +109,12 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="Auto" Header="Time" DisplayMemberBinding="{Binding Path=Time}"/>
-                    <GridViewColumn Width="Auto" Header="Level" DisplayMemberBinding="{Binding Path=LogLevel.Level}"/>                    
+                    <GridViewColumn Width="Auto" Header="Level" DisplayMemberBinding="{Binding Path=LogLevel.Level}"/>
                     <GridViewColumn Width="Auto" Header="Logger" DisplayMemberBinding="{Binding Path=Logger.Name}"/>
                     <GridViewColumn Width="Auto" Header="Thread" DisplayMemberBinding="{Binding Path=ThreadId}"/>
                     <GridViewColumn Width="Auto" Header="Message" DisplayMemberBinding="{Binding Path=Message}"/>
-                </GridView>                
+                </GridView>
             </ListView.View>
-        </ListView>                
-    </DockPanel>
+        </ListView>
+    </Grid>
 </ui:ViewBase>
