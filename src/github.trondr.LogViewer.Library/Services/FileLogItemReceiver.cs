@@ -29,39 +29,57 @@ namespace github.trondr.LogViewer.Library.Services
 
         public void Initialize()
         {
-            if(string.IsNullOrEmpty(LogFileName))
+            if (string.IsNullOrEmpty(LogFileName))
             {
                 _logger.Warn("Log file name is null or empty. Initialization of FileLogItemReceiver cannot continue.");
                 return;
             }
-            if(File.Exists(LogFileName))
+            
+            ComputeFullLoggerName();
+
+            StartMonitoringLogFile(LogFileName);            
+        }
+
+        private void StartMonitoringLogFile(string logFileName)
+        {
+            _lastFileLength = CalculateLastFileLength();
+            var file = Path.GetFileName(logFileName);
+            if (file == null) return;
+
+            var folder = Path.GetDirectoryName(logFileName);
+            if (folder == null) return;
+
+            _fileSystemWatcher = new FileSystemWatcher(folder, file)
+            {
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size
+            };
+            _fileSystemWatcher.Changed += OnFileChanged;
+            _fileSystemWatcher.Deleted += OnFileDeleted;
+            _fileSystemWatcher.Renamed += OnFileRenamed;
+            _fileSystemWatcher.EnableRaisingEvents = true;
+        }
+
+        private long CalculateLastFileLength()
+        {
+            if (File.Exists(LogFileName))
             {
                 using (var fileStream = new FileStream(LogFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    using(var sr = new StreamReader(fileStream))
+                    using (var sr = new StreamReader(fileStream))
                     {
-                        _lastFileLength = ShowFromBeginning ? 0 : sr.BaseStream.Length;
+                        return ShowFromBeginning ? 0 : sr.BaseStream.Length;
                     }
                 }
             }
-            var fullFileName = Path.GetFullPath(LogFileName);
-            var folder = Path.GetDirectoryName(fullFileName);
-            var file = Path.GetFileName(fullFileName);
-            if (folder != null) 
-            {
-                _fileSystemWatcher = new FileSystemWatcher(folder,file)
-                {
-                    NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size
-                };
-                _fileSystemWatcher.Changed+=OnFileChanged;
-                _fileSystemWatcher.Deleted+=OnFileDeleted;
-                _fileSystemWatcher.Renamed+=OnFileRenamed;     
-                _fileSystemWatcher.EnableRaisingEvents = true;
-            }            
-            ComputeFullLoggerName();
+            return 0;
         }
 
         public void Terminate()
+        {
+            StopMonitoringLogFile();            
+        }
+
+        private void StopMonitoringLogFile()
         {
             if (_fileSystemWatcher != null)
             {
@@ -78,7 +96,7 @@ namespace github.trondr.LogViewer.Library.Services
         public void Attach(ILogItemNotifiable logItemNotifiable)
         {
             _logItemNotifiable = logItemNotifiable;
-            if(ShowFromBeginning)
+            if (ShowFromBeginning)
                 ReadFile();
         }
 
@@ -94,11 +112,11 @@ namespace github.trondr.LogViewer.Library.Services
             get { return _logFileName; }
             set
             {
-                if(String.Compare(_logFileName, value, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(_logFileName, value, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     return;
-                }                
-                _logFileName = value;
+                }
+                _logFileName = Path.GetFullPath(value);
                 Terminate();
                 Initialize();
             }
@@ -110,7 +128,7 @@ namespace github.trondr.LogViewer.Library.Services
             set
             {
                 _showFromBeginning = value;
-                if(_showFromBeginning && _lastFileLength == 0)
+                if (_showFromBeginning && _lastFileLength == 0)
                 {
                     ReadFile();
                 }
@@ -130,6 +148,7 @@ namespace github.trondr.LogViewer.Library.Services
                 using (var sr = new StreamReader(fileStream))
                 {
                     if (sr.BaseStream.Length == _lastFileLength)
+                        //No new entries
                         return;
 
                     if (sr.BaseStream.Length < _lastFileLength)
@@ -138,33 +157,47 @@ namespace github.trondr.LogViewer.Library.Services
                         _lastFileLength = 0;
                     }
 
-                    // Seek to the last file length
-                    sr.BaseStream.Seek(_lastFileLength, SeekOrigin.Begin);
+                    var logItems = GetLastAddedLogItems(sr, _lastFileLength);
 
-                    // Get last added lines
-                    string line;
-                    var logItemString = new StringBuilder();
-                    var logItems = new List<LogItem>();
-                    while ((line = sr.ReadLine()) != null)
+                    if (NotifyUserInterfaceAboutNewLogItems(logItems))
                     {
-                        logItemString.Append(line);
-                        // This condition allows us to process events that spread over multiple lines
-                        if (line.Contains("</log4j:event>"))
-                        {
-                            var logMsg = _log4JLogItemParser.Parse(logItemString.ToString(), _fullLoggerName);
-                            logItems.Add(logMsg);
-                            logItemString.Clear();
-                            logItemString = new StringBuilder();
-                        }
+                        // Update the last file length
+                        _lastFileLength = sr.BaseStream.Position;
                     }
-
-                    // Notify the UI with the set of messages
-                    _logItemNotifiable.Notify(logItems.ToArray());
-
-                    // Update the last file length
-                    _lastFileLength = sr.BaseStream.Position;
                 }
             }
+        }
+
+        private bool NotifyUserInterfaceAboutNewLogItems(List<LogItem> logItems)
+        {
+            if (_logItemNotifiable != null)
+            {
+                _logItemNotifiable.Notify(logItems.ToArray());
+                return true;
+            }
+            return false;
+        }
+
+        private List<LogItem> GetLastAddedLogItems(StreamReader sr, long lastFileLength)
+        {
+            // Seek to the last file length
+            sr.BaseStream.Seek(lastFileLength, SeekOrigin.Begin);
+            var logItems = new List<LogItem>();
+            var logItemString = new StringBuilder();
+            string line;
+            while ((line = sr.ReadLine()) != null)
+            {
+                logItemString.Append(line);
+                // This condition allows us to process events that spread over multiple lines
+                if (line.Contains("</log4j:event>"))
+                {
+                    var logMsg = _log4JLogItemParser.Parse(logItemString.ToString(), _fullLoggerName);
+                    logItems.Add(logMsg);
+                    logItemString.Clear();
+                    logItemString = new StringBuilder();
+                }
+            }
+            return logItems;
         }
 
         void OnFileRenamed(object sender, RenamedEventArgs e)
@@ -195,9 +228,10 @@ namespace github.trondr.LogViewer.Library.Services
 
         private void ComputeFullLoggerName()
         {
-            _fullLoggerName = String.Format("FileLogger.{0}",
-                String.IsNullOrEmpty(DefaultLoggerName)
-                    ? LogFileName.Replace('.', '_')
+            var fileName = Path.GetFileName(LogFileName);
+            _fullLoggerName = string.Format("FileLogger.{0}",
+                string.IsNullOrEmpty(DefaultLoggerName) && !string.IsNullOrEmpty(fileName)
+                    ? fileName.Replace('.', '_')
                     : DefaultLoggerName);
 
         }
