@@ -15,6 +15,7 @@ namespace github.trondr.LogViewer.Library.ViewModels
     public class MainViewModel : ViewModelBase, IMainViewModel, ILogItemNotifiable
     {
         private readonly IFileLogItemReceiver _fileLogItemReceiver;
+        private readonly IRandomLogItemReceiver _randomLogItemReceiver;        
         private readonly IMapper _mapper;
         //private readonly Timer _testDataTimer;
         //bool _cancelTestDataTimer;
@@ -24,9 +25,10 @@ namespace github.trondr.LogViewer.Library.ViewModels
         private readonly CollectionViewSource _logItemsViewSource;
 
 
-        public MainViewModel(ILoggerViewModelProvider loggerViewModelProvider, ILogLevelViewModelProvider logLevelViewModelProvider, IFileLogItemReceiver fileLogItemReceiver, IMapper mapper)
+        public MainViewModel(ILoggerViewModelProvider loggerViewModelProvider, ILogLevelViewModelProvider logLevelViewModelProvider, IFileLogItemReceiver fileLogItemReceiver, IRandomLogItemReceiver randomLogItemReceiver, IMapper mapper)
         {
             _fileLogItemReceiver = fileLogItemReceiver;
+            _randomLogItemReceiver = randomLogItemReceiver;
             _mapper = mapper;
             LogItems = new ObservableCollection<LogItemViewModel>();
             _logItemsViewSource = new CollectionViewSource { Source = LogItems };
@@ -120,13 +122,15 @@ namespace github.trondr.LogViewer.Library.ViewModels
                 MainWindow.Closing += MainWindow_Closing;
                 _callBackRegistered = true;
             }
+            //_fileLogItemReceiver.LogFileName = @"C:\Users\Public\SKALA\Logs\Ito.Tools.SharedFolder.Client\Ito.Tools.SharedFolder.Client.eta410.log";
+            //_fileLogItemReceiver.Terminate();
+            //_fileLogItemReceiver.ShowFromBeginning = true;
+            //_fileLogItemReceiver.Initialize();
+            //_fileLogItemReceiver.Attach(this);   
             
-            _fileLogItemReceiver.LogFileName = @"C:\Users\Public\SKALA\Logs\Ito.Tools.SharedFolder.Client\Ito.Tools.SharedFolder.Client.eta410.log";
-            _fileLogItemReceiver.Terminate();
-            _fileLogItemReceiver.Initialize();
-            _fileLogItemReceiver.ShowFromBeginning = true;
-            _fileLogItemReceiver.Attach(this);
-            
+            _randomLogItemReceiver.Terminate();
+            _randomLogItemReceiver.Initialize();
+            _randomLogItemReceiver.Attach(this);
         }
 
         public ICollectionView LogItemsView { get{return _logItemsViewSource.View;} }
@@ -200,12 +204,17 @@ namespace github.trondr.LogViewer.Library.ViewModels
 
         public void Notify(LogItem logItem)
         {
-            throw new NotImplementedException();
+             var item = logItem;
+            Dispatcher.Invoke(() =>
+            {
+                LogItems.Add(_mapper.Map<LogItemViewModel>(item));
+            });
         }
 
         public void Terminate()
         {
             _fileLogItemReceiver.Terminate();
+            _randomLogItemReceiver.Terminate();
         }
     }
 }

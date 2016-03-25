@@ -113,8 +113,10 @@
     <Compile Include="Services\ILogItemNotifiable.cs" />
     <Compile Include="Services\ILogItemReceiver.cs" />
     <Compile Include="Services\ILogItemService.cs" />
+    <Compile Include="Services\IRandomLogItemReceiver.cs" />
     <Compile Include="Services\Log4JLogItemParser.cs" />
     <Compile Include="Services\Mapper.cs" />
+    <Compile Include="Services\RandomLogItemReceiver.cs" />
     <Compile Include="Services\TestDataLogItemService.cs" />
     <Compile Include="Common\UI\AsyncCommand.cs" />
     <Compile Include="ViewModels\Brush2ColorConverter.cs" />
