@@ -7,7 +7,8 @@
              xmlns:ui="clr-namespace:github.trondr.LogViewer.Library.Common.UI"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="330" d:DesignWidth="700">
+             d:DesignWidth="1024" d:DesignHeight="768"
+             >
     <UserControl.Resources>
         <viewModels:Brush2ColorConverter x:Key="Brush2ColorConverter" />
         <Style TargetType="TreeViewItem">
@@ -78,43 +79,91 @@
         </Grid>
         
         <GridSplitter Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext"/>
+
+        <Grid Grid.Column="0" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="4*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ListView x:Name="_logItemsListView" Grid.Column="0" Grid.Row="0" ItemsSource="{Binding LogItemsView}" Margin="2,2,2,2" SelectedItem="{Binding Path=SelectedLogItem}">
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}" >
+                        <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True"/>
+                        <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Recycling"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Trace">
+                                <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Debug">
+                                <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Info">
+                                <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Warn">
+                                <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Error">
+                                <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Fatal">
+                                <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="Auto" Header="Time" DisplayMemberBinding="{Binding Path=Time, StringFormat={}{0:yyyy-MM-dd hh:mm:ss:ms}}"/>
+                        <GridViewColumn Width="Auto" Header="Level" DisplayMemberBinding="{Binding Path=LogLevel.Level}"/>
+                        <GridViewColumn Width="Auto" Header="Logger" DisplayMemberBinding="{Binding Path=Logger.Name}"/>
+                        <GridViewColumn Width="Auto" Header="Thread" DisplayMemberBinding="{Binding Path=ThreadId}"/>
+                        <GridViewColumn Width="Auto" Header="Message" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Path=Message}" TextWrapping="NoWrap" MinLines="1" MaxLines="1" IsReadOnly="True" BorderThickness="0" Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem},Path=Foreground}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="5" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"/>
+
+            <Grid Grid.Row="2" Grid.Column="0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Message Details" FontWeight="Bold"></Label>
+                
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Time:" Margin="5,0,5,0" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=SelectedLogItem.Time}"  Margin="5,0,5,0" />
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="LogLevel:" Margin="5,0,5,0" />
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=SelectedLogItem.LogLevel.Level}"  Margin="5,0,5,0" />
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Logger:" Margin="5,0,5,0" />
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Path=SelectedLogItem.Logger.Name}"  Margin="5,0,5,0" />
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Message:"  Margin="5,0,5,0"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=SelectedLogItem.Message}"  Margin="5,0,5,0" BorderThickness="0" IsReadOnly="True" />
+            </Grid>
+        </Grid>
         
-        <ListView Grid.Column="0" Grid.Row="0" ItemsSource="{Binding LogItemsView}" Margin="2,2,2,2">
-            <ListView.Resources>
-                <Style TargetType="{x:Type ListViewItem}" >
-                    <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True"/>
-                    <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Recycling"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Trace">
-                            <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Debug">
-                            <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Info">
-                            <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"></Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Warn">
-                            <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"></Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Error">
-                            <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"></Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Path=LogLevel.Level}" Value="Fatal">
-                            <Setter Property="Foreground" Value="{Binding Path=LogLevel.Color}"></Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.Resources>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="Auto" Header="Time" DisplayMemberBinding="{Binding Path=Time}"/>
-                    <GridViewColumn Width="Auto" Header="Level" DisplayMemberBinding="{Binding Path=LogLevel.Level}"/>
-                    <GridViewColumn Width="Auto" Header="Logger" DisplayMemberBinding="{Binding Path=Logger.Name}"/>
-                    <GridViewColumn Width="Auto" Header="Thread" DisplayMemberBinding="{Binding Path=ThreadId}"/>
-                    <GridViewColumn Width="Auto" Header="Message" DisplayMemberBinding="{Binding Path=Message}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        
     </Grid>
 </ui:ViewBase>

@@ -71,7 +71,7 @@ namespace github.trondr.LogViewer.Library.Services
             return _threadIds[_random.Next(0, 9)];
         }
 
-        private static readonly string[] _messages = new []{"Message 1","Message 2","Message 3","Message 4","Message 5","Message 6","Message 7","Message 8","Message 9","Message 10"};
+        private static readonly string[] _messages = new[] { "Message 1" + Environment.NewLine + "Message 1 Next Line", "Message 2" + Environment.NewLine + "Message 2 Next Line", "Message 3" + Environment.NewLine + "Message 3 Next Line", "Message 1" + Environment.NewLine + "Message 1 Next Line", "Message 5" + Environment.NewLine + "Message 5 Next Line", "Message 6" + Environment.NewLine + "Message 6 Next Line", "Message 7" + Environment.NewLine + "Message 7 Next Line", "Message 8" + Environment.NewLine + "Message 8 Next Line", "Message 9" + Environment.NewLine + "Message 9 Next Line", "Message 10" + Environment.NewLine + "Message 10 Next Line" };
 
         private static string GetRandomMessage()
         {

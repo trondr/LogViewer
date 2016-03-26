@@ -135,6 +135,15 @@ namespace github.trondr.LogViewer.Library.ViewModels
             set { SetValue(SearchFilterProperty, value); }
         }
 
+        public static readonly DependencyProperty SelectedLogItemProperty = DependencyProperty.Register(
+            "SelectedLogItem", typeof (LogItemViewModel), typeof (MainViewModel), new PropertyMetadata(default(LogItemViewModel)));
+
+        public LogItemViewModel SelectedLogItem
+        {
+            get { return (LogItemViewModel) GetValue(SelectedLogItemProperty); }
+            set { SetValue(SelectedLogItemProperty, value); }
+        }
+
         private void Exit()
         {
             if (MainWindow != null)
@@ -161,7 +170,8 @@ namespace github.trondr.LogViewer.Library.ViewModels
                 var item = logItem;
                 Dispatcher.Invoke(() =>
                 {
-                    LogItems.Add(_mapper.Map<LogItemViewModel>(item));
+                    var logItemViewModel = _mapper.Map<LogItemViewModel>(item);                    
+                    LogItems.Add(logItemViewModel);
                 });
             }
         }

@@ -58,6 +58,6 @@ namespace github.trondr.LogViewer.Library.ViewModels
         {
             get { return (bool) GetValue(IsVisibleProperty); }
             set { SetValue(IsVisibleProperty, value); }
-        }
+        }        
     }
 }
