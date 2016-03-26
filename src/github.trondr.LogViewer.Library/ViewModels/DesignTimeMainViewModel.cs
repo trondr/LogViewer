@@ -49,6 +49,7 @@ namespace github.trondr.LogViewer.Library.ViewModels
                 Message = "Some message with \n line shifts",                
             };      
             SearchFilter = "some search text";
+            LogItemIsSelected = true;
         }
 
         public void Initialize()
@@ -70,6 +71,7 @@ namespace github.trondr.LogViewer.Library.ViewModels
         public bool IsBusy { get; set; }
         public string SearchFilter { get; set; }
         public LogItemViewModel SelectedLogItem { get; set; }
+        public bool LogItemIsSelected { get; set; }
         public ICommand ClearSearchFilterCommand { get; set; }
     }
 }

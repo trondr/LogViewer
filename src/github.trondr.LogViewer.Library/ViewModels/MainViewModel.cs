@@ -49,6 +49,9 @@ namespace github.trondr.LogViewer.Library.ViewModels
             UpdateCommand = new AsyncCommand(Update, () => !IsBusy);
             ClearSearchFilterCommand = new CommandHandler(delegate { SearchFilter = string.Empty; }, true);
             SearchFilter = Properties.Settings.Default.SearchFilter;
+            LogItemIsSelected = false;
+            SelectedLogItem = null;
+            Console.WriteLine("MainViewModel");
         }
 
         private Task Update()
@@ -136,12 +139,28 @@ namespace github.trondr.LogViewer.Library.ViewModels
         }
 
         public static readonly DependencyProperty SelectedLogItemProperty = DependencyProperty.Register(
-            "SelectedLogItem", typeof (LogItemViewModel), typeof (MainViewModel), new PropertyMetadata(default(LogItemViewModel)));
+            "SelectedLogItem", typeof (LogItemViewModel), typeof (MainViewModel), new FrameworkPropertyMetadata(default(LogItemViewModel),PropertyChangedCallback));
+
+        private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var viewModel = dependencyObject as MainViewModel;
+            if (viewModel != null)
+                viewModel.LogItemIsSelected = (dependencyPropertyChangedEventArgs.NewValue != null);
+        }
 
         public LogItemViewModel SelectedLogItem
         {
             get { return (LogItemViewModel) GetValue(SelectedLogItemProperty); }
             set { SetValue(SelectedLogItemProperty, value); }
+        }
+
+        public static readonly DependencyProperty LogItemIsSelectedProperty = DependencyProperty.Register(
+            "LogItemIsSelected", typeof (bool), typeof (MainViewModel), new PropertyMetadata(default(bool)));
+
+        public bool LogItemIsSelected
+        {
+            get { return (bool) GetValue(LogItemIsSelectedProperty); }
+            set { SetValue(LogItemIsSelectedProperty, value); }
         }
 
         private void Exit()

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Castle.Core.Internal;
+using Castle.DynamicProxy.Internal;
 using Castle.Facilities.Logging;
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel.Registration;
@@ -62,9 +65,9 @@ namespace github.trondr.LogViewer.Infrastructure
             //
             //   Register all command providers and attach logging interceptor
             //
-            const string libraryRootNameSpace = "github.trondr.LogViewer.Library";
+            
             container.Register(Classes.FromAssemblyContaining<CommandProvider>()
-                .InNamespace(libraryRootNameSpace, true)
+                .InNamespace(_libraryRootNameSpace, true)
                 .If(type => type.Is<CommandProvider>())
                 .Configure(registration => registration.Interceptors(new[] { typeof(InfoLogAspect) }))
                 .WithService.DefaultInterfaces().LifestyleTransient()                
@@ -81,18 +84,36 @@ namespace github.trondr.LogViewer.Infrastructure
             //   Register all singletons found in the library
             //
             container.Register(Classes.FromAssemblyContaining<CommandDefinition>()
-                .InNamespace(libraryRootNameSpace, true)
+                .InNamespace(_libraryRootNameSpace, true)
                 .If(type => Attribute.IsDefined(type, typeof(SingletonAttribute)))
                 .WithService.DefaultInterfaces().LifestyleSingleton());
             //
             //   Register all transients found in the library
             //
             container.Register(Classes.FromAssemblyContaining<CommandDefinition>()
-                .InNamespace(libraryRootNameSpace, true)
-                .WithService.DefaultInterfaces().LifestyleTransient());
+                .InNamespace(_libraryRootNameSpace, true).If(IfFilter)
+                .WithServiceDefaultInterfaces()
+                .LifestyleTransient());
             
             IApplicationInfo applicationInfo = new ApplicationInfo();
             container.Register(Component.For<IApplicationInfo>().Instance(applicationInfo).LifestyleSingleton());
         }
+
+        private bool IfFilter(Type type)
+        {
+            var interfaces = type.GetAllInterfaces();
+            if(interfaces != null && interfaces.Length > 0)
+            {
+                var hasMatchingIterfaces = interfaces.Select(type1 => type1.FullName.Contains(_libraryRootNameSpace)).Any();
+                if(hasMatchingIterfaces)
+                {
+                    Console.WriteLine(type.FullName);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        const string _libraryRootNameSpace = "github.trondr.LogViewer.Library";        
     }
 }

@@ -17,6 +17,6 @@ namespace github.trondr.LogViewer.Library.ViewModels
         bool IsBusy { get; set; }
         string SearchFilter { get; set; }
         LogItemViewModel SelectedLogItem {get;set; }
-        
+        bool LogItemIsSelected {get;set; }        
     }
 }
