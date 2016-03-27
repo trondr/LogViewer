@@ -92,7 +92,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\OpenLog\IOpenLogCommandProviderFactory.cs" />
+    <Compile Include="Services\FileLogItem\FileLogItemLogItemConnectionStringParser.cs" />
+    <Compile Include="Services\FileLogItem\IFileLogItemConnectionFactory.cs" />
+    <Compile Include="Services\FileLogItem\IFileLogItemConnectionStringParser.cs" />
+    <Compile Include="Services\ILogItemConnectionProvider.cs" />
+    <Compile Include="Services\LogItemConnectionProvider.cs" />
+    <Compile Include="Services\ILogItemConnectionStringParser.cs" />
     <Compile Include="Common\Install\IWindowsExplorerContextMenuInstaller.cs" />
     <Compile Include="Common\Install\WindowsExplorerContextMenuInstaller.cs" />
     <Compile Include="Common\UI\DispatcherService.cs" />
@@ -114,17 +119,28 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Services\EventLogItem\EventLogItemConnection.cs" />
+    <Compile Include="Services\EventLogItem\EventLogItemHandler.cs" />
+    <Compile Include="Services\FileLogItem\FileLogItemConnection.cs" />
+    <Compile Include="Services\FileLogItem\FileLogItemHandler.cs" />
+    <Compile Include="Services\FileLogItem\IFileLogItemConnection.cs" />
+    <Compile Include="Services\ILogItemConnection.cs" />
+    <Compile Include="Services\ILogItemHandler.cs" />
+    <Compile Include="Services\ILogItemHandlerFactory.cs" />
     <Compile Include="Services\IMapper.cs" />
-    <Compile Include="Services\FileLogItemReceiver.cs" />
-    <Compile Include="Services\IFileLogItemReceiver.cs" />
     <Compile Include="Services\ILog4JLogItemParser.cs" />
     <Compile Include="Services\ILogItemNotifiable.cs" />
-    <Compile Include="Services\ILogItemReceiver.cs" />
     <Compile Include="Services\ILogItemService.cs" />
     <Compile Include="Services\IRandomLogItemReceiver.cs" />
     <Compile Include="Services\Log4JLogItemParser.cs" />
     <Compile Include="Services\Mapper.cs" />
     <Compile Include="Services\RandomLogItemReceiver.cs" />
+    <Compile Include="Services\RandomLogItem\RandomLogItemConnection.cs" />
+    <Compile Include="Services\RandomLogItem\RandomLogItemHandler.cs" />
+    <Compile Include="Services\RandomLogItem\RandomLogItemLogItemConnectionStringParser.cs" />
+    <Compile Include="Services\RandomLogItem\IRandomLogItemConnection.cs" />
+    <Compile Include="Services\RandomLogItem\IRandomLogItemConnectionFactory.cs" />
+    <Compile Include="Services\RandomLogItem\IRandomLogItemConnectionStringParser.cs" />
     <Compile Include="Services\TestDataLogItemService.cs" />
     <Compile Include="Common\UI\AsyncCommand.cs" />
     <Compile Include="ViewModels\Brush2ColorConverter.cs" />
@@ -151,7 +167,9 @@
     </Compile>
     <Compile Include="Common\UI\ViewBase.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Services\Obsolete\" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>

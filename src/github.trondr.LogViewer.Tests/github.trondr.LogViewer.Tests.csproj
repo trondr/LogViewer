@@ -68,12 +68,19 @@
     <Compile Include="IntegrationTests\StandardUser\StandardUserImpersonationTests.cs" />
     <Compile Include="UnitTests\LoggerViewModelProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTests\LogItemConnectionStringParserTests.cs" />
+    <Compile Include="UnitTests\LogItemReceiverFactoryTests.cs" />
+    <Compile Include="UnitTests\FileLogItemConnectionFactoryTests.cs" />
     <Compile Include="UnitTests\UnitTestsTemplate.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\github.trondr.LogViewer.Library\github.trondr.LogViewer.Library.csproj">
       <Project>{88bbc1f8-f0e9-4259-9357-4e3da770a6d6}</Project>
       <Name>github.trondr.LogViewer.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\github.trondr.LogViewer\github.trondr.LogViewer.csproj">
+      <Project>{4be5c7bc-0e00-4d0c-a77f-091e7f3a0291}</Project>
+      <Name>github.trondr.LogViewer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

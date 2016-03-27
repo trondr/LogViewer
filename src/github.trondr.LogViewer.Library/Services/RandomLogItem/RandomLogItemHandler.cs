@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using github.trondr.LogViewer.Library.Model;
+using LogLevel = github.trondr.LogViewer.Library.Model.LogLevel;
 
-namespace github.trondr.LogViewer.Library.Services
+namespace github.trondr.LogViewer.Library.Services.RandomLogItem
 {
-    public class RandomLogItemReceiver : IRandomLogItemReceiver
+    public class RandomLogItemHandler : ILogItemHandler<RandomLogItemConnection>
     {
+        public ILogItemConnection Connection { get; set; }
         private Timer _timer    ;
         private ILogItemNotifiable _logItemNotifiable;
         private static readonly List<LogLevel> LogLevels = Enum.GetValues(typeof(LogLevel)).Cast<LogLevel>().ToList();
         private static Random _random = new Random();
 
+        
         public void Initialize()
         {
             _timer?.Dispose();
@@ -105,6 +108,8 @@ namespace github.trondr.LogViewer.Library.Services
         {
             _logItemNotifiable = null;
         }
+
+        public bool ShowFromBeginning { get; set; }
 
         public string DefaultLoggerName { get; set; }
     }

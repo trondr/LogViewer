@@ -14,8 +14,6 @@ namespace github.trondr.LogViewer.Library.ViewModels
 {
     public class MainViewModel : ViewModelBase, IMainViewModel, ILogItemNotifiable
     {
-        private readonly IFileLogItemReceiver _fileLogItemReceiver;
-        private readonly IRandomLogItemReceiver _randomLogItemReceiver;        
         private readonly IMapper _mapper;
         //private readonly Timer _testDataTimer;
         //bool _cancelTestDataTimer;
@@ -25,10 +23,8 @@ namespace github.trondr.LogViewer.Library.ViewModels
         private readonly CollectionViewSource _logItemsViewSource;
 
 
-        public MainViewModel(ILoggerViewModelProvider loggerViewModelProvider, ILogLevelViewModelProvider logLevelViewModelProvider, IFileLogItemReceiver fileLogItemReceiver, IRandomLogItemReceiver randomLogItemReceiver, IMapper mapper)
-        {
-            _fileLogItemReceiver = fileLogItemReceiver;
-            _randomLogItemReceiver = randomLogItemReceiver;
+        public MainViewModel(ILoggerViewModelProvider loggerViewModelProvider, ILogLevelViewModelProvider logLevelViewModelProvider, IMapper mapper)
+        {        
             _mapper = mapper;
             LogItems = new ObservableCollection<LogItemViewModel>();
             _logItemsViewSource = new CollectionViewSource { Source = LogItems };
@@ -101,9 +97,9 @@ namespace github.trondr.LogViewer.Library.ViewModels
             //_fileLogItemReceiver.Initialize();
             //_fileLogItemReceiver.Attach(this);   
             
-            _randomLogItemReceiver.Terminate();
-            _randomLogItemReceiver.Initialize();
-            _randomLogItemReceiver.Attach(this);
+            //_randomLogItemReceiver.Terminate();
+            //_randomLogItemReceiver.Initialize();
+            //_randomLogItemReceiver.Attach(this);
         }
 
         public ICollectionView LogItemsView { get{return _logItemsViewSource.View;} }
@@ -178,8 +174,7 @@ namespace github.trondr.LogViewer.Library.ViewModels
         void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Properties.Settings.Default.SearchFilter = SearchFilter;
-            Properties.Settings.Default.Save();
-            this.Terminate();
+            Properties.Settings.Default.Save();            
         }
 
         public void Notify(LogItem[] logItems)
@@ -204,10 +199,6 @@ namespace github.trondr.LogViewer.Library.ViewModels
             });
         }
 
-        public void Terminate()
-        {
-            _fileLogItemReceiver.Terminate();
-            _randomLogItemReceiver.Terminate();
-        }
+        
     }
 }

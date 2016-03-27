@@ -123,6 +123,7 @@
     <Compile Include="Infrastructure\InfoLogAspect.cs" />
     <Compile Include="Infrastructure\InvocationLogStringBuilder.cs" />
     <Compile Include="Infrastructure\LogFactory.cs" />
+    <Compile Include="Infrastructure\LogItemHandlerSelector.cs" />
     <Compile Include="Infrastructure\StrictComponentActivator.cs" />
     <Compile Include="Infrastructure\ContainerInstaller.cs" />
     <Compile Include="Infrastructure\CustomTypeFactoryComponentSelector.cs" />

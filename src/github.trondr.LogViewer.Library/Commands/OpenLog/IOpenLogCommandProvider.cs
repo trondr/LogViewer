@@ -2,6 +2,6 @@
 {
     public interface IOpenLogCommandProvider
     {
-        int OpenLog(string logFile);
+        int OpenLogs(string[] connectionStrings);
     }
 }

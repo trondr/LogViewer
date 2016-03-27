@@ -2,17 +2,22 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Castle.Core;
 using Castle.Core.Internal;
 using Castle.DynamicProxy.Internal;
 using Castle.Facilities.Logging;
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Common.Logging;
 using github.trondr.LogViewer.Library.Commands.OpenLog;
 using NCmdLiner;
 using github.trondr.LogViewer.Library.Infrastructure;
+using github.trondr.LogViewer.Library.Services;
+using github.trondr.LogViewer.Library.Services.FileLogItem;
+using github.trondr.LogViewer.Library.Services.RandomLogItem;
 using github.trondr.LogViewer.Library.ViewModels;
 using github.trondr.LogViewer.Library.Views;
 using SingletonAttribute = github.trondr.LogViewer.Library.Infrastructure.SingletonAttribute;
@@ -43,15 +48,33 @@ namespace github.trondr.LogViewer.Infrastructure
             container.Register(Component.For<MainView>().Activator<StrictComponentActivator>());
             container.Register(Component.For<MainViewModel>().Activator<StrictComponentActivator>());
 
-            //Factory registrations example:
+            container.Register(Classes.FromAssemblyInThisApplication().IncludeNonPublicTypes().BasedOn<ILogItemConnectionStringParser>().WithServiceAllInterfaces());
+            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
 
-            container.Register(Component.For<IOpenLogCommandProviderFactory>().AsFactory());
+            //Factory registrations:
+            container.Register(Component.For<ILogItemHandlerFactory>().AsFactory(new LogItemHandlerSelector()));
             container.Register(
-                Component.For<IOpenLogCommandProvider>()
-                    .ImplementedBy<OpenLogCommandProvider>()
-                    .Named("OpenLogCommandProvider")
+                Classes.FromAssemblyContaining<ILogItemHandlerFactory>()
+                .BasedOn(typeof(ILogItemHandler<>))
+                .WithService
+                .Base()
+                .Configure(registration => registration.LifeStyle.Is(LifestyleType.Transient))
+                );
+
+            container.Register(Component.For<IFileLogItemConnectionFactory>().AsFactory());
+            container.Register(
+                Component.For<IFileLogItemConnection>()
+                    .ImplementedBy<FileLogItemConnection>()
+                    .Named("FileLogItemConnection")
                     .LifeStyle.Transient);
-            
+
+            container.Register(Component.For<IRandomLogItemConnectionFactory>().AsFactory());
+            container.Register(
+                Component.For<IRandomLogItemConnection>()
+                    .ImplementedBy<RandomLogItemConnection>()
+                    .Named("RandomLogItemConnection")
+                    .LifeStyle.Transient);
+
             container.Register(Component.For<IInvocationLogStringBuilder>().ImplementedBy<InvocationLogStringBuilder>().LifestyleSingleton());
             container.Register(Component.For<ILogFactory>().ImplementedBy<LogFactory>().LifestyleSingleton());
             ///////////////////////////////////////////////////////////////////
