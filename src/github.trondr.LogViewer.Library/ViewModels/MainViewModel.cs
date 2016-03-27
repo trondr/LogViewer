@@ -171,7 +171,7 @@ namespace github.trondr.LogViewer.Library.ViewModels
             }
         }
 
-        void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             Properties.Settings.Default.SearchFilter = SearchFilter;
             Properties.Settings.Default.Save();            
@@ -182,6 +182,7 @@ namespace github.trondr.LogViewer.Library.ViewModels
             foreach (var logItem in logItems)
             {
                 var item = logItem;
+
                 Dispatcher.Invoke(() =>
                 {
                     var logItemViewModel = _mapper.Map<LogItemViewModel>(item);                    

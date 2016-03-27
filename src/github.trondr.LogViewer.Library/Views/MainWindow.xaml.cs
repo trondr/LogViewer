@@ -24,7 +24,7 @@ namespace github.trondr.LogViewer.Library.Views
 
         void OnLoaded(object sender, RoutedEventArgs e)
         {
-            Logger.Debug("MainWindow is loaded.");
+            Logger.Info("MainWindow is loaded.");
             if(this.View == null) throw new NullReferenceException("View has not been initialized. Has view been registered with the container?");
             this.View.HorizontalAlignment = HorizontalAlignment.Stretch;
             this.View.VerticalAlignment = VerticalAlignment.Stretch;

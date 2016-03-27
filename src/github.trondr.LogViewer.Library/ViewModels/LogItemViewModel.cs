@@ -33,12 +33,21 @@ namespace github.trondr.LogViewer.Library.ViewModels
             set { SetValue(LoggerProperty, value); }
         }
 
-        public static readonly DependencyProperty ThreadIdProperty = DependencyProperty.Register(
-            "ThreadId", typeof (int), typeof (LogItemViewModel), new PropertyMetadata(default(int)));
+        //public static readonly DependencyProperty ThreadIdProperty = DependencyProperty.Register(
+        //    "ThreadId", typeof (int), typeof (LogItemViewModel), new PropertyMetadata(default(int)));
 
-        public int ThreadId
+        //public int ThreadId
+        //{
+        //    get { return (int) GetValue(ThreadIdProperty); }
+        //    set { SetValue(ThreadIdProperty, value); }
+        //}
+
+        public static readonly DependencyProperty ThreadIdProperty = DependencyProperty.Register(
+            "ThreadId", typeof (string), typeof (LogItemViewModel), new PropertyMetadata(default(string)));
+
+        public string ThreadId
         {
-            get { return (int) GetValue(ThreadIdProperty); }
+            get { return (string) GetValue(ThreadIdProperty); }
             set { SetValue(ThreadIdProperty, value); }
         }
 
