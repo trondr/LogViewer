@@ -85,7 +85,7 @@ namespace github.trondr.LogViewer.Library.Services
             logMsg.Logger = logItemXmlReader.GetAttribute("logger");
             var logLevelString = logItemXmlReader.GetAttribute("level");
             var logLevel = LogLevel.None;
-            var sucessFullConversion = Enum.TryParse<LogLevel>(logLevelString, out logLevel);
+            var sucessFullConversion = Enum.TryParse<LogLevel>(logLevelString,true, out logLevel);
             logMsg.LogLevel = logLevel;
             logMsg.ThreadId = logItemXmlReader.GetAttribute("thread");
             long timeStamp;
