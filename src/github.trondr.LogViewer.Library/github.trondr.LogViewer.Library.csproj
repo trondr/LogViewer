@@ -130,18 +130,14 @@
     <Compile Include="Services\IMapper.cs" />
     <Compile Include="Services\ILog4JLogItemParser.cs" />
     <Compile Include="Services\ILogItemNotifiable.cs" />
-    <Compile Include="Services\ILogItemService.cs" />
-    <Compile Include="Services\IRandomLogItemReceiver.cs" />
     <Compile Include="Services\Log4JLogItemParser.cs" />
     <Compile Include="Services\Mapper.cs" />
-    <Compile Include="Services\RandomLogItemReceiver.cs" />
     <Compile Include="Services\RandomLogItem\RandomLogItemConnection.cs" />
     <Compile Include="Services\RandomLogItem\RandomLogItemHandler.cs" />
     <Compile Include="Services\RandomLogItem\RandomLogItemLogItemConnectionStringParser.cs" />
     <Compile Include="Services\RandomLogItem\IRandomLogItemConnection.cs" />
     <Compile Include="Services\RandomLogItem\IRandomLogItemConnectionFactory.cs" />
     <Compile Include="Services\RandomLogItem\IRandomLogItemConnectionStringParser.cs" />
-    <Compile Include="Services\TestDataLogItemService.cs" />
     <Compile Include="Common\UI\AsyncCommand.cs" />
     <Compile Include="ViewModels\Brush2ColorConverter.cs" />
     <Compile Include="ViewModels\ILogLevelSettings.cs" />
@@ -167,9 +163,7 @@
     </Compile>
     <Compile Include="Common\UI\ViewBase.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\Obsolete\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
