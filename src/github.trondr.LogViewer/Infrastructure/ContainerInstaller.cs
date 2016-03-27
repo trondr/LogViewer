@@ -41,7 +41,9 @@ namespace github.trondr.LogViewer.Infrastructure
 
             container.AddFacility<LoggingFacility>(f => f.UseLog4Net().ConfiguredExternally());
             container.Kernel.Register(Component.For<ILog>().Instance(LogManager.GetLogger(applicationRootNameSpace))); //Default logger
-            container.Kernel.Resolver.AddSubResolver(new LoggerSubDependencyResolver()); //Enable injection of class specific loggers
+            var logFactory = new LogFactory();
+            container.Register(Component.For<ILogFactory>().Instance(logFactory).LifestyleSingleton());
+            container.Kernel.Resolver.AddSubResolver(new LoggerSubDependencyResolver(logFactory)); //Enable injection of class specific loggers
             
             //Manual registrations
             container.Register(Component.For<MainWindow>().Activator<StrictComponentActivator>());
@@ -76,7 +78,7 @@ namespace github.trondr.LogViewer.Infrastructure
                     .LifeStyle.Transient);
 
             container.Register(Component.For<IInvocationLogStringBuilder>().ImplementedBy<InvocationLogStringBuilder>().LifestyleSingleton());
-            container.Register(Component.For<ILogFactory>().ImplementedBy<LogFactory>().LifestyleSingleton());
+            
             ///////////////////////////////////////////////////////////////////
             //Automatic registrations
             ///////////////////////////////////////////////////////////////////
