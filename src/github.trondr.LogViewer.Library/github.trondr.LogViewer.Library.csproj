@@ -96,6 +96,7 @@
     <Compile Include="Services\FileLogItem\IFileLogItemConnectionFactory.cs" />
     <Compile Include="Services\FileLogItem\IFileLogItemConnectionStringParser.cs" />
     <Compile Include="Services\ILogItemConnectionProvider.cs" />
+    <Compile Include="Services\ITestWriteLog.cs" />
     <Compile Include="Services\LogItemConnectionProvider.cs" />
     <Compile Include="Services\ILogItemConnectionStringParser.cs" />
     <Compile Include="Common\Install\IWindowsExplorerContextMenuInstaller.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Services\RandomLogItem\IRandomLogItemConnectionFactory.cs" />
     <Compile Include="Services\RandomLogItem\IRandomLogItemConnectionStringParser.cs" />
     <Compile Include="Common\UI\AsyncCommand.cs" />
+    <Compile Include="Services\TestWriteLog.cs" />
     <Compile Include="ViewModels\Brush2ColorConverter.cs" />
     <Compile Include="ViewModels\ILogLevelSettings.cs" />
     <Compile Include="ViewModels\IsVisibleConverter.cs" />

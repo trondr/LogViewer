@@ -153,6 +153,8 @@ namespace github.trondr.LogViewer.Library.ViewModels
         public static readonly DependencyProperty LogItemIsSelectedProperty = DependencyProperty.Register(
             "LogItemIsSelected", typeof (bool), typeof (MainViewModel), new PropertyMetadata(default(bool)));
 
+        private bool _closing;
+
         public bool LogItemIsSelected
         {
             get { return (bool) GetValue(LogItemIsSelectedProperty); }
@@ -162,7 +164,8 @@ namespace github.trondr.LogViewer.Library.ViewModels
         private void Exit()
         {
             if (MainWindow != null)
-            {                                      
+            {                      
+                _closing = true;                
                 MainWindow.Close();
             }
             else
@@ -182,12 +185,23 @@ namespace github.trondr.LogViewer.Library.ViewModels
             foreach (var logItem in logItems)
             {
                 var item = logItem;
-
-                Dispatcher.Invoke(() =>
+                if(_closing)
                 {
-                    var logItemViewModel = _mapper.Map<LogItemViewModel>(item);                    
-                    LogItems.Add(logItemViewModel);
-                });
+                    break;
+                }
+
+                try
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        var logItemViewModel = _mapper.Map<LogItemViewModel>(item);
+                        LogItems.Add(logItemViewModel);
+                    });
+                }
+                catch (TaskCanceledException)
+                {
+                    //Swallow
+                }                
             }
         }
 

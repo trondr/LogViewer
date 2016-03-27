@@ -38,8 +38,6 @@ namespace github.trondr.LogViewer.Library.Services.FileLogItem
                 }
                 _connection = value;
                 _logFileName = _connection?.Value?.Replace("file://", "");
-                //Terminate();
-                //Initialize();
             }
         }
 
