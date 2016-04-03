@@ -92,7 +92,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Services\FileLogItem\FileLogItemLogItemConnectionStringParser.cs" />
+    <Compile Include="Services\EventLogItem\EventLogItemConnectionStringParser.cs" />
+    <Compile Include="Services\EventLogItem\IEventLogItemConnection.cs" />
+    <Compile Include="Services\EventLogItem\IEventLogItemConnectionFactory.cs" />
+    <Compile Include="Services\EventLogItem\IEventLogItemConnectionStringParser.cs" />
+    <Compile Include="Services\FileLogItem\FileLogItemConnectionStringParser.cs" />
     <Compile Include="Services\FileLogItem\IFileLogItemConnectionFactory.cs" />
     <Compile Include="Services\FileLogItem\IFileLogItemConnectionStringParser.cs" />
     <Compile Include="Services\ILogItemConnectionProvider.cs" />

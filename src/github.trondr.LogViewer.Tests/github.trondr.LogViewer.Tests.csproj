@@ -66,11 +66,14 @@
     <Compile Include="IntegrationTests\ExampleIntegrationTests.cs" />
     <Compile Include="IntegrationTests\StandardUser\ExampleStandardUserIntegrationTests.cs" />
     <Compile Include="IntegrationTests\StandardUser\StandardUserImpersonationTests.cs" />
+    <Compile Include="UnitTests\FileLogItemConnectionStringParserTests.cs" />
+    <Compile Include="UnitTests\FileLogItemConnectionFactoryTests.cs" />
+    <Compile Include="UnitTests\EventLogItemConnectionStringParserTests.cs" />
     <Compile Include="UnitTests\LoggerViewModelProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests\LogItemConnectionStringParserTests.cs" />
     <Compile Include="UnitTests\LogItemReceiverFactoryTests.cs" />
-    <Compile Include="UnitTests\FileLogItemConnectionFactoryTests.cs" />
+    <Compile Include="UnitTests\EventLogItemConnectionFactoryTests.cs" />
     <Compile Include="UnitTests\UnitTestsTemplate.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿namespace github.trondr.LogViewer.Library.Services
+﻿namespace github.trondr.LogViewer.Library.Services.EventLogItem
 {
     public class EventLogItemHandler : ILogItemHandler<EventLogItemConnection>
     {

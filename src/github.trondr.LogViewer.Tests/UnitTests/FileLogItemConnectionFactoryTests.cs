@@ -5,9 +5,8 @@ using Castle.Windsor;
 using Common.Logging;
 using Common.Logging.Simple;
 using github.trondr.LogViewer.Infrastructure;
-using github.trondr.LogViewer.Library.Commands.OpenLog;
 using github.trondr.LogViewer.Library.Infrastructure;
-using github.trondr.LogViewer.Library.Services;
+using github.trondr.LogViewer.Library.Services.EventLogItem;
 using github.trondr.LogViewer.Library.Services.FileLogItem;
 using NUnit.Framework;
 
@@ -37,11 +36,18 @@ namespace github.trondr.LogViewer.Tests.UnitTests
             using(var testBooStrapper = new TestBootStrapper(GetType()))
             {
                 var target = testBooStrapper.Container.Resolve<IFileLogItemConnectionFactory>();
-                string testConnectionString = @"file://c:\some\temp\file.log";
-                var actual = target.GetFileLogItemConnection(testConnectionString);
-                Assert.IsNotNull(actual);
-                Assert.IsTrue(actual.GetType() == typeof(FileLogItemConnection),"Not of type FileLogItemConnection");
-                Assert.AreEqual(testConnectionString, actual.Value, "Connection string not equal");
+                const string testConnectionString = @"file://c:\some\temp\file.log";
+                IFileLogItemConnection expected = new FileLogItemConnection()
+                {
+                    Value = testConnectionString,
+                    FileName = @"c:\some\temp\file.log",                    
+                };
+                var actual = target.GetFileLogItemConnection(testConnectionString, expected.FileName);
+                Assert.IsInstanceOf<IFileLogItemConnection>(actual);
+                var actual2 = actual as IFileLogItemConnection;
+                Assert.IsNotNull(actual2);
+                Assert.AreEqual(expected.Value, actual2.Value,"Value was not expected.");
+                Assert.AreEqual(expected.FileName, actual2.FileName, "FileName was not expected.");                
             }
         }
 
@@ -63,16 +69,16 @@ namespace github.trondr.LogViewer.Tests.UnitTests
                     {
                         _container = new WindsorContainer();
                         _container.Register(Component.For<IWindsorContainer>().Instance(_container));
-                        _container.AddFacility<TypedFactoryFacility>();
-
+            
                         //Configure logging
                         _container.Register(Component.For<ILog>().Instance(_logger));
-                        _container.Register(Component.For<ITypedFactoryComponentSelector>().ImplementedBy<CustomTypeFactoryComponentSelector>());
 
                         //Manual override registrations for interfaces that the interface under test is dependent on
                         //_container.Register(Component.For<ISomeInterface>().Instance(MockRepository.GenerateStub<ISomeInterface>()));
 
                         //Factory registrations example:
+                        _container.AddFacility<TypedFactoryFacility>();
+                        _container.Register(Component.For<ITypedFactoryComponentSelector>().ImplementedBy<CustomTypeFactoryComponentSelector>());
 
                         _container.Register(Component.For<IFileLogItemConnectionFactory>().AsFactory());
                         _container.Register(

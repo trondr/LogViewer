@@ -16,6 +16,7 @@ using github.trondr.LogViewer.Library.Commands.OpenLog;
 using NCmdLiner;
 using github.trondr.LogViewer.Library.Infrastructure;
 using github.trondr.LogViewer.Library.Services;
+using github.trondr.LogViewer.Library.Services.EventLogItem;
 using github.trondr.LogViewer.Library.Services.FileLogItem;
 using github.trondr.LogViewer.Library.Services.RandomLogItem;
 using github.trondr.LogViewer.Library.ViewModels;
@@ -68,6 +69,13 @@ namespace github.trondr.LogViewer.Infrastructure
                 Component.For<IFileLogItemConnection>()
                     .ImplementedBy<FileLogItemConnection>()
                     .Named("FileLogItemConnection")
+                    .LifeStyle.Transient);
+
+            container.Register(Component.For<IEventLogItemConnectionFactory>().AsFactory());
+            container.Register(
+                Component.For<IEventLogItemConnection>()
+                    .ImplementedBy<EventLogItemConnection>()
+                    .Named("EventLogItemConnection")
                     .LifeStyle.Transient);
 
             container.Register(Component.For<IRandomLogItemConnectionFactory>().AsFactory());
