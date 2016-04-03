@@ -6,7 +6,7 @@
   <PropertyGroup>    
     <ProductName>LogViewer</ProductName>
     <ProductCompany>github.trondr</ProductCompany>
-    <ProductDescription>log4j log viewer</ProductDescription>
+    <ProductDescription>LogViewerogViewer is a log4j log viewer</ProductDescription>
     <ProductCopyright>Copyright &#169; github.trondr $([System.DateTime]::Now.Year)</ProductCopyright>
     <ProductProjectName>$(ProductName)</ProductProjectName>
 
@@ -178,6 +178,9 @@
     <CreateProperty Value="$(Major).$(Minor).$(Build).$(Revision)">
       <Output TaskParameter="Value" PropertyName="AssemblyVersion" />
     </CreateProperty>
+    <CreateProperty Value="$(Major)_$(Minor)_$(Build)_$(Revision)">
+      <Output TaskParameter="Value" PropertyName="AssemblyVersionU" />
+    </CreateProperty>
     <AssemblyInfo CodeLanguage="CS"
        OutputFile="$(SrcDirectory)\github.trondr.LogViewer\Properties\AssemblyInfo.cs"
        AssemblyDescription="$(ProductDescription)"
@@ -189,6 +192,19 @@
        AssemblyVersion="$(AssemblyVersion)"
        AssemblyFileVersion="$(AssemblyVersion)"
 	  />
+	  
+	<AssemblyInfo CodeLanguage="CS"
+       OutputFile="$(SrcDirectory)\github.trondr.LogViewer.Gui\Properties\AssemblyInfo.cs"
+       AssemblyDescription="$(ProductDescription)"
+       AssemblyCompany="$(ProductCompany)"
+       AssemblyProduct="github.trondr.LogViewer.Gui"
+       AssemblyCopyright="$(ProductCopyright)"
+       CLSCompliant="false"
+       AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision).$(RevisionHash)"
+       AssemblyVersion="$(AssemblyVersion)"
+       AssemblyFileVersion="$(AssemblyVersion)"
+	  />
+	  
     <AssemblyInfo CodeLanguage="CS"
        OutputFile="$(SrcDirectory)\github.trondr.LogViewer.Library\Properties\AssemblyInfo.cs"
        AssemblyDescription="$(ProductDescription)"
@@ -212,6 +228,7 @@
       AssemblyVersion="$(AssemblyVersion)"
       AssemblyFileVersion="$(AssemblyVersion)"
 	  />
+	    	  
   </Target>
   
   <!--Compile-->
@@ -219,6 +236,7 @@
   <Target Name="Compile" DependsOnTargets="Version">
     <MSBuild Projects="$(SrcDirectory)\github.trondr.LogViewer.Library\github.trondr.LogViewer.Library.csproj" Properties="Configuration=Release;" />
     <MSBuild Projects="$(SrcDirectory)\github.trondr.LogViewer\github.trondr.LogViewer.csproj" Properties="Configuration=Release;" />
+	<MSBuild Projects="$(SrcDirectory)\github.trondr.LogViewer.Gui\github.trondr.LogViewer.Gui.csproj" Properties="Configuration=Release;" />
   </Target>
 
   <Target Name="CompileTests" DependsOnTargets="Compile">
@@ -229,7 +247,8 @@
   
   <Target Name="DownloadNunit" Condition=" '$(NUnitIsAvailable)' == 'false' ">
     <Message Text="Downloading NUnit..." Importance="normal" />
-    <WebDownload FileUri="http://launchpad.net/nunitv2/trunk/2.6.3/+download/NUnit-$(NunitVersion).zip" FileName="$(BinDirectory)\Download\NUnit-$(NunitVersion).zip" />
+	<MakeDir Directories="$(BinDirectory)\Download"/>
+    <WebDownload FileUri="http://github.com/nunit/nunitv2/releases/download/$(NunitVersion)/NUnit-$(NunitVersion).zip" FileName="$(BinDirectory)\Download\NUnit-$(NunitVersion).zip" />
     <Message Text="Extracting NUnit..." Importance="normal" />
     <Unzip ZipFileName="$(BinDirectory)\Download\NUnit-$(NunitVersion).zip" TargetDirectory="$(BinDirectory)\Download"/>
     <ItemGroup>
@@ -307,13 +326,26 @@
          />
     <Message Text="github.trondr.LogViewer.$(AssemblyVersion).msi zip complete" Importance="normal" />
 
-
     <Zip Files="@(SourceFiles)"
          WorkingDirectory="$(MSBuildProjectDirectory)"
          ZipFileName="$(BinDirectory)\Release\github.trondr.LogViewer.Source.$(AssemblyVersion).zip"
          ZipLevel="9"
          />
     <Message Text="github.trondr.LogViewer.Source.$(AssemblyVersion) zip complete" Importance="normal" />    
+	
+	  <ResolveScriptInstallPackage
+      ScriptInstallPackageSourcePath="$(SrcDirectory)\github.trondr LogViewer"
+      ScriptInstallPackageTargetPath="$(BinDirectory)\Release\github.trondr LogViewer $(AssemblyVersion)"
+      SourceMsiFile="$(BinDirectory)\Release\github.trondr.LogViewer.Setup\en-us\github.trondr.LogViewer.$(AssemblyVersion).msi"
+      TargetMsiFile="$(BinDirectory)\Release\github.trondr LogViewer $(AssemblyVersion)\VendorInstall\github.trondr.LogViewer.$(AssemblyVersion).msi"
+      VendorInstallIni="$(BinDirectory)\Release\github.trondr LogViewer $(AssemblyVersion)\VendorInstall\VendorInstall.ini"
+      PackageDefinitionSms="$(BinDirectory)\Release\github.trondr LogViewer $(AssemblyVersion)\PackageDefinition.sms"
+      PackageDefinitionName="LogViewer"
+      PackageDefinitionVersion="$(AssemblyVersion)"
+      PackageDefinitionPublisher="github.trondr"
+      PackageDefinitionInstallCommandLine="Install.cmd Install > &quot;%Public%\Logs\github_trondr_LogViewer$(AssemblyVersionU)_Install.cmd.log&quot;"
+      PackageDefinitionUnInstallCommandLine="Install.cmd UnInstall > &quot;%Public%\Logs\github_trondr_LogViewer$(AssemblyVersionU)_UnInstall.cmd.log&quot;"
+     />
   </Target>
 
   <Target Name="Build" DependsOnTargets="CompileSetup">

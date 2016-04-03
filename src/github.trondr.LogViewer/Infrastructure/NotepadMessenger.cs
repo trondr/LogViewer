@@ -81,7 +81,7 @@ namespace github.trondr.LogViewer.Infrastructure
             {
                 using (var sr = new StreamReader(_tempTextFileName))
                 {
-                    Console.WriteLine(sr.ReadToEnd());
+                    System.Console.WriteLine(sr.ReadToEnd());
                 }
             }
             Cleanup();

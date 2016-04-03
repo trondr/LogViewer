@@ -3,8 +3,8 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Common.Logging;
 using Common.Logging.Simple;
-using github.trondr.LogViewer.Library.Infrastructure;
 using NUnit.Framework;
+using github.trondr.LogViewer.Library.Infrastructure;
 
 namespace github.trondr.LogViewer.Tests.UnitTests
 {

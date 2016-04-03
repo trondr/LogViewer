@@ -14,13 +14,13 @@ using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyDescription("log4j log viewer")]
+[assembly: AssemblyDescription("LogViewerogViewer is a log4j log viewer")]
 [assembly: AssemblyCompany("github.trondr")]
 [assembly: AssemblyProduct("github.trondr.LogViewer")]
 [assembly: AssemblyCopyright("Copyright © github.trondr 2016")]
 [assembly: CLSCompliant(false)]
-[assembly: AssemblyInformationalVersion("1.0.15092.0.8d4b702")]
-[assembly: AssemblyVersion("1.0.15092.0")]
-[assembly: AssemblyFileVersion("1.0.15092.0")]
+[assembly: AssemblyInformationalVersion("1.0.16094.2.3915191")]
+[assembly: AssemblyVersion("1.0.16094.2")]
+[assembly: AssemblyFileVersion("1.0.16094.2")]
 
 

@@ -33,13 +33,6 @@ namespace github.trondr.LogViewer.Infrastructure
     /// </example>
     public class LoggerSubDependencyResolver : ISubDependencyResolver
     {
-        private readonly ILogFactory _logFactory;
-
-        public LoggerSubDependencyResolver(ILogFactory logFactory)
-        {
-            _logFactory = logFactory;
-        }
-
         /// <summary>
         /// Check if dependency is of type ILog
         /// </summary>
@@ -67,8 +60,7 @@ namespace github.trondr.LogViewer.Infrastructure
             {
                 if (dependency.TargetType == typeof(ILog))
                 {
-                    //return LogManager.GetLogger(model.Implementation.FullName);
-                    return _logFactory.GetLogger(model.Implementation);
+                    return LogManager.GetLogger(model.Implementation.FullName);
                 }
             }
             return null;

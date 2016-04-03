@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Threading;
 using Common.Logging;
 using NCmdLiner;
 using NCmdLiner.Exceptions;
-using github.trondr.LogViewer.Commands;
 using github.trondr.LogViewer.Infrastructure;
 using github.trondr.LogViewer.Library.Infrastructure;
 
@@ -20,11 +20,12 @@ namespace github.trondr.LogViewer
                 var applicationInfo = BootStrapper.Container.Resolve<IApplicationInfo>();
                 try
                 {
-                    applicationInfo.Authors = @"github.com/trondr";
+                    applicationInfo.Authors = @"trondr@outlook.com";
                     // ReSharper disable once CoVariantArrayConversion
                     object[] commandTargets = BootStrapper.Container.ResolveAll<CommandDefinition>();
-                    logger.InfoFormat("Start: {0} ({1}). Command line: {2}", applicationInfo.Name, applicationInfo.Version, Environment.CommandLine);                    
-                    return CmdLinery.Run(commandTargets, args, applicationInfo, new NotepadMessenger());
+                    logger.InfoFormat("Start: {0}.{1}. Command line: {2}", applicationInfo.Name, applicationInfo.Version, Environment.CommandLine);                    
+                    returnValue = CmdLinery.Run(commandTargets, args, applicationInfo, BootStrapper.Container.Resolve<IMessenger>());
+                    return returnValue;
                 }
                 catch (MissingCommandException ex)
                 {
@@ -38,16 +39,16 @@ namespace github.trondr.LogViewer
                 }
                 finally
                 {
-                    logger.InfoFormat("Stop: {0} ({1}). Return value: {2}", applicationInfo.Name, applicationInfo.Version, returnValue);
+                    logger.InfoFormat("Stop: {0}.{1}. Return value: {2}", applicationInfo.Name, applicationInfo.Version, returnValue);
 #if DEBUG
-                    Console.WriteLine("Press ENTER...");
-                    Console.ReadLine();
+                    System.Console.WriteLine("Terminating in 5 seconds...");
+                    Thread.Sleep(5000);
 #endif
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Fatal error when wiring up the application.{0}{1}", Environment.NewLine, ex);
+                System.Console.WriteLine("Fatal error when wiring up the application.{0}{1}", Environment.NewLine, ex);
                 returnValue = 3;
             }
             return returnValue;

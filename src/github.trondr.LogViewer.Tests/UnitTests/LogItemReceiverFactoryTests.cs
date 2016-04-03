@@ -8,11 +8,10 @@ using Castle.Windsor;
 using Common.Logging;
 using Common.Logging.Simple;
 using github.trondr.LogViewer.Infrastructure;
-using github.trondr.LogViewer.Library.Commands.OpenLog;
 using github.trondr.LogViewer.Library.Infrastructure;
-using github.trondr.LogViewer.Library.Services;
-using github.trondr.LogViewer.Library.Services.EventLogItem;
-using github.trondr.LogViewer.Library.Services.FileLogItem;
+using github.trondr.LogViewer.Library.Module.Services;
+using github.trondr.LogViewer.Library.Module.Services.EventLogItem;
+using github.trondr.LogViewer.Library.Module.Services.FileLogItem;
 using NUnit.Framework;
 using SingletonAttribute = github.trondr.LogViewer.Library.Infrastructure.SingletonAttribute;
 

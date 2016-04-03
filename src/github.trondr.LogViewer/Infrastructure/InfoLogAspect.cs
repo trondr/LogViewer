@@ -27,7 +27,7 @@ namespace github.trondr.LogViewer.Infrastructure
             }
             catch (Exception ex)
             {
-                if (_logger.IsInfoEnabled) _logger.Error(_invocationLogStringBuilder.BuildLogString(invocation, InvocationPhase.Error), ex);
+                if (_logger.IsErrorEnabled) _logger.Error(_invocationLogStringBuilder.BuildLogString(invocation, InvocationPhase.Error), ex);
                 throw;
             }
         }

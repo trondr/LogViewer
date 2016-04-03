@@ -3,7 +3,7 @@ using System.Collections;
 using System.Reflection;
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel;
-using github.trondr.LogViewer.Library.Services;
+using github.trondr.LogViewer.Library.Module.Services;
 
 namespace github.trondr.LogViewer.Infrastructure
 {

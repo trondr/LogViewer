@@ -4,7 +4,7 @@ using Castle.Windsor;
 using Common.Logging;
 using Common.Logging.Simple;
 using github.trondr.LogViewer.Library.Infrastructure;
-using github.trondr.LogViewer.Library.ViewModels;
+using github.trondr.LogViewer.Library.Module.ViewModels;
 using NUnit.Framework;
 using LogLevel = Common.Logging.LogLevel;
 

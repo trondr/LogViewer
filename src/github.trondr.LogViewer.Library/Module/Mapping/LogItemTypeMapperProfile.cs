@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AutoMapper;
+using github.trondr.LogViewer.Library.Module.Model;
+using github.trondr.LogViewer.Library.Module.ViewModels;
+
+namespace github.trondr.LogViewer.Library.Module.Mapping
+{
+    public class LogItemTypeMapperProfile: Profile
+    {
+        private readonly ILogLevelViewModelProvider _logLevelViewModelProvider;
+        private readonly ILoggerViewModelProvider _loggerViewModelProvider;
+
+        public LogItemTypeMapperProfile(ILogLevelViewModelProvider logLevelViewModelProvider,ILoggerViewModelProvider loggerViewModelProvider)
+        {
+            _logLevelViewModelProvider = logLevelViewModelProvider;
+            _loggerViewModelProvider = loggerViewModelProvider;
+        }
+
+        protected override void Configure()
+        {
+            CreateMap<LogItem, LogItemViewModel>()
+                .ForMember(model => model.Time, expression => expression.MapFrom(item => item.Time))
+                .ForMember(model => model.LogLevel, expression => expression.MapFrom(item => _logLevelViewModelProvider.GetLevel(item.LogLevel.ToString())))
+                .ForMember(model => model.Logger,expression => expression.MapFrom(item => _loggerViewModelProvider.GetLogger(item.Logger)))
+                .ForMember(model => model.ThreadId, expression => expression.MapFrom(item => item.ThreadId))
+                .ForMember(model => model.Message, expression => expression.MapFrom(item => item.Message));
+        }
+    }
+}

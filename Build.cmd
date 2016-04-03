@@ -1,5 +1,6 @@
 @ECHO OFF
 Set ProductName=LogViewer
+Set SolutionName=LogViewer
 
 IF EXIST "%VSDEVCMD%" goto Build
 IF EXIST "%MSBUILDPATH%" goto Build
@@ -27,4 +28,3 @@ IF NOT %BuildErrorLevel% == 0 Set BuildMessage=Failed to build %ProductName%
 
 :End
 Echo %BuildMessage%
-
