@@ -108,6 +108,8 @@
     <Compile Include="Module\Common\UI\CommandHandler.cs" />
     <Compile Include="Module\Common\UI\DispatcherService.cs" />
     <Compile Include="Module\Mapping\LogItemTypeMapperProfile.cs" />
+    <Compile Include="Module\Model\ILogItem.cs" />
+    <Compile Include="Module\Model\ILogItemFactory.cs" />
     <Compile Include="Module\Model\LogItem.cs" />
     <Compile Include="Module\Model\LogLevel.cs" />
     <Compile Include="Module\Services\EventLogItem\EventLogItemConnection.cs" />
@@ -116,6 +118,7 @@
     <Compile Include="Module\Services\EventLogItem\IEventLogItemConnection.cs" />
     <Compile Include="Module\Services\EventLogItem\IEventLogItemConnectionFactory.cs" />
     <Compile Include="Module\Services\EventLogItem\IEventLogItemConnectionStringParser.cs" />
+    <Compile Include="Module\Services\EventLogItem\LogViewerException.cs" />
     <Compile Include="Module\Services\FileLogItem\FileLogItemConnection.cs" />
     <Compile Include="Module\Services\FileLogItem\FileLogItemConnectionStringParser.cs" />
     <Compile Include="Module\Services\FileLogItem\FileLogItemHandler.cs" />

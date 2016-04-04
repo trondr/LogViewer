@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace github.trondr.LogViewer.Library.Module.Model
 {
-    public class LogItem
+    public class LogItem : ILogItem
     {
         public DateTime Time { get; set; }
         public LogLevel LogLevel { get; set; }

@@ -79,6 +79,7 @@
     <Compile Include="IntegrationTests\StandardUser\StandardUserImpersonationTests.cs" />
     <Compile Include="UnitTests\EventLogItemConnectionFactoryTests.cs" />
     <Compile Include="UnitTests\EventLogItemConnectionStringParserTests.cs" />
+    <Compile Include="UnitTests\LogItemFactoryTests.cs" />
     <Compile Include="UnitTests\FileLogItemConnectionFactoryTests.cs" />
     <Compile Include="UnitTests\FileLogItemConnectionStringParserTests.cs" />
     <Compile Include="UnitTests\LoggerViewModelProviderTests.cs" />
