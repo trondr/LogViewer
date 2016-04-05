@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
+using Common.Logging;
+using github.trondr.LogViewer.Library.Module.Services.EventLogItem;
 
 namespace github.trondr.LogViewer.Library.Infrastructure
 {
@@ -10,12 +13,14 @@ namespace github.trondr.LogViewer.Library.Infrastructure
     public class TypeMapper : ITypeMapper
     {
         private readonly IEnumerable<Profile> _typeMapperProfiles;
+        private readonly ILog _logger;
         private IMapper _mapper;
         private object _synch = new object();
 
-        public TypeMapper(IEnumerable<Profile> typeMapperProfiles)
+        public TypeMapper(IEnumerable<Profile> typeMapperProfiles, ILog logger)
         {
             _typeMapperProfiles = typeMapperProfiles;
+            _logger = logger;
         }
 
         private IMapper Mapper
@@ -38,13 +43,42 @@ namespace github.trondr.LogViewer.Library.Infrastructure
         
         public T Map<T>(object source)
         {
-            return Mapper.Map<T>(source);
+            return Mapper.Map<T>(source);            
         }
 
         private IMapper ConfigureAndCreateMapper()
         {
             var mapperConfiguration = new MapperConfiguration(ConfigureTypeMappers);
-            return mapperConfiguration.CreateMapper();
+            var mapper = mapperConfiguration.CreateMapper();
+            ValidateMapper(mapper);
+            return mapper;
+        }
+
+        private void ValidateMapper(IMapper mapper)
+        {
+            int numberOfValidationErrors = 0;
+            foreach (var typeMap in mapper.ConfigurationProvider.GetAllTypeMaps())
+            {
+                numberOfValidationErrors += ValidateTypeMap(mapper,typeMap);                                
+            }
+            if(numberOfValidationErrors > 0)
+            {
+                throw new LogViewerException("Number of AutoMapper configurations errors: " + numberOfValidationErrors);
+            }
+        }
+
+        private int ValidateTypeMap(IMapper mapper, TypeMap typeMap)
+        {
+            try
+            {
+                mapper.ConfigurationProvider.AssertConfigurationIsValid(typeMap);
+            }
+            catch (AutoMapperConfigurationException ex)
+            {
+                _logger.Fatal(ex.Message);
+                return 1;
+            }
+            return 0;
         }
 
         private void ConfigureTypeMappers(IMapperConfiguration mapperConfiguration)
@@ -52,6 +86,7 @@ namespace github.trondr.LogViewer.Library.Infrastructure
             foreach (var profile in _typeMapperProfiles)
             {
                 mapperConfiguration.AddProfile(profile);
+                //((MapperConfiguration)mapperConfiguration).AssertConfigurationIsValid(profile.ProfileName);
             }
         }
     }

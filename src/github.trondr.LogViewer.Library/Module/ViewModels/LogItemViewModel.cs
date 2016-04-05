@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using github.trondr.LogViewer.Library.Module.Common.Collection;
 
 namespace github.trondr.LogViewer.Library.Module.ViewModels
 {
@@ -67,6 +68,8 @@ namespace github.trondr.LogViewer.Library.Module.ViewModels
         {
             get { return (bool) GetValue(IsVisibleProperty); }
             set { SetValue(IsVisibleProperty, value); }
-        }        
+        }
+        
+        public ObservableDictionary<string, string> Properties { get; set; }
     }
 }

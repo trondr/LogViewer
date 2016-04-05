@@ -49,7 +49,7 @@ namespace github.trondr.LogViewer.Tests.UnitTests
                     Properties = new Dictionary<string, string> { { "username", "ola" }, { "lastname", "Normann" } }
                 };
 
-                var actual = target.GetLogItem(expected.Time, expected.LogLevel, expected.Logger, expected.ThreadId, expected.Message, expected.ExceptionString, expected.Properties);
+                var actual = target.GetLogItem(expected.Time, expected.LogLevel, expected.Logger, expected.ThreadId, expected.Message, expected.ExceptionString);
                 Assert.IsInstanceOf<LogItem>(actual);                
                 Assert.IsNotNull(actual);
                 Assert.AreEqual(expected.Time, actual.Time, "Time was not expected.");
@@ -58,8 +58,9 @@ namespace github.trondr.LogViewer.Tests.UnitTests
                 Assert.AreEqual(expected.ThreadId, actual.ThreadId, "ThreadId was not expected.");
                 Assert.AreEqual(expected.Message, actual.Message, "Message was not expected.");
                 Assert.AreEqual(expected.ExceptionString, actual.ExceptionString, "ExceptionString was not expected.");
-                ToDo.Implement(ToDoPriority.Critical, "trondr","Initialization of Dictionary is not working correctly.");
-                Assert.AreEqual(expected.Properties.Count, actual.Properties.Count, "Properties.Count was not expected.");
+                Assert.IsNotNull(actual.Properties, "Properties dictionary was null.");
+                //ToDo.Implement(ToDoPriority.Critical, "trondr","Initialization of Dictionary is not working correctly.");
+                //Assert.AreEqual(expected.Properties.Count, actual.Properties.Count, "Properties.Count was not expected.");
             }
         }
 

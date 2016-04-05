@@ -165,6 +165,7 @@
     <EmbeddedResource Include="Credits\4. Common.Logging Credit.xml" />
     <EmbeddedResource Include="Credits\5. Log4Net Credit.xml" />
     <EmbeddedResource Include="Credits\6. Log2Console Credit.xml" />
+    <EmbeddedResource Include="Credits\7. ObservableDictionary Credit.xml" />
     <Content Include="Debug.txt" />
     <EmbeddedResource Include="License\0 github.trondr.LogViewer License.xml" />
     <EmbeddedResource Include="License\1 Castle Project License.xml" />
@@ -173,6 +174,7 @@
     <EmbeddedResource Include="License\4 Common.Logging License.xml" />
     <EmbeddedResource Include="License\5 Log4Net License.xml" />
     <EmbeddedResource Include="License\6 Log2Console License.xml" />
+    <EmbeddedResource Include="License\7 ObservableDictionary License.xml" />
     <Content Include="NCmdLiner.ico" />
     <Content Include="References.txt" />
   </ItemGroup>

@@ -94,6 +94,7 @@
     <Compile Include="Infrastructure\TypeMapper.cs" />
     <Compile Include="Module\Commands\OpenLog\IOpenLogCommandProvider.cs" />
     <Compile Include="Module\Commands\OpenLog\OpenLogCommandProvider.cs" />
+    <Compile Include="Module\Common\Collection\ObservableDictionary.cs" />
     <Compile Include="Module\Common\Install\IWindowsExplorerContextMenuInstaller.cs" />
     <Compile Include="Module\Common\Install\WindowsExplorerContextMenuInstaller.cs" />
     <Compile Include="Infrastructure\CommandProvider.cs" />
@@ -132,11 +133,9 @@
     <Compile Include="Module\Services\ILogItemHandler.cs" />
     <Compile Include="Module\Services\ILogItemHandlerFactory.cs" />
     <Compile Include="Module\Services\ILogItemNotifiable.cs" />
-    <Compile Include="Module\Services\IMapper.cs" />
     <Compile Include="Module\Services\ITestWriteLog.cs" />
     <Compile Include="Module\Services\Log4JLogItemParser.cs" />
     <Compile Include="Module\Services\LogItemConnectionProvider.cs" />
-    <Compile Include="Module\Services\Mapper.cs" />
     <Compile Include="Module\Services\RandomLogItem\IRandomLogItemConnection.cs" />
     <Compile Include="Module\Services\RandomLogItem\IRandomLogItemConnectionFactory.cs" />
     <Compile Include="Module\Services\RandomLogItem\IRandomLogItemConnectionStringParser.cs" />

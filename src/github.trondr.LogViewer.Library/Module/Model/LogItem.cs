@@ -11,6 +11,7 @@ namespace github.trondr.LogViewer.Library.Module.Model
         public string ThreadId { get; set; }
         public string Message { get; set; }
         public string ExceptionString { get; set; }
+
         public Dictionary<string, string> Properties = new Dictionary<string, string>();
     }
 }
