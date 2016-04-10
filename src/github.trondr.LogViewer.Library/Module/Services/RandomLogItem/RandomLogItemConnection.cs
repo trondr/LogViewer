@@ -3,12 +3,7 @@
     public class RandomLogItemConnection : IRandomLogItemConnection
     {
         private string _value;
-
-        public RandomLogItemConnection(string value)
-        {
-            Value = value;
-        }
-
+        
         public string Value
         {
             get

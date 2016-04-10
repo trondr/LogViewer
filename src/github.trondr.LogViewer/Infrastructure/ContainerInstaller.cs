@@ -26,6 +26,7 @@ namespace github.trondr.LogViewer.Infrastructure
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(Component.For<IWindsorContainer>().Instance(container));
+            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));            
             container.AddFacility<TypedFactoryFacility>();
             container.Register(Component.For<ITypedFactoryComponentSelector>().ImplementedBy<CustomTypeFactoryComponentSelector>());
             container.Register(Component.For<IMessenger>().ImplementedBy<NotepadMessenger>());
@@ -37,15 +38,16 @@ namespace github.trondr.LogViewer.Infrastructure
             var applicationRootNameSpace = typeof(Program).Namespace;
             container.Kernel.Register(Component.For<ILog>().Instance(LogManager.GetLogger(applicationRootNameSpace))); //Default logger
             container.Kernel.Resolver.AddSubResolver(new LoggerSubDependencyResolver()); //Enable injection of class specific loggers
+            container.Register(Component.For<IInvocationLogStringBuilder>().ImplementedBy<InvocationLogStringBuilder>().LifestyleSingleton());
+            container.Register(Component.For<ILogFactory>().ImplementedBy<LogFactory>().LifestyleSingleton());
 
             //Manual registrations
-            container.Register(Component.For<MainWindow>().Activator<StrictComponentActivator>());
-            container.Register(Component.For<MainView>().Activator<StrictComponentActivator>());
-            container.Register(Component.For<MainViewModel>().Activator<StrictComponentActivator>());
+            container.Register(Component.For<MainWindow>().Activator<StrictComponentActivator>().LifestyleSingleton());
+            container.Register(Component.For<MainView>().Activator<StrictComponentActivator>().LifestyleSingleton());
+            container.Register(Component.For<MainViewModel>().Activator<StrictComponentActivator>().LifestyleSingleton());
 
             container.Register(Classes.FromAssemblyInThisApplication().IncludeNonPublicTypes().BasedOn<ILogItemConnectionStringParser>().WithServiceAllInterfaces());
-            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
-
+            
             container.Register(Component.For<ILogItemHandlerFactory>().AsFactory(new LogItemHandlerSelector()));
             container.Register(
                 Classes.FromAssemblyContaining<ILogItemHandlerFactory>()
@@ -83,10 +85,8 @@ namespace github.trondr.LogViewer.Infrastructure
                     .Named("LogItem")
                     .LifeStyle.Transient);
 
-            container.Register(Component.For<IInvocationLogStringBuilder>().ImplementedBy<InvocationLogStringBuilder>().LifestyleSingleton());
-            container.Register(Component.For<ILogFactory>().ImplementedBy<LogFactory>().LifestyleSingleton());
 
-            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
+            
             container.Register(Classes.FromAssemblyContaining<ITypeMapper>().IncludeNonPublicTypes().BasedOn<AutoMapper.Profile>().WithService.Base());
             ///////////////////////////////////////////////////////////////////
             //Automatic registrations
