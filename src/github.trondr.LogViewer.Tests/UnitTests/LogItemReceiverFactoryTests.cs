@@ -9,10 +9,12 @@ using Common.Logging;
 using Common.Logging.Simple;
 using github.trondr.LogViewer.Infrastructure;
 using github.trondr.LogViewer.Library.Infrastructure;
+using github.trondr.LogViewer.Library.Module.Model;
 using github.trondr.LogViewer.Library.Module.Services;
 using github.trondr.LogViewer.Library.Module.Services.EventLogItem;
 using github.trondr.LogViewer.Library.Module.Services.FileLogItem;
 using NUnit.Framework;
+using LogLevel = Common.Logging.LogLevel;
 using SingletonAttribute = github.trondr.LogViewer.Library.Infrastructure.SingletonAttribute;
 
 namespace github.trondr.LogViewer.Tests.UnitTests
@@ -138,6 +140,13 @@ namespace github.trondr.LogViewer.Tests.UnitTests
                         //        .ImplementedBy<SqlTeamProvider>()
                         //        .Named("SqlTeamProvider")
                         //        .LifeStyle.Transient);
+
+                        _container.Register(Component.For<ILogItemFactory>().AsFactory());
+                        _container.Register(
+                            Component.For<LogItem>()
+                                .ImplementedBy<LogItem>()
+                                .Named("LogItem")
+                                .LifeStyle.Transient);
 
                         ///////////////////////////////////////////////////////////////////
                         //Automatic registrations
