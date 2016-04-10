@@ -1,6 +1,6 @@
 ﻿namespace github.trondr.LogViewer.Library.Module.Services.EventLogItem
 {
-    public interface IEventLogItemConnection :ILogItemConnection
+    public interface IEventLogItemConnection : ILogItemConnection
     {
         string LogName {get;set; }
 

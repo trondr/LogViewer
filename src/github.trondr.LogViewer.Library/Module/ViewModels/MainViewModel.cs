@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using AutoMapper;
 using github.trondr.LogViewer.Library.Infrastructure;
 using github.trondr.LogViewer.Library.Module.Common.UI;
 using github.trondr.LogViewer.Library.Module.Model;
@@ -16,11 +15,7 @@ namespace github.trondr.LogViewer.Library.Module.ViewModels
     public class MainViewModel : ViewModelBase, IMainViewModel, ILogItemNotifiable
     {
         private readonly ITypeMapper _typeMapper;
-        //private readonly Timer _testDataTimer;
-        //bool _cancelTestDataTimer;
-        //private readonly AutoResetEvent _autoResetEvent;
         private bool _callBackRegistered;
-        //private int _count;
         private readonly CollectionViewSource _logItemsViewSource;
 
 
@@ -48,7 +43,6 @@ namespace github.trondr.LogViewer.Library.Module.ViewModels
             SearchFilter = Properties.Settings.Default.SearchFilter;
             LogItemIsSelected = false;
             SelectedLogItem = null;
-            Console.WriteLine("MainViewModel");
         }
 
         private Task Update()
