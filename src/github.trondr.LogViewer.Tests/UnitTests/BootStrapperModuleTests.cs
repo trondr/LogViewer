@@ -58,22 +58,64 @@ namespace github.trondr.LogViewer.Tests.UnitTests
         public void ILogItemHandlerFactoryRegistrationTest()
         {
             BootStrapperTestsHelper.CheckThatNumberOfResolvedServicesAre<ILogItemHandlerFactory>(1);
-            BootStrapperTestsHelper.CheckThatResolvedServiceHasSingletonLifeCycle<ILogItemHandlerFactory>();
+            BootStrapperTestsHelper.CheckThatResolvedServiceHasSingletonLifeCycle<ILogItemHandlerFactory>();                  
+        }
+
+        [Test, RequiresSTA]
+        public void FileLogItemConnectionFactoryRegistrationTest()
+        {
+            BootStrapperTestsHelper.CheckThatNumberOfResolvedServicesAre<IFileLogItemConnectionFactory>(1);            
+            BootStrapperTestsHelper.CheckThatResolvedServiceHasSingletonLifeCycle<IFileLogItemConnectionFactory>();                
+        }
+
+        [Test, RequiresSTA]
+        public void EventLogItemConnectionFactoryRegistrationTest()
+        {
+            BootStrapperTestsHelper.CheckThatNumberOfResolvedServicesAre<IEventLogItemConnectionFactory>(1);            
+            BootStrapperTestsHelper.CheckThatResolvedServiceHasSingletonLifeCycle<IEventLogItemConnectionFactory>();                
+        }
+
+        [Test, RequiresSTA]
+        public void RandomLogItemConnectionFactoryRegistrationTest()
+        {
+            BootStrapperTestsHelper.CheckThatNumberOfResolvedServicesAre<IRandomLogItemConnectionFactory>(1);            
+            BootStrapperTestsHelper.CheckThatResolvedServiceHasSingletonLifeCycle<IRandomLogItemConnectionFactory>();                
+        }
+        
+        [Test, RequiresSTA]
+        public void FileLogItemHandlerFactoryRegistrationTest()
+        {
             using (var bootStrapper = new BootStrapperInstance())
             {
                 var target = bootStrapper.Container.Resolve<ILogItemHandlerFactory>();
                 var logItemHandler = target.GetLogItemHandlers(new FileLogItemConnection());
                 Assert.AreEqual(1, logItemHandler.Length, "Handlers for file log item connection is not 1.");
                 Assert.AreEqual(typeof(FileLogItemHandler), logItemHandler[0].GetType(), "Log item handler is not of type FileLogItemHandler");
-
-                logItemHandler = target.GetLogItemHandlers(new EventLogItemConnection());
-                Assert.AreEqual(1, logItemHandler.Length, "Handlers for event log item connection is not 1.");
-                Assert.AreEqual(typeof(EventLogItemHandler), logItemHandler[0].GetType(), "Log item handler is not of type EventLogItemHandler");
-
-                logItemHandler = target.GetLogItemHandlers(new RandomLogItemConnection());
-                Assert.AreEqual(1, logItemHandler.Length, "Handlers for event log item connection is not 1.");
-                Assert.AreEqual(typeof(RandomLogItemHandler), logItemHandler[0].GetType(), "Log item handler is not of type RandomLogItemHandler");
             }            
         }
+
+        [Test, RequiresSTA]
+        public void EventLogItemHandlerFactoryRegistrationTest()
+        {
+            using (var bootStrapper = new BootStrapperInstance())
+            {
+                var target = bootStrapper.Container.Resolve<ILogItemHandlerFactory>();
+                var logItemHandler = target.GetLogItemHandlers(new EventLogItemConnection());
+                Assert.AreEqual(1, logItemHandler.Length, "Handlers for event log item connection is not 1.");
+                Assert.AreEqual(typeof(EventLogItemHandler), logItemHandler[0].GetType(), "Log item handler is not of type EventLogItemHandler");
+            }            
+        }
+
+        [Test, RequiresSTA]
+        public void RandomLogItemHandlerFactoryRegistrationTest()
+        {
+            using (var bootStrapper = new BootStrapperInstance())
+            {
+                var target = bootStrapper.Container.Resolve<ILogItemHandlerFactory>();
+                var logItemHandler = target.GetLogItemHandlers(new RandomLogItemConnection());
+                Assert.AreEqual(1, logItemHandler.Length, "Handlers for Random log item connection is not 1.");
+                Assert.AreEqual(typeof(RandomLogItemHandler), logItemHandler[0].GetType(), "Log item handler is not of type RandomLogItemHandler");
+            }            
+        }        
     }
 }
