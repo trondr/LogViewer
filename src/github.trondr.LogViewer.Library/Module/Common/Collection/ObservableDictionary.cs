@@ -625,7 +625,7 @@ namespace github.trondr.LogViewer.Library.Module.Common.Collection
 
         #region KeyedDictionaryEntryCollection<TKey>
 
-        protected class KeyedDictionaryEntryCollection<TKey> : KeyedCollection<TKey, DictionaryEntry>
+        protected class KeyedDictionaryEntryCollection<TKey1> : KeyedCollection<TKey1, DictionaryEntry>
         {
             #region constructors
 
@@ -633,7 +633,7 @@ namespace github.trondr.LogViewer.Library.Module.Common.Collection
 
             public KeyedDictionaryEntryCollection() : base() { }
 
-            public KeyedDictionaryEntryCollection(IEqualityComparer<TKey> comparer) : base(comparer) { }
+            public KeyedDictionaryEntryCollection(IEqualityComparer<TKey1> comparer) : base(comparer) { }
 
             #endregion public
 
@@ -643,9 +643,9 @@ namespace github.trondr.LogViewer.Library.Module.Common.Collection
 
             #region protected
 
-            protected override TKey GetKeyForItem(DictionaryEntry entry)
+            protected override TKey1 GetKeyForItem(DictionaryEntry entry)
             {
-                return (TKey)entry.Key;
+                return (TKey1)entry.Key;
             }
 
             #endregion protected
@@ -662,17 +662,17 @@ namespace github.trondr.LogViewer.Library.Module.Common.Collection
         #region Enumerator
 
         [Serializable, StructLayout(LayoutKind.Sequential)]
-        public struct Enumerator<TKey, TValue> : IEnumerator<KeyValuePair<TKey, TValue>>, IDisposable, IDictionaryEnumerator, IEnumerator
+        public struct Enumerator<TKey1, TValue1> : IEnumerator<KeyValuePair<TKey1, TValue1>>, IDisposable, IDictionaryEnumerator, IEnumerator
         {
             #region constructors
 
-            internal Enumerator(ObservableDictionary<TKey, TValue> dictionary, bool isDictionaryEntryEnumerator)
+            internal Enumerator(ObservableDictionary<TKey1, TValue1> dictionary, bool isDictionaryEntryEnumerator)
             {
                 _dictionary = dictionary;
                 _version = dictionary._version;
                 _index = -1;
                 _isDictionaryEntryEnumerator = isDictionaryEntryEnumerator;
-                _current = new KeyValuePair<TKey, TValue>();
+                _current = new KeyValuePair<TKey1, TValue1>();
             }
 
             #endregion constructors
@@ -681,7 +681,7 @@ namespace github.trondr.LogViewer.Library.Module.Common.Collection
 
             #region public
 
-            public KeyValuePair<TKey, TValue> Current
+            public KeyValuePair<TKey1, TValue1> Current
             {
                 get
                 {
@@ -708,11 +708,11 @@ namespace github.trondr.LogViewer.Library.Module.Common.Collection
                 _index++;
                 if (_index < _dictionary._keyedEntryCollection.Count)
                 {
-                    _current = new KeyValuePair<TKey, TValue>((TKey)_dictionary._keyedEntryCollection[_index].Key, (TValue)_dictionary._keyedEntryCollection[_index].Value);
+                    _current = new KeyValuePair<TKey1, TValue1>((TKey1)_dictionary._keyedEntryCollection[_index].Key, (TValue1)_dictionary._keyedEntryCollection[_index].Value);
                     return true;
                 }
                 _index = -2;
-                _current = new KeyValuePair<TKey, TValue>();
+                _current = new KeyValuePair<TKey1, TValue1>();
                 return false;
             }
 
@@ -755,7 +755,7 @@ namespace github.trondr.LogViewer.Library.Module.Common.Collection
                     {
                         return new DictionaryEntry(_current.Key, _current.Value);
                     }
-                    return new KeyValuePair<TKey, TValue>(_current.Key, _current.Value);
+                    return new KeyValuePair<TKey1, TValue1>(_current.Key, _current.Value);
                 }
             }
 
@@ -763,7 +763,7 @@ namespace github.trondr.LogViewer.Library.Module.Common.Collection
             {
                 ValidateVersion();
                 _index = -1;
-                _current = new KeyValuePair<TKey, TValue>();
+                _current = new KeyValuePair<TKey1, TValue1>();
             }
 
             #endregion IEnumerator implemenation
@@ -799,10 +799,10 @@ namespace github.trondr.LogViewer.Library.Module.Common.Collection
 
             #region fields
 
-            private ObservableDictionary<TKey, TValue> _dictionary;
+            private ObservableDictionary<TKey1, TValue1> _dictionary;
             private int _version;
             private int _index;
-            private KeyValuePair<TKey, TValue> _current;
+            private KeyValuePair<TKey1, TValue1> _current;
             private bool _isDictionaryEntryEnumerator;
 
             #endregion fields
