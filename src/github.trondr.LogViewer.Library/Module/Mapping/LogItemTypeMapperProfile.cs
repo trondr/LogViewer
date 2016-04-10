@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using github.trondr.LogViewer.Library.Module.Model;
 using github.trondr.LogViewer.Library.Module.ViewModels;
 
@@ -27,7 +22,9 @@ namespace github.trondr.LogViewer.Library.Module.Mapping
                 .ForMember(model => model.LogLevel, expression => expression.MapFrom(item => _logLevelViewModelProvider.GetLevel(item.LogLevel.ToString())))
                 .ForMember(model => model.Logger,expression => expression.MapFrom(item => _loggerViewModelProvider.GetLogger(item.Logger)))
                 .ForMember(model => model.ThreadId, expression => expression.MapFrom(item => item.ThreadId))
-                .ForMember(model => model.Message, expression => expression.MapFrom(item => item.Message));
+                .ForMember(model => model.Message, expression => expression.MapFrom(item => item.Message))
+                .ForMember(model => model.ExceptionString, expression => expression.MapFrom(item => item.ExceptionString))
+                .ForMember(model => model.IsVisible, expression => expression.Ignore());
         }
     }
 }

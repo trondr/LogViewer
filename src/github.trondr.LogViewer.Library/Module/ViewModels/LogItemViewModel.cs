@@ -34,15 +34,6 @@ namespace github.trondr.LogViewer.Library.Module.ViewModels
             set { SetValue(LoggerProperty, value); }
         }
 
-        //public static readonly DependencyProperty ThreadIdProperty = DependencyProperty.Register(
-        //    "ThreadId", typeof (int), typeof (LogItemViewModel), new PropertyMetadata(default(int)));
-
-        //public int ThreadId
-        //{
-        //    get { return (int) GetValue(ThreadIdProperty); }
-        //    set { SetValue(ThreadIdProperty, value); }
-        //}
-
         public static readonly DependencyProperty ThreadIdProperty = DependencyProperty.Register(
             "ThreadId", typeof (string), typeof (LogItemViewModel), new PropertyMetadata(default(string)));
 
@@ -71,5 +62,14 @@ namespace github.trondr.LogViewer.Library.Module.ViewModels
         }
         
         public ObservableDictionary<string, string> Properties { get; set; }
+
+        public static readonly DependencyProperty ExceptionStringProperty = DependencyProperty.Register(
+            "ExceptionString", typeof (string), typeof (LogItemViewModel), new PropertyMetadata(default(string)));
+
+        public string ExceptionString
+        {
+            get { return (string) GetValue(ExceptionStringProperty); }
+            set { SetValue(ExceptionStringProperty, value); }
+        }
     }
 }
