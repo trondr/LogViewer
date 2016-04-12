@@ -2,7 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using Common.Logging;
 
-namespace github.trondr.LogViewer.Library.Module.Services.EventLogItem
+namespace github.trondr.LogViewer.Library.Module.Services.EventLog
 {
     public class EventLogItemConnectionStringParser : IEventLogItemConnectionStringParser
     {

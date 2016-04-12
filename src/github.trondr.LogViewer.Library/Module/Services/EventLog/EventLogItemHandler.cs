@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Security;
 using github.trondr.LogViewer.Library.Module.Model;
 
-namespace github.trondr.LogViewer.Library.Module.Services.EventLogItem
+namespace github.trondr.LogViewer.Library.Module.Services.EventLog
 {
     public class EventLogItemHandler : ILogItemHandler<EventLogItemConnection>
     {
         private readonly ILogItemFactory _logItemFactory;
         private IEventLogItemConnection _eventLogItemConnection;
-        private EventLog _eventLog;
+        private System.Diagnostics.EventLog _eventLog;
         private string _baseLoggerName;
         private ILogItemNotifiable _logItemNotifiable;
         private object _sync = new object();
@@ -25,7 +24,7 @@ namespace github.trondr.LogViewer.Library.Module.Services.EventLogItem
             try
             {
                 _eventLogItemConnection = GetEventLogConnection();
-                _eventLog = new EventLog(_eventLogItemConnection.LogName, _eventLogItemConnection.Machine, _eventLogItemConnection.Source);
+                _eventLog = new System.Diagnostics.EventLog(_eventLogItemConnection.LogName, _eventLogItemConnection.Machine, _eventLogItemConnection.Source);
                 _eventLog.EntryWritten += EventLogEntryWritten;
                 _eventLog.EnableRaisingEvents = true;
                 _baseLoggerName = GetBaseLoggerName(_eventLogItemConnection);

@@ -1,4 +1,4 @@
-﻿namespace github.trondr.LogViewer.Library.Module.Services.FileLogItem
+﻿namespace github.trondr.LogViewer.Library.Module.Services.FileLog
 {
     public class FileLogItemConnection : IFileLogItemConnection
     {

@@ -12,9 +12,10 @@ using NCmdLiner;
 using github.trondr.LogViewer.Library.Infrastructure;
 using github.trondr.LogViewer.Library.Module.Model;
 using github.trondr.LogViewer.Library.Module.Services;
-using github.trondr.LogViewer.Library.Module.Services.EventLogItem;
-using github.trondr.LogViewer.Library.Module.Services.FileLogItem;
-using github.trondr.LogViewer.Library.Module.Services.RandomLogItem;
+using github.trondr.LogViewer.Library.Module.Services.EventLog;
+using github.trondr.LogViewer.Library.Module.Services.FileLog;
+using github.trondr.LogViewer.Library.Module.Services.RandomLog;
+using github.trondr.LogViewer.Library.Module.Services.WinDebugLog;
 using github.trondr.LogViewer.Library.Module.ViewModels;
 using github.trondr.LogViewer.Library.Module.Views;
 using SingletonAttribute = github.trondr.LogViewer.Library.Infrastructure.SingletonAttribute;
@@ -76,6 +77,13 @@ namespace github.trondr.LogViewer.Infrastructure
                 Component.For<IRandomLogItemConnection>()
                     .ImplementedBy<RandomLogItemConnection>()
                     .Named("RandomLogItemConnection")
+                    .LifeStyle.Transient);
+
+            container.Register(Component.For<IWinDebugLogItemConnectionFactory>().AsFactory());
+            container.Register(
+                Component.For<IWinDebugLogItemConnection>()
+                    .ImplementedBy<WinDebugLogItemConnection>()
+                    .Named("WinDebugLogItemConnection")
                     .LifeStyle.Transient);
 
             container.Register(Component.For<ILogItemFactory>().AsFactory());

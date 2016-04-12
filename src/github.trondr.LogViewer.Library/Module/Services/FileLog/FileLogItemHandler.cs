@@ -5,7 +5,7 @@ using System.Text;
 using Common.Logging;
 using github.trondr.LogViewer.Library.Module.Model;
 
-namespace github.trondr.LogViewer.Library.Module.Services.FileLogItem
+namespace github.trondr.LogViewer.Library.Module.Services.FileLog
 {
     public class FileLogItemHandler : ILogItemHandler<FileLogItemConnection>
     {

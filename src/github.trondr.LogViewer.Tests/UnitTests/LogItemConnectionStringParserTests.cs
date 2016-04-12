@@ -9,9 +9,10 @@ using Common.Logging.Simple;
 using github.trondr.LogViewer.Infrastructure;
 using github.trondr.LogViewer.Library.Infrastructure;
 using github.trondr.LogViewer.Library.Module.Services;
-using github.trondr.LogViewer.Library.Module.Services.EventLogItem;
-using github.trondr.LogViewer.Library.Module.Services.FileLogItem;
-using github.trondr.LogViewer.Library.Module.Services.RandomLogItem;
+using github.trondr.LogViewer.Library.Module.Services.EventLog;
+using github.trondr.LogViewer.Library.Module.Services.FileLog;
+using github.trondr.LogViewer.Library.Module.Services.RandomLog;
+using github.trondr.LogViewer.Library.Module.Services.WinDebugLog;
 using NUnit.Framework;
 using SingletonAttribute = github.trondr.LogViewer.Library.Infrastructure.SingletonAttribute;
 
@@ -98,6 +99,13 @@ namespace github.trondr.LogViewer.Tests.UnitTests
                             Component.For<IRandomLogItemConnection>()
                                 .ImplementedBy<RandomLogItemConnection>()
                                 .Named("RandomLogItemConnection")
+                                .LifeStyle.Transient);
+
+                        _container.Register(Component.For<IWinDebugLogItemConnectionFactory>().AsFactory());
+                        _container.Register(
+                            Component.For<IWinDebugLogItemConnection>()
+                                .ImplementedBy<WinDebugLogItemConnection>()
+                                .Named("WinDebugLogItemConnection")
                                 .LifeStyle.Transient);
 
                         //Configure logging

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace github.trondr.LogViewer.Library.Module.Services.EventLogItem
+namespace github.trondr.LogViewer.Library.Module.Services.EventLog
 {
     public class LogViewerException : Exception
     {

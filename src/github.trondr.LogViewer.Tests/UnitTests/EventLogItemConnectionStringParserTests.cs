@@ -6,7 +6,7 @@ using Common.Logging;
 using Common.Logging.Simple;
 using github.trondr.LogViewer.Infrastructure;
 using github.trondr.LogViewer.Library.Infrastructure;
-using github.trondr.LogViewer.Library.Module.Services.EventLogItem;
+using github.trondr.LogViewer.Library.Module.Services.EventLog;
 using NUnit.Framework;
 
 namespace github.trondr.LogViewer.Tests.UnitTests

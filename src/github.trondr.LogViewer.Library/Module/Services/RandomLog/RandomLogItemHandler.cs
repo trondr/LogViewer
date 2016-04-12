@@ -5,7 +5,7 @@ using System.Timers;
 using github.trondr.LogViewer.Library.Module.Model;
 using LogLevel = github.trondr.LogViewer.Library.Module.Model.LogLevel;
 
-namespace github.trondr.LogViewer.Library.Module.Services.RandomLogItem
+namespace github.trondr.LogViewer.Library.Module.Services.RandomLog
 {
     public class RandomLogItemHandler : ILogItemHandler<RandomLogItemConnection>
     {

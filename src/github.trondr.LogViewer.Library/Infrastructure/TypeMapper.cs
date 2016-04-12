@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using AutoMapper;
 using Common.Logging;
-using github.trondr.LogViewer.Library.Module.Services.EventLogItem;
+using github.trondr.LogViewer.Library.Module.Services.EventLog;
 
 namespace github.trondr.LogViewer.Library.Infrastructure
 {
