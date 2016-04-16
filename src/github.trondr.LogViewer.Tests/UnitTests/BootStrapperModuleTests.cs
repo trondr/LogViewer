@@ -87,7 +87,7 @@ namespace github.trondr.LogViewer.Tests.UnitTests
         [Test, RequiresSTA]
         public void FileLogItemHandlerFactoryRegistrationTest()
         {
-            using (var bootStrapper = new BootStrapperInstance())
+            using (var bootStrapper = new BootStrapper())
             {
                 var target = bootStrapper.Container.Resolve<ILogItemHandlerFactory>();
                 var logItemHandler = target.GetLogItemHandlers(new FileLogItemConnection());
@@ -99,7 +99,7 @@ namespace github.trondr.LogViewer.Tests.UnitTests
         [Test, RequiresSTA]
         public void EventLogItemHandlerFactoryRegistrationTest()
         {
-            using (var bootStrapper = new BootStrapperInstance())
+            using (var bootStrapper = new BootStrapper())
             {
                 var target = bootStrapper.Container.Resolve<ILogItemHandlerFactory>();
                 var logItemHandler = target.GetLogItemHandlers(new EventLogItemConnection());
@@ -111,7 +111,7 @@ namespace github.trondr.LogViewer.Tests.UnitTests
         [Test, RequiresSTA]
         public void RandomLogItemHandlerFactoryRegistrationTest()
         {
-            using (var bootStrapper = new BootStrapperInstance())
+            using (var bootStrapper = new BootStrapper())
             {
                 var target = bootStrapper.Container.Resolve<ILogItemHandlerFactory>();
                 var logItemHandler = target.GetLogItemHandlers(new RandomLogItemConnection());
@@ -141,7 +141,7 @@ namespace github.trondr.LogViewer.Tests.UnitTests
         [Test, RequiresSTA]
         public void LogItemMapperConfigurationTest()
         {
-            using (var bootStrapper = new BootStrapperInstance())
+            using (var bootStrapper = new BootStrapper())
             {
                 var typeMapper = bootStrapper.Container.Resolve<ITypeMapper>();
                 var messsage = "An error";

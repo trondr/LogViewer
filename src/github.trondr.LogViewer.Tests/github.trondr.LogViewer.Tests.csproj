@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>NCmdLiner.pfx</AssemblyOriginatorKeyFile>
@@ -76,6 +76,10 @@
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\tools\NuGetPackages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
     </Reference>
+    <Reference Include="syslog4net, Version=1.0.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\tools\NuGetPackages\syslog4net.1.0.10\lib\net40\syslog4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
@@ -115,7 +119,8 @@
     <Compile Include="IntegrationTests\AdminUser\AdminUserImpersonationTests.cs" />
     <Compile Include="Common\SecurityHelper.cs" />
     <Compile Include="IntegrationTests\AdminUser\ExampleStandardUserIntegrationTests.cs" />
-    <Compile Include="IntegrationTests\ExampleIntegrationTests.cs" />
+    <Compile Include="IntegrationTests\TestTcpLogGenerator.cs" />
+    <Compile Include="IntegrationTests\TcpLogIntegrationTests.cs" />
     <Compile Include="IntegrationTests\StandardUser\ExampleStandardUserIntegrationTests.cs" />
     <Compile Include="IntegrationTests\StandardUser\StandardUserImpersonationTests.cs" />
     <Compile Include="UnitTests\BootStrapperModuleTests.cs" />

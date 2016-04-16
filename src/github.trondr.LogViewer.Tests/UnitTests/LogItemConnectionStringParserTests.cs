@@ -38,14 +38,10 @@ namespace github.trondr.LogViewer.Tests.UnitTests
         [Test]
         public void LogItemConnectionStringParserTest1()
         {            
-            using(var testBooStrapper = new TestBootStrapper(GetType()))
+            using(var booStrapper = new BootStrapper())
             {
-                var target = testBooStrapper.Container.ResolveAll<ILogItemConnectionStringParser>();
-                Assert.IsTrue(target.Length > 0, "Failed to resolve any ILogItemConnectionStringParser components");
-                //var fileLogItemConnection = new FileLogItemConnection();
-                //var actual = target.GetLogItemHandlers(fileLogItemConnection).ToList();
-                //Assert.AreEqual(1, actual.Count);
-                //Assert.AreEqual(actual[0].GetType(), typeof(FileLogItemHandler));
+                var target = booStrapper.Container.ResolveAll<ILogItemConnectionStringParser>();
+                Assert.IsTrue(target.Length > 0, "Failed to resolve any ILogItemConnectionStringParser components");               
             }
         }
 

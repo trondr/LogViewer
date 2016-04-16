@@ -7,16 +7,16 @@ namespace github.trondr.LogViewer.Library.Module.Services.FileLog
 
     public class FileLogItemConnectionStringParser : IFileLogItemConnectionStringParser
     {
-        private readonly IFileLogItemConnectionFactory _fileLogItemConnectionStringFactory;
+        private readonly IFileLogItemConnectionFactory _fileLogItemConnectionFactory;
         private readonly ILog _logger;
 
         private readonly Regex _fileUrlRegEx = new Regex("^file://(.+)$");
         private readonly Regex _uncPathRegEx = new Regex(@"^(\\\\.+)$");
         private readonly Regex _localPathRegEx = new Regex(@"^([a-zA-z]:.+)$");
 
-        public FileLogItemConnectionStringParser(IFileLogItemConnectionFactory fileLogItemConnectionStringFactory, ILog logger)
+        public FileLogItemConnectionStringParser(IFileLogItemConnectionFactory fileLogItemConnectionFactory, ILog logger)
         {
-            _fileLogItemConnectionStringFactory = fileLogItemConnectionStringFactory;
+            _fileLogItemConnectionFactory = fileLogItemConnectionFactory;
             _logger = logger;
         }
 
@@ -33,7 +33,7 @@ namespace github.trondr.LogViewer.Library.Module.Services.FileLog
 
             if(!string.IsNullOrEmpty(fileName))
             {
-                return _fileLogItemConnectionStringFactory.GetFileLogItemConnection(connectionString, fileName);
+                return _fileLogItemConnectionFactory.GetFileLogItemConnection(connectionString, fileName);
             }
 
             _logger.WarnFormat("Invalid connection string '{0}'. File log connection string must be on the format: 'file:\\<log file path>' or '<unc path>' or '<local path>'", connectionString);

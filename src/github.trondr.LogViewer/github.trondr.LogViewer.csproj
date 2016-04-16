@@ -130,7 +130,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Infrastructure\BootStrapper.cs" />
-    <Compile Include="Infrastructure\BootStrapperInstance.cs" />
     <Compile Include="Infrastructure\DebugLogAspect.cs" />
     <Compile Include="Infrastructure\IInvocationLogStringBuilder.cs" />
     <Compile Include="Infrastructure\ILogFactory.cs" />

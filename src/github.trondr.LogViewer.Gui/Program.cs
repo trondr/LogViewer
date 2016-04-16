@@ -50,7 +50,7 @@ namespace github.trondr.LogViewer.Gui
             var consoleExe = assembly.Location.Replace(".Gui.exe",".exe");
             if(!File.Exists(consoleExe))
             {
-                throw new FileNotFoundException("Failed to derive console executable from entry assembly. Entry assembly is null.");
+                throw new FileNotFoundException("Failed to derive console executable from entry assembly. Console exe does not exist:" + consoleExe);
             }
             return consoleExe;
         }

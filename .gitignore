@@ -51,3 +51,5 @@ Doc\Help
 */tools/NuGetPackages/Newtonsoft.Json.*/*
 */tools/NuGetPackages/RhinoMocks.*/*
 */tools/NuGetPackages/log4net.*/*
+tools/NuGetPackages/log4net.2.0.0/
+tools/NuGetPackages/syslog4net.1.0.10/

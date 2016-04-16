@@ -12,7 +12,7 @@ namespace github.trondr.LogViewer.Tests.Common
 
         public static void CheckThatNumberOfResolvedServicesAre<T>(int numberOfServices, string message)
         {
-            using (var bootStrapper = new BootStrapperInstance())
+            using (var bootStrapper = new BootStrapper())
             {
                 var target = bootStrapper.Container.ResolveAll<T>();
                 Assert.AreEqual(numberOfServices, target.Length, string.Format("Number of resolved '{0}' was not expected. {1}", typeof(T).Name, message));
@@ -21,7 +21,7 @@ namespace github.trondr.LogViewer.Tests.Common
 
         public static void CheckThatResolvedServiceIsOfInstanceType<T, TV>()
         {
-            using (var bootStrapper = new BootStrapperInstance())
+            using (var bootStrapper = new BootStrapper())
             {
                 var target = bootStrapper.Container.Resolve<T>();
                 Assert.AreEqual(typeof(TV), target.GetType(), string.Format("'{0}' was not of type '{1}'", typeof(T).Name, typeof(TV).Name));
@@ -30,7 +30,7 @@ namespace github.trondr.LogViewer.Tests.Common
 
         public static void CheckThatResolvedServiceHasSingletonLifeCycle<T>()
         {
-            using (var bootStrapper = new BootStrapperInstance())
+            using (var bootStrapper = new BootStrapper())
             {
                 var target1 = bootStrapper.Container.ResolveAll<T>();
                 var target2 = bootStrapper.Container.ResolveAll<T>();
@@ -44,7 +44,7 @@ namespace github.trondr.LogViewer.Tests.Common
 
         public static void CheckThatResolvedServiceHasTransientLifeCycle<T>()
         {
-            using (var bootStrapper = new BootStrapperInstance())
+            using (var bootStrapper = new BootStrapper())
             {
                 var target1 = bootStrapper.Container.ResolveAll<T>();
                 var target2 = bootStrapper.Container.ResolveAll<T>();
@@ -58,7 +58,7 @@ namespace github.trondr.LogViewer.Tests.Common
 
         public static void CheckThatResolvedServiceIsSameAsInstance<T>(T instance)
         {
-            using (var bootStrapper = new BootStrapperInstance())
+            using (var bootStrapper = new BootStrapper())
             {
                 var target = bootStrapper.Container.Resolve<T>();                              
                 Assert.AreEqual(instance.GetHashCode(), target.GetHashCode(), string.Format("Resolved instance of service '{0}' is not the same as input instance.", typeof(T).Name));

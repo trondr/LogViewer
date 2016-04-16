@@ -37,7 +37,7 @@ namespace github.trondr.LogViewer.Tests.UnitTests
             BootStrapperTestsHelper.CheckThatNumberOfResolvedServicesAre<IWindsorContainer>(1);
             BootStrapperTestsHelper.CheckThatResolvedServiceIsOfInstanceType<IWindsorContainer, WindsorContainer>();
             BootStrapperTestsHelper.CheckThatResolvedServiceHasSingletonLifeCycle<IWindsorContainer>();
-            using (var bootStrapper = new BootStrapperInstance())
+            using (var bootStrapper = new BootStrapper())
             {
                 var target = bootStrapper.Container.Resolve<IWindsorContainer>();
                 Assert.AreEqual(bootStrapper.Container.GetHashCode(), target.GetHashCode(), string.Format("Instance of service '{0}' is not the same.", typeof(IWindsorContainer)));
@@ -49,7 +49,7 @@ namespace github.trondr.LogViewer.Tests.UnitTests
         {
             BootStrapperTestsHelper.CheckThatNumberOfResolvedServicesAre<ITypedFactoryComponentSelector>(3);
             BootStrapperTestsHelper.CheckThatResolvedServiceHasSingletonLifeCycle<ITypedFactoryComponentSelector>();
-            using (var bootStrapper = new BootStrapperInstance())
+            using (var bootStrapper = new BootStrapper())
             {
                 var target = bootStrapper.Container.ResolveAll<ITypedFactoryComponentSelector>();                
                 Assert.AreEqual(typeof(CustomTypeFactoryComponentSelector), target[2].GetType(), "The third ITypedFactoryComponentSelector instance was not of type CustomTypeFactoryComponentSelector");
@@ -133,7 +133,7 @@ namespace github.trondr.LogViewer.Tests.UnitTests
             BootStrapperTestsHelper.CheckThatNumberOfResolvedServicesAre<MainView>(1);
             BootStrapperTestsHelper.CheckThatResolvedServiceIsOfInstanceType<MainView, MainView>();
             BootStrapperTestsHelper.CheckThatResolvedServiceHasSingletonLifeCycle<MainView>();
-            using (var bootStrapper = new BootStrapperInstance())
+            using (var bootStrapper = new BootStrapper())
             {
                 var target = bootStrapper.Container.ResolveAll<MainView>();                
                 Assert.IsNotNull(target[0].ViewModel, "ViewModel was null");
@@ -146,7 +146,7 @@ namespace github.trondr.LogViewer.Tests.UnitTests
             BootStrapperTestsHelper.CheckThatNumberOfResolvedServicesAre<MainWindow>(1);
             BootStrapperTestsHelper.CheckThatResolvedServiceIsOfInstanceType<MainWindow, MainWindow>();
             BootStrapperTestsHelper.CheckThatResolvedServiceHasSingletonLifeCycle<MainWindow>();
-            using (var bootStrapper = new BootStrapperInstance())
+            using (var bootStrapper = new BootStrapper())
             {
                 var target = bootStrapper.Container.ResolveAll<MainWindow>();
                 Assert.IsNotNull(target[0].View, "View was null");
