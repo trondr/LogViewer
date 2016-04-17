@@ -6,10 +6,10 @@ using github.trondr.LogViewer.Infrastructure;
 using github.trondr.LogViewer.Library.Module.Commands.OpenLog;
 using NUnit.Framework;
 
-namespace github.trondr.LogViewer.Tests.IntegrationTests
+namespace github.trondr.LogViewer.Tests.ManualTests.TcpLogTests
 {
-    [TestFixture(Category = "IntegrationTests")]
-    public class TcpLogIntegrationTests
+    [TestFixture(Category = "ManualTests")]
+    public class TcpLogManualTests
     {
         private ConsoleOutLogger _logger;
 
@@ -28,35 +28,29 @@ namespace github.trondr.LogViewer.Tests.IntegrationTests
         [Test, RequiresSTA]
         public void TcpLogTest()
         {
-            StartTcpTestLogger();
             using (var bootStrapper = new BootStrapper())
             {
                 var container = bootStrapper.Container;
                 var openLogProvider = container.Resolve<IOpenLogCommandProvider>();
+                var logGenerator = new TestTcpLogGenerator("localhost", 8099);
+                StartTcpTestLogger(logGenerator);
                 openLogProvider.OpenLogs(new string[] {"tcp:somehost:8099:ipv4"});
-            }            
+                StoppTcpTestLogger(logGenerator);
+            }
         }
 
-        private void StartTcpTestLogger()
+        private static void StoppTcpTestLogger(TestTcpLogGenerator logGenerator)
         {
-            var threadStart = new ThreadStart(Start);
+            logGenerator.Stop();
+            Thread.Sleep(1000);
+        }
+
+        private void StartTcpTestLogger(TestTcpLogGenerator logGenerator)
+        {
+            if (logGenerator == null) throw new ArgumentNullException(nameof(logGenerator));
+            var threadStart = new ThreadStart(logGenerator.Start);
             var thread = new Thread(threadStart);
             thread.Start();
-        }
-
-        private void Start()
-        {
-            try
-            {
-                var logGenerator = new TestTcpLogGenerator("localhost",8099);
-                logGenerator.Start();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-            
-        }
+        }        
     }
 }

@@ -142,6 +142,12 @@
     <Compile Include="Module\Services\RandomLog\RandomLogItemConnection.cs" />
     <Compile Include="Module\Services\RandomLog\RandomLogItemHandler.cs" />
     <Compile Include="Module\Services\RandomLog\RandomLogItemLogItemConnectionStringParser.cs" />
+    <Compile Include="Module\Services\UdpLog\IUdpLogItemConnection.cs" />
+    <Compile Include="Module\Services\UdpLog\IUdpLogItemConnectionFactory.cs" />
+    <Compile Include="Module\Services\UdpLog\IUdpLogItemConnectionStringParser.cs" />
+    <Compile Include="Module\Services\UdpLog\UdpLogItemConnection.cs" />
+    <Compile Include="Module\Services\UdpLog\UdpLogItemHandler.cs" />
+    <Compile Include="Module\Services\UdpLog\UdpLogItemLogItemConnectionStringParser.cs" />
     <Compile Include="Module\Services\TcpLog\IpVersion.cs" />
     <Compile Include="Module\Services\TestWriteLog.cs" />
     <Compile Include="Module\Services\TcpLog\ITcpLogItemConnectionStringParser.cs" />

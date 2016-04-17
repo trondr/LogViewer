@@ -113,7 +113,7 @@ namespace github.trondr.LogViewer.Library.Module.Services.TcpLog
             }
             catch (Exception ex)
             {
-                _logger.Warn("System.Exception when listning for TCP log items: " + ex.Message);
+                //_logger.Warn("System.Exception when listning for TCP log items: " + ex.Message);
             }
         }
     }
