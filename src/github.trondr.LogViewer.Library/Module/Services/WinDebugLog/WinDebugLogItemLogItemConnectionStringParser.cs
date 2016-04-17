@@ -1,6 +1,7 @@
+using github.trondr.LogViewer.Library.Module.Services.UdpLog;
+
 namespace github.trondr.LogViewer.Library.Module.Services.WinDebugLog
 {
-
     public class WinDebugLogItemLogItemConnectionStringParser : IWinDebugLogItemConnectionStringParser
     {
         private readonly IWinDebugLogItemConnectionFactory _winDebugLogItemConnectionFactory;
@@ -17,8 +18,15 @@ namespace github.trondr.LogViewer.Library.Module.Services.WinDebugLog
 
         public ILogItemConnection Parse(string connectionString)
         {
-            return _winDebugLogItemConnectionFactory.GetWinDebugLogItemConnection(connectionString);
+            if(IsWinDebugConnectionString(connectionString))
+            {
+                return _winDebugLogItemConnectionFactory.GetWinDebugLogItemConnection(connectionString);
+            }
+            var message = string.Format("Invalid random connection string '{0}'. Valid {1}", connectionString, HelpString);
+            throw new InvalidConnectionStringException(message);
         }
+
+        public string HelpString { get; set; } = "WinDebug connection string format: 'windebug'";
 
         private bool IsWinDebugConnectionString(string connectionString)
         {

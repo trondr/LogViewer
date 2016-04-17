@@ -1,6 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 using Common.Logging;
+using github.trondr.LogViewer.Library.Module.Services.UdpLog;
 
 namespace github.trondr.LogViewer.Library.Module.Services.TcpLog
 {
@@ -36,9 +37,11 @@ namespace github.trondr.LogViewer.Library.Module.Services.TcpLog
                 var ipVersion = (IpVersion)Enum.Parse(typeof(IpVersion), match.Groups[3].Value, true);
                 var connection = _tcpLogItemConnectionFactory.GetTcpLogItemConnection(connectionString, hostName, port, ipVersion);
                 return connection;    
-            }
-            _logger.WarnFormat("Invalid connection string '{0}'. Tcp connection string must be on the format: 'tcp:<hostname>:<port>:<Ipv4|Ipv6>'", connectionString);
-            return null;
+            }            
+            var message = string.Format("Invalid tcp connection string '{0}'. Valid {1}", connectionString, HelpString);
+            throw new InvalidConnectionStringException(message);
         }
+
+        public string HelpString { get; set; } = "Tcp connection string format: 'tcp:<hostname>:<port>:<Ipv4|Ipv6>'";
     }
 }

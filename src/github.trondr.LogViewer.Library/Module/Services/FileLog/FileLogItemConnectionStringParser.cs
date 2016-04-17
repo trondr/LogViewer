@@ -1,6 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 using Common.Logging;
+using github.trondr.LogViewer.Library.Module.Services.UdpLog;
 
 namespace github.trondr.LogViewer.Library.Module.Services.FileLog
 {
@@ -36,9 +37,11 @@ namespace github.trondr.LogViewer.Library.Module.Services.FileLog
                 return _fileLogItemConnectionFactory.GetFileLogItemConnection(connectionString, fileName);
             }
 
-            _logger.WarnFormat("Invalid connection string '{0}'. File log connection string must be on the format: 'file:\\<log file path>' or '<unc path>' or '<local path>'", connectionString);
-            return null;
+            var message = string.Format("Invalid file connection string '{0}'. Valid {1}", connectionString, HelpString);
+            throw new InvalidConnectionStringException(message);
         }
+
+        public string HelpString { get; set; } = @"File log connection string format: 'file://<log file path>' or '<unc path>' or '<local path>'";
 
         private string GetFileNameFromConnectionString(string connectionString)
         {

@@ -136,13 +136,14 @@
     <Compile Include="Module\Services\ITestWriteLog.cs" />
     <Compile Include="Module\Services\Log4JLogItemParser.cs" />
     <Compile Include="Module\Services\LogItemConnectionProvider.cs" />
+    <Compile Include="Module\Services\DuplicateConnectionStringException.cs" />
     <Compile Include="Module\Services\RandomLog\IRandomLogItemConnection.cs" />
     <Compile Include="Module\Services\RandomLog\IRandomLogItemConnectionFactory.cs" />
     <Compile Include="Module\Services\RandomLog\IRandomLogItemConnectionStringParser.cs" />
     <Compile Include="Module\Services\RandomLog\RandomLogItemConnection.cs" />
     <Compile Include="Module\Services\RandomLog\RandomLogItemHandler.cs" />
     <Compile Include="Module\Services\RandomLog\RandomLogItemLogItemConnectionStringParser.cs" />
-    <Compile Include="Module\Services\UdpLog\InvalidConnectionStringException.cs" />
+    <Compile Include="Module\Services\InvalidConnectionStringException.cs" />
     <Compile Include="Module\Services\UdpLog\IUdpLogItemConnection.cs" />
     <Compile Include="Module\Services\UdpLog\IUdpLogItemConnectionFactory.cs" />
     <Compile Include="Module\Services\UdpLog\IUdpLogItemConnectionStringParser.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Module\Services\TcpLog\TcpLogItemConnection.cs" />
     <Compile Include="Module\Services\TcpLog\TcpLogItemHandler.cs" />
     <Compile Include="Module\Services\TcpLog\TcpLogItemLogItemConnectionStringParser.cs" />
+    <Compile Include="Module\Services\UnSupportedConnectionStringException.cs" />
     <Compile Include="Module\Services\WinDebugLog\IWinDebugLogItemConnection.cs" />
     <Compile Include="Module\Services\WinDebugLog\IWinDebugLogItemConnectionFactory.cs" />
     <Compile Include="Module\Services\WinDebugLog\IWinDebugLogItemConnectionStringParser.cs" />

@@ -51,13 +51,30 @@ namespace github.trondr.LogViewer.Library.Module.Services
                 {
                     sb.AppendFormat("'{0}', ", unsupportedConnectionString);
                 }
-                throw new NotSupportedException(sb.ToString().TrimEnd(',', ' '));
+                var notSupportedConnectionStrings = sb.ToString().TrimEnd(',', ' ');
+                var supportedConnectionStringFormats = GetSupportedConnectionStringFormats();
+                var message = string.Format("{1}{0}Supported connection string formats:{0}{2}",Environment.NewLine, notSupportedConnectionStrings,supportedConnectionStringFormats );
+                throw new UnSupportedConnectionStringException(message);
             }            
         }
 
         private void AddConnectionStringToIsSupportedDictionary(string connectionString, Dictionary<string, object> supportedDictionary)
         {
+            if(supportedDictionary.ContainsKey(connectionString))
+            {
+                throw new DuplicateConnectionStringException("Duplicate connection string found: " + connectionString);
+            }
             supportedDictionary.Add(connectionString,null);
+        }
+
+        private string GetSupportedConnectionStringFormats()
+        {
+            var sb = new StringBuilder();
+            foreach (var logItemConnectionStringParser in _connectionStringParsers)
+            {
+                sb.AppendLine(logItemConnectionStringParser.HelpString);
+            }
+            return sb.ToString();
         }
     }
 }

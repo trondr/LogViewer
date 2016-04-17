@@ -1,3 +1,5 @@
+using github.trondr.LogViewer.Library.Module.Services.UdpLog;
+
 namespace github.trondr.LogViewer.Library.Module.Services.RandomLog
 {
 
@@ -17,10 +19,17 @@ namespace github.trondr.LogViewer.Library.Module.Services.RandomLog
 
         public ILogItemConnection Parse(string connectionString)
         {
-            return _randomLogItemConnectionFactory.GetRandomLogItemConnection(connectionString);
+            if(IsRandomConnectionString(connectionString))
+            {
+                return _randomLogItemConnectionFactory.GetRandomLogItemConnection(connectionString);
+            }
+            var message = string.Format("Invalid random connection string '{0}'. Valid {1}", connectionString, HelpString);
+            throw new InvalidConnectionStringException(message);
         }
 
-        private bool IsRandomConnectionString(string connectionString)
+       public string HelpString { get; set; } = "Random connection string format 'random'";
+
+       private bool IsRandomConnectionString(string connectionString)
         {
             return connectionString.StartsWith("random");
         }        

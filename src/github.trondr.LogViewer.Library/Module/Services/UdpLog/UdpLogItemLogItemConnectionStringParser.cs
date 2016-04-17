@@ -50,8 +50,10 @@ namespace github.trondr.LogViewer.Library.Module.Services.UdpLog
                 }                
                 return connection;    
             }
-            var message = string.Format("Invalid udp connection string '{0}'. Udp connection string must be on the format: 'udp:<hostname>:<port>:<Ipv4|Ipv6>[:<multi cast ip address (224.0.0.1 -> 239.255.255.255)>]'", connectionString);
+            var message = string.Format("Invalid udp connection string '{0}'. Valid {1}", connectionString, HelpString);
             throw new InvalidConnectionStringException(message);
         }
+
+        public string HelpString { get; set; } = "Udp connection string format: 'udp:<hostname>:<port>:<Ipv4|Ipv6>[:<multi cast ip address (between 224.0.0.1 and 239.255.255.255)>]'";
     }
 }

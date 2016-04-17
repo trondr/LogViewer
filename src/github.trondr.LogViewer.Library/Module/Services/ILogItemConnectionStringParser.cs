@@ -5,5 +5,7 @@ namespace github.trondr.LogViewer.Library.Module.Services
         bool CanParse(string connectionString);
 
         ILogItemConnection Parse(string connectionString);
+
+        string HelpString { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using github.trondr.LogViewer.Infrastructure;
+using github.trondr.LogViewer.Library.Module.Services;
 using github.trondr.LogViewer.Library.Module.Services.TcpLog;
 using NUnit.Framework;
 using github.trondr.LogViewer.Library.Module.Services.UdpLog;

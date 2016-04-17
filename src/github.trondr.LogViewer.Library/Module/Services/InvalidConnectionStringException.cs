@@ -1,6 +1,6 @@
 using System;
 
-namespace github.trondr.LogViewer.Library.Module.Services.UdpLog
+namespace github.trondr.LogViewer.Library.Module.Services
 {
     public class InvalidConnectionStringException : Exception
     {
