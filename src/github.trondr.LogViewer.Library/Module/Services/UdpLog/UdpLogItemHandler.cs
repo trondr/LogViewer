@@ -40,8 +40,8 @@ namespace github.trondr.LogViewer.Library.Module.Services.UdpLog
             _remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
             _udpClient = ipVersionFamily == AddressFamily.InterNetworkV6 ? new UdpClient(connection.Port, AddressFamily.InterNetworkV6) : new UdpClient(connection.Port);
 
-            //if (!string.IsNullOrEmpty(connection.HostName))
-            //    _udpClient.JoinMulticastGroup(IPAddress.Parse("127.0.0.1"));
+            if (connection.MultiCastAddress != null)
+                _udpClient.JoinMulticastGroup(connection.MultiCastAddress);
 
             // We need a working thread
             _worker = new Thread(Start) {IsBackground = true};

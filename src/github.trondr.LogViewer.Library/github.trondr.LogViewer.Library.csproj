@@ -142,6 +142,7 @@
     <Compile Include="Module\Services\RandomLog\RandomLogItemConnection.cs" />
     <Compile Include="Module\Services\RandomLog\RandomLogItemHandler.cs" />
     <Compile Include="Module\Services\RandomLog\RandomLogItemLogItemConnectionStringParser.cs" />
+    <Compile Include="Module\Services\UdpLog\InvalidConnectionStringException.cs" />
     <Compile Include="Module\Services\UdpLog\IUdpLogItemConnection.cs" />
     <Compile Include="Module\Services\UdpLog\IUdpLogItemConnectionFactory.cs" />
     <Compile Include="Module\Services\UdpLog\IUdpLogItemConnectionStringParser.cs" />

@@ -135,6 +135,7 @@
     <Compile Include="UnitTests\LogItemConnectionStringParserTests.cs" />
     <Compile Include="UnitTests\LogItemReceiverFactoryTests.cs" />
     <Compile Include="UnitTests\BootStrapperInfrastructureTests.cs" />
+    <Compile Include="UnitTests\UdpLogItemLogItemConnectionStringParserTests.cs" />
     <Compile Include="UnitTests\UnitTestsTemplate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
