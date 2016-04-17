@@ -36,7 +36,6 @@ namespace github.trondr.LogViewer.Library.Module.Services.FileLog
             {
                 return _fileLogItemConnectionFactory.GetFileLogItemConnection(connectionString, fileName);
             }
-
             var message = string.Format("Invalid file connection string '{0}'. Valid {1}", connectionString, HelpString);
             throw new InvalidConnectionStringException(message);
         }
@@ -48,22 +47,22 @@ namespace github.trondr.LogViewer.Library.Module.Services.FileLog
             var match = _fileUrlRegEx.Match(connectionString);
             if(match.Success)
             {
-                var fileName = match.Groups[1].Value;
+                var fileName = Environment.ExpandEnvironmentVariables(match.Groups[1].Value);
                 return fileName;
             }
             match = _uncPathRegEx.Match(connectionString);
             if(match.Success)
             {
-                var fileName = match.Groups[1].Value;
+                var fileName = Environment.ExpandEnvironmentVariables(match.Groups[1].Value);
                 return fileName;
             }
             match = _localPathRegEx.Match(connectionString);
             if(match.Success)
             {
-                var fileName = match.Groups[1].Value;
+                var fileName = Environment.ExpandEnvironmentVariables(match.Groups[1].Value);
                 return fileName;
             }
-            _logger.WarnFormat("Invalid connection string '{0}'. File log connection string must be on the format: 'file:\\<log file path>' or <unc path> or <local path>", connectionString);
+            _logger.WarnFormat("Invalid connection string '{0}'. Valid {1}", connectionString, HelpString);
             return null;
         }
 

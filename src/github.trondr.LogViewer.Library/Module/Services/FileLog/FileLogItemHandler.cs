@@ -4,13 +4,13 @@ using System.IO;
 using System.Text;
 using Common.Logging;
 using github.trondr.LogViewer.Library.Module.Model;
+using github.trondr.LogViewer.Library.Module.Services.EventLog;
 
 namespace github.trondr.LogViewer.Library.Module.Services.FileLog
 {
     public class FileLogItemHandler : ILogItemHandler<FileLogItemConnection>
     {
-        private readonly ILog4JLogItemParser _log4JLogItemParser;
-        private readonly IFileLogItemConnectionStringParser _fileLogItemConnectionStringParser;
+        private readonly ILog4JLogItemParser _log4JLogItemParser;        
         private readonly ILog _logger;
         private ILogItemNotifiable _logItemNotifiable = null;
         private long _lastFileLength;
@@ -18,12 +18,10 @@ namespace github.trondr.LogViewer.Library.Module.Services.FileLog
         private string _fullLoggerName;        
         private bool _showFromBeginning;
         private ILogItemConnection _connection;
-        private string _logFileName;
 
-        public FileLogItemHandler(ILog4JLogItemParser log4JLogItemParser, IFileLogItemConnectionStringParser fileLogItemConnectionStringParser, ILog logger)
+        public FileLogItemHandler(ILog4JLogItemParser log4JLogItemParser, ILog logger)
         {
-            _log4JLogItemParser = log4JLogItemParser;
-            _fileLogItemConnectionStringParser = fileLogItemConnectionStringParser;
+            _log4JLogItemParser = log4JLogItemParser;            
             _logger = logger;
         }
 
@@ -31,31 +29,16 @@ namespace github.trondr.LogViewer.Library.Module.Services.FileLog
         {
             get { return _connection; }
             set
-            {
-                if ((_connection != null) && string.Compare(_connection.Value, value.Value, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    return;
-                }
-                _connection = value;
-                _logFileName = _connection?.Value?.Replace("file://", "");
+            {                
+                _connection = value;                
             }
         }
 
         public void Initialize()
         {
-            if (Connection == null)
-            {
-                _logger.Warn("Connection info has not been initialized. Initialization of cannot continue.");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(_logFileName))
-            {
-                _logger.Warn("Log file name is null or empty. Initialization cannot continue.");
-                return;
-            }
+            var connection = GetConnection();
             ComputeFullLoggerName();
-            StartMonitoringLogFile(_logFileName);
+            StartMonitoringLogFile(connection.FileName);
         }
 
         public void Terminate()
@@ -96,9 +79,10 @@ namespace github.trondr.LogViewer.Library.Module.Services.FileLog
 
         private long CalculateLastFileLength()
         {
-            if (File.Exists(_logFileName))
+            var connection = GetConnection();
+            if (File.Exists(connection.FileName))
             {
-                using (var fileStream = new FileStream(_logFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var fileStream = new FileStream(connection.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     using (var sr = new StreamReader(fileStream))
                     {
@@ -140,13 +124,14 @@ namespace github.trondr.LogViewer.Library.Module.Services.FileLog
 
         private void ReadFile()
         {
-            if (!File.Exists(_logFileName))
+            var connection = GetConnection();
+            if (!File.Exists(connection.FileName))
             {
-                _logger.WarnFormat("Cannot read log file '{0}'. Log file does not exist.", _logFileName);
+                _logger.WarnFormat("Cannot read log file '{0}'. Log file does not exist.", connection.FileName);
                 return;
             }
 
-            using (var fileStream = new FileStream(_logFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var fileStream = new FileStream(connection.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 using (var sr = new StreamReader(fileStream))
                 {
@@ -231,12 +216,25 @@ namespace github.trondr.LogViewer.Library.Module.Services.FileLog
 
         private void ComputeFullLoggerName()
         {
-            var fileName = Path.GetFileName(_logFileName);
+            var connection = GetConnection();
+            var fileName = Path.GetFileName(connection.FileName);
             _fullLoggerName = string.Format("FileLogger.{0}",
                 string.IsNullOrEmpty(DefaultLoggerName) && !string.IsNullOrEmpty(fileName)
                     ? fileName.Replace('.', '_')
                     : DefaultLoggerName);
 
+        }
+
+        IFileLogItemConnection GetConnection()
+        {
+            var connection = Connection as IFileLogItemConnection;
+            ValidateConnection(connection);
+            return connection;
+        }
+        private void ValidateConnection(IFileLogItemConnection eventLogConnection)
+        {
+            if (eventLogConnection == null) throw new ArgumentNullException(nameof(eventLogConnection));
+            if (string.IsNullOrEmpty(eventLogConnection.FileName)) throw new LogViewerException("FileName has not been initialized.");            
         }
     }
 }
