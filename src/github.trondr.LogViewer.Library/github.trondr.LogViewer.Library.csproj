@@ -52,11 +52,16 @@
       <HintPath>..\..\tools\NuGetPackages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\tools\NuGetPackages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -115,7 +120,7 @@
     <Compile Include="Module\Model\LogLevel.cs" />
     <Compile Include="Module\Services\RemotingLog\RemotingLogItemConnection.cs" />
     <Compile Include="Module\Services\RemotingLog\RemotingLogItemConnectionStringParser.cs" />
-    <Compile Include="Module\Services\RemotingLog\EventLogItemHandler.cs" />
+    <Compile Include="Module\Services\RemotingLog\RemotingLogItemHandler.cs" />
     <Compile Include="Module\Services\RemotingLog\IRemotingLogItemConnection.cs" />
     <Compile Include="Module\Services\RemotingLog\IRemotingLogItemConnectionFactory.cs" />
     <Compile Include="Module\Services\RemotingLog\IRemotingLogItemConnectionStringParser.cs" />
