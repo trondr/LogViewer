@@ -113,6 +113,13 @@
     <Compile Include="Module\Model\ILogItemFactory.cs" />
     <Compile Include="Module\Model\LogItem.cs" />
     <Compile Include="Module\Model\LogLevel.cs" />
+    <Compile Include="Module\Services\RemotingLog\RemotingLogItemConnection.cs" />
+    <Compile Include="Module\Services\RemotingLog\RemotingLogItemConnectionStringParser.cs" />
+    <Compile Include="Module\Services\RemotingLog\EventLogItemHandler.cs" />
+    <Compile Include="Module\Services\RemotingLog\IRemotingLogItemConnection.cs" />
+    <Compile Include="Module\Services\RemotingLog\IRemotingLogItemConnectionFactory.cs" />
+    <Compile Include="Module\Services\RemotingLog\IRemotingLogItemConnectionStringParser.cs" />
+    <Compile Include="Module\Services\LogViewerException.cs" />
     <Compile Include="Module\Services\EventLog\EventLogItemConnection.cs" />
     <Compile Include="Module\Services\EventLog\EventLogItemConnectionStringParser.cs" />
     <Compile Include="Module\Services\EventLog\EventLogItemHandler.cs" />
