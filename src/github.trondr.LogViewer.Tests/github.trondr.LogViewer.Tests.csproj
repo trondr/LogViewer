@@ -122,7 +122,7 @@
     <Compile Include="ManualTests\FileLogTests\FileLogManualTests.cs" />
     <Compile Include="ManualTests\FileLogTests\TestFileLogGenerator.cs" />
     <Compile Include="ManualTests\RemotingLogTest\TestRemotingLogGenerator.cs" />
-    <Compile Include="ManualTests\RemotingLogTest\UpdLogManualTests.cs" />
+    <Compile Include="ManualTests\RemotingLogTest\RemotingLogManualTests.cs" />
     <Compile Include="ManualTests\UdpLogTests\UpdLogManualTests.cs" />
     <Compile Include="ManualTests\UdpLogTests\TestUdpLogGenerator.cs" />
     <Compile Include="ManualTests\TcpLogTests\TestTcpLogGenerator.cs" />
