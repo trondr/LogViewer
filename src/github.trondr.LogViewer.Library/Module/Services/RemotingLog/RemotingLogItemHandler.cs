@@ -17,6 +17,7 @@ namespace github.trondr.LogViewer.Library.Module.Services.RemotingLog
     {
         private const string RemotingReceiverChannelName = "RemotingReceiverChannel";
         private readonly ILogItemFactory _logItemFactory;
+        private readonly ILogLevelProvider _logLevelProvider;
         private IRemotingLogItemConnection _remotingLogItemConnection;
         private System.Diagnostics.EventLog _eventLog;
         private string _baseLoggerName;
@@ -24,9 +25,10 @@ namespace github.trondr.LogViewer.Library.Module.Services.RemotingLog
         private object _sync = new object();
         private IChannel _channel;
 
-        public RemotingLogItemHandler(ILogItemFactory logItemFactory)
+        public RemotingLogItemHandler(ILogItemFactory logItemFactory, ILogLevelProvider logLevelProvider)
         {
             _logItemFactory = logItemFactory;
+            _logLevelProvider = logLevelProvider;
         }
 
         public void Initialize()
@@ -54,7 +56,7 @@ namespace github.trondr.LogViewer.Library.Module.Services.RemotingLog
 					props["port"] = connection.Port.ToString();
 					props["name"] = RemotingReceiverChannelName;
 					props["typeFilterLevel"] = TypeFilterLevel.Full;
-					_channel = new TcpChannel(props, clientProvider, serverProvider);
+					_channel = new TcpChannel(props, clientProvider, serverProvider);                    
 
 					ChannelServices.RegisterChannel(_channel, false);
 				}
@@ -130,8 +132,6 @@ namespace github.trondr.LogViewer.Library.Module.Services.RemotingLog
                 var logItem = GetLogItem(loggingEvent);
                 _logItemNotifiable.Notify(logItem);
             }
-
-            throw new NotImplementedException();
         }
 
         private LogItem GetLogItem(LoggingEvent loggingEvent)
@@ -139,10 +139,17 @@ namespace github.trondr.LogViewer.Library.Module.Services.RemotingLog
             var loggerName = GetLoggerName(loggingEvent);
             var message = loggingEvent.RenderedMessage;
             var timeStamp = loggingEvent.TimeStamp;
-            var logLevel = GetLogLevel(loggingEvent);
-            var userName = loggingEvent.UserName;
+            var logLevel = _logLevelProvider.GetLogLevel(loggingEvent.Level.Value);
             var threadId = loggingEvent.ThreadName;
-            var logItem = _logItemFactory.GetLogItem(timeStamp, logLevel, loggerName, threadId, message, string.Empty);
+            var exceptionString = loggingEvent.GetExceptionString();
+            var logItem = _logItemFactory.GetLogItem(timeStamp, logLevel, loggerName, threadId, message, exceptionString);
+            foreach (DictionaryEntry property in loggingEvent.Properties)
+            {
+                if ((property.Key == null) || (property.Value == null))
+                    continue;
+
+                logItem.Properties.Add(property.Key.ToString(),property.Value.ToString());
+            }            
             return logItem;
         }
 
@@ -153,12 +160,6 @@ namespace github.trondr.LogViewer.Library.Module.Services.RemotingLog
         	                    	: loggingEvent.LoggerName;
             return loggerName;
         }
-
-        private LogLevel GetLogLevel(LoggingEvent loggingEvent)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public RemotingLogItemHandler(SerializationInfo info, StreamingContext context)
         {

@@ -9,6 +9,5 @@
         Warn,
         Error,
         Fatal
-    }
-
+    }    
 }

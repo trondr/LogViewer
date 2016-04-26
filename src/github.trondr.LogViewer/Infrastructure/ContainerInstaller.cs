@@ -15,6 +15,7 @@ using github.trondr.LogViewer.Library.Module.Services;
 using github.trondr.LogViewer.Library.Module.Services.EventLog;
 using github.trondr.LogViewer.Library.Module.Services.FileLog;
 using github.trondr.LogViewer.Library.Module.Services.RandomLog;
+using github.trondr.LogViewer.Library.Module.Services.RemotingLog;
 using github.trondr.LogViewer.Library.Module.Services.TcpLog;
 using github.trondr.LogViewer.Library.Module.Services.UdpLog;
 using github.trondr.LogViewer.Library.Module.Services.WinDebugLog;
@@ -100,6 +101,13 @@ namespace github.trondr.LogViewer.Infrastructure
                 Component.For<IUdpLogItemConnection>()
                     .ImplementedBy<UdpLogItemConnection>()
                     .Named("UdpLogItemConnection")
+                    .LifeStyle.Transient);
+
+            container.Register(Component.For<IRemotingLogItemConnectionFactory>().AsFactory());
+            container.Register(
+                Component.For<IRemotingLogItemConnection>()
+                    .ImplementedBy<RemotingLogItemConnection>()
+                    .Named("RemotingLogItemConnection")
                     .LifeStyle.Transient);
 
             container.Register(Component.For<ILogItemFactory>().AsFactory());

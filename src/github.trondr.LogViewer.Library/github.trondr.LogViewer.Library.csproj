@@ -118,6 +118,8 @@
     <Compile Include="Module\Model\ILogItemFactory.cs" />
     <Compile Include="Module\Model\LogItem.cs" />
     <Compile Include="Module\Model\LogLevel.cs" />
+    <Compile Include="Module\Services\ILogLevelProvider.cs" />
+    <Compile Include="Module\Services\LogLevelInfo.cs" />
     <Compile Include="Module\Services\RemotingLog\RemotingLogItemConnection.cs" />
     <Compile Include="Module\Services\RemotingLog\RemotingLogItemConnectionStringParser.cs" />
     <Compile Include="Module\Services\RemotingLog\RemotingLogItemHandler.cs" />
