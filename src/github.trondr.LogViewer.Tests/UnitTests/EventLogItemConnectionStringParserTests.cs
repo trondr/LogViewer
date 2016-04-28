@@ -6,6 +6,7 @@ using Common.Logging;
 using Common.Logging.Simple;
 using github.trondr.LogViewer.Infrastructure;
 using github.trondr.LogViewer.Library.Infrastructure;
+using github.trondr.LogViewer.Library.Module.Services;
 using github.trondr.LogViewer.Library.Module.Services.EventLog;
 using NUnit.Framework;
 
@@ -69,8 +70,10 @@ namespace github.trondr.LogViewer.Tests.UnitTests
                     Machine = "localhost",
                     Source = "Security-Auditing"
                 };
-                var actual = target.Parse(testConnectionString);
-                Assert.IsNull(actual, "Instance of IEventLogItemConnection was not null");                
+                Assert.Catch<InvalidConnectionStringException>(() =>
+                {
+                    var actual = target.Parse(testConnectionString);    
+                },"Did not throw InvalidConnectionStringException");                
             }
         }
 

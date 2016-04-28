@@ -6,6 +6,7 @@ using Common.Logging;
 using Common.Logging.Simple;
 using github.trondr.LogViewer.Infrastructure;
 using github.trondr.LogViewer.Library.Infrastructure;
+using github.trondr.LogViewer.Library.Module.Services;
 using github.trondr.LogViewer.Library.Module.Services.FileLog;
 using NUnit.Framework;
 
@@ -101,9 +102,11 @@ namespace github.trondr.LogViewer.Tests.UnitTests
             using(var testBooStrapper = new TestBootStrapper(GetType()))
             {
                 var target = testBooStrapper.Container.Resolve<IFileLogItemConnectionStringParser>();
-                const string testConnectionString = @"file:c:\some\temp\file.log";                
-                var actual = target.Parse(testConnectionString);
-                Assert.IsNull(actual, "Instance of IFileLogItemConnection was not null");                
+                const string testConnectionString = @"file:c:\some\temp\file.log";  
+                Assert.Catch<InvalidConnectionStringException>(() =>
+                {
+                    var actual = target.Parse(testConnectionString);    
+                },"Did not throw InvalidConnectionStringException");              
             }
         }
 
