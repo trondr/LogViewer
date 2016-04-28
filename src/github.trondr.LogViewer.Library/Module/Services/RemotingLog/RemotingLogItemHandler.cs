@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Diagnostics;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
@@ -18,11 +17,8 @@ namespace github.trondr.LogViewer.Library.Module.Services.RemotingLog
         private const string RemotingReceiverChannelName = "RemotingReceiverChannel";
         private readonly ILogItemFactory _logItemFactory;
         private readonly ILogLevelProvider _logLevelProvider;
-        private IRemotingLogItemConnection _remotingLogItemConnection;
-        private System.Diagnostics.EventLog _eventLog;
-        private string _baseLoggerName;
         private ILogItemNotifiable _logItemNotifiable;
-        private object _sync = new object();
+        private readonly object _sync = new object();
         private IChannel _channel;
 
         public RemotingLogItemHandler(ILogItemFactory logItemFactory, ILogLevelProvider logLevelProvider)

@@ -6,8 +6,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Common.Logging;
-using github.trondr.LogViewer.Library.Module.Services.EventLog;
-
 
 namespace github.trondr.LogViewer.Library.Module.Services.TcpLog
 {
@@ -111,7 +109,7 @@ namespace github.trondr.LogViewer.Library.Module.Services.TcpLog
             {
                 _logger.Warn("System.IO.IOException when listning for TCP log items: " + ioex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //_logger.Warn("System.Exception when listning for TCP log items: " + ex.Message);
             }
