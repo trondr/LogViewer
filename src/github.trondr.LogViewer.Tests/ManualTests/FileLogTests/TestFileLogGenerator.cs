@@ -43,7 +43,7 @@ namespace github.trondr.LogViewer.Tests.ManualTests.FileLogTests
             var loggerRoot = loggerHierarchy.Root;
             loggerRoot.AddAppender(GetFileAppender(_logFile));
             loggerRepository.Configured = true;
-            var logger = LogManager.GetLogger(loggerRepository.Name, "tcplogger");                        
+            var logger = LogManager.GetLogger(loggerRepository.Name, "FileLogger");                        
             return logger;
         }
 
@@ -53,7 +53,7 @@ namespace github.trondr.LogViewer.Tests.ManualTests.FileLogTests
             {
                 Layout = new XmlLayoutSchemaLog4j(true),
                 File = Environment.ExpandEnvironmentVariables(logFile),
-                ImmediateFlush = true,
+                ImmediateFlush = true,                
                 StaticLogFileName = true,
                 RollingStyle = RollingFileAppender.RollingMode.Size
             };
