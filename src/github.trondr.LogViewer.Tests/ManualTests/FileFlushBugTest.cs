@@ -3,18 +3,20 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using System.Text;
 using System.Threading;
 using Common.Logging;
 using Common.Logging.Simple;
 using github.trondr.LogViewer.Infrastructure;
 using github.trondr.LogViewer.Library.Module.Commands.OpenLog;
+using github.trondr.LogViewer.Tests.ManualTests.FileLogTests;
 using Microsoft.Win32.SafeHandles;
 using NUnit.Framework;
 
-namespace github.trondr.LogViewer.Tests.ManualTests.FileLogTests
+namespace github.trondr.LogViewer.Tests.ManualTests
 {
     [TestFixture(Category = "ManualTests")]
-    public class FileLogManualTests
+    public class FileFlushBugTest
     {
         private ConsoleOutLogger _logger;
 
@@ -30,32 +32,19 @@ namespace github.trondr.LogViewer.Tests.ManualTests.FileLogTests
 
         }
 
-        [Test, RequiresSTA]
-        public void FileLogTest()
-        {
-            using (var bootStrapper = new BootStrapper())
-            {
-                var container = bootStrapper.Container;
-                var openLogProvider = container.Resolve<IOpenLogCommandProvider>();
-                var logGenerator = new TestFileLogGenerator(@"%public%\Logs\FileLogTests-%COMPUTERNAME%-%USERNAME%.log");
-                StartFileTestLogger(logGenerator);
-                openLogProvider.OpenLogs(new string[] {@"file://%public%\Logs\FileLogTests-%COMPUTERNAME%-%USERNAME%.log"});
-                StoppTcpTestLogger(logGenerator);
-            }
-        }
-
         [Test]
         public void FileFlushTest_FlushBug()
         {
-            var testMessage = new string('T', 1024);
+            var messageLength = 1024;
+            var testMessage = new string('T', messageLength);
             var logFile = Environment.ExpandEnvironmentVariables(@"%public%\Logs\FileLogTests-NotFlushedBug-%COMPUTERNAME%-%USERNAME%-CustomLog.log");
-            using (var sw = new StreamWriter(logFile))
+            using (var sw = new StreamWriter(logFile, false, Encoding.ASCII))
             {
-                sw.AutoFlush = true; // Bug: The file is not actually flushed to disk.
+                sw.AutoFlush = true; // Bug: The file is not actually flushed to disk by setting this.                
                 while (true)
                 {
                     sw.WriteLine(testMessage);
-                    sw.Flush(); // Bug: This does not work either. Watch in Windows Explorer and see that file size is NOT changing. F5 is required to trigger flush to disk.
+                    sw.Flush(); // Bug: This does not work either. Watch in Windows Explorer and see that file size is NOT changing. F5 is required to trigger flush to disk.         
                     Thread.Sleep(500);
                 }                
             }
@@ -64,17 +53,17 @@ namespace github.trondr.LogViewer.Tests.ManualTests.FileLogTests
         [Test]
         public void FileFlushTest_FlushBugWorkaround()
         {
-            var testMessage = new string('T', 1024);
+            var messageLength = 1024;
+            var testMessage = new string('T', messageLength);
             var logFile = Environment.ExpandEnvironmentVariables(@"%public%\Logs\FileLogTests-FlushedWorkaround-%COMPUTERNAME%-%USERNAME%-CustomLog.log");
-            using (var sw = new StreamWriter(logFile))
-            {
+            using (var sw = new StreamWriter(logFile, false, Encoding.ASCII))
+            {                
                 while (true)
-                {
-                    sw.AutoFlush = true;
+                {                    
                     sw.WriteLine(testMessage);
-                    NativeWin32Flush(sw); //Now the file is flushed to disk! Watch in Windows Explorer and see that file size is changing without pressing F5.
+                    NativeWin32Flush(sw); //Now the file is flushed to disk! Watch in Windows Explorer and see that file size is changing without pressing F5.                    
                     Thread.Sleep(500);
-                }                
+                }
             }
         }
 
@@ -92,19 +81,5 @@ namespace github.trondr.LogViewer.Tests.ManualTests.FileLogTests
             var error = Marshal.GetLastWin32Error();
             throw new Win32Exception(error);
         }
-
-        private static void StoppTcpTestLogger(TestFileLogGenerator logGenerator)
-        {
-            logGenerator.Stop();
-            Thread.Sleep(1000);
-        }
-
-        private void StartFileTestLogger(TestFileLogGenerator logGenerator)
-        {
-            if (logGenerator == null) throw new ArgumentNullException(nameof(logGenerator));
-            var threadStart = new ThreadStart(logGenerator.Start);
-            var thread = new Thread(threadStart);
-            thread.Start();
-        }        
     }
 }
