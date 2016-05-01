@@ -1,5 +1,7 @@
-﻿using github.trondr.LogViewer.Library.Module.Common.UI;
+﻿using System.Windows.Controls;
+using System.Windows.Media;
 using github.trondr.LogViewer.Library.Module.ViewModels;
+using ViewBase = github.trondr.LogViewer.Library.Module.Common.UI.ViewBase;
 
 namespace github.trondr.LogViewer.Library.Module.Views
 {
@@ -10,8 +12,23 @@ namespace github.trondr.LogViewer.Library.Module.Views
     {
         public MainView(MainViewModel viewModel)
         {
-            this.ViewModel = viewModel;
+            viewModel.ScrollToBottom += ScrollToBottom;
+            this.ViewModel = viewModel;            
             InitializeComponent();
+        }
+
+        private void ScrollToBottom()
+        {
+            if (VisualTreeHelper.GetChildrenCount(_logItemsListView) > 0)
+            {
+                var listBoxChrome = VisualTreeHelper.GetChild(_logItemsListView, 0);
+                var scrollViewer = VisualTreeHelper.GetChild(listBoxChrome, 0) as ScrollViewer;
+                if(scrollViewer != null)
+                {                 
+                    scrollViewer.ScrollToBottom();
+                    _logItemsListView.SelectedIndex = _logItemsListView.Items.Count;
+                }                
+            }
         }
     }
 }

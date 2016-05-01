@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -18,5 +19,6 @@ namespace github.trondr.LogViewer.Library.Module.ViewModels
         string SearchFilter { get; set; }
         LogItemViewModel SelectedLogItem {get;set; }
         bool LogItemIsSelected {get;set; }        
+        event Action ScrollToBottom;
     }
 }

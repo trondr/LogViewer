@@ -1,11 +1,13 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using github.trondr.LogViewer.Library.Infrastructure;
+using github.trondr.LogViewer.Library.Module.Common;
 using github.trondr.LogViewer.Library.Module.Common.UI;
 using github.trondr.LogViewer.Library.Module.Model;
 using github.trondr.LogViewer.Library.Module.Services;
@@ -15,16 +17,19 @@ namespace github.trondr.LogViewer.Library.Module.ViewModels
     public class MainViewModel : ViewModelBase, IMainViewModel, ILogItemNotifiable
     {
         private readonly ITypeMapper _typeMapper;
+        private readonly IEventsHelper _eventsHelper;
         private bool _callBackRegistered;
         private readonly CollectionViewSource _logItemsViewSource;
 
 
-        public MainViewModel(ILoggerViewModelProvider loggerViewModelProvider, ILogLevelViewModelProvider logLevelViewModelProvider, ITypeMapper typeMapper)
+        public MainViewModel(ILoggerViewModelProvider loggerViewModelProvider, ILogLevelViewModelProvider logLevelViewModelProvider, ITypeMapper typeMapper, IEventsHelper eventsHelper)
         {        
             _typeMapper = typeMapper;
+            _eventsHelper = eventsHelper;
             LogItems = new ObservableCollection<LogItemViewModel>();
+            LogItems.CollectionChanged+=LogItemsOnCollectionChanged;
             _logItemsViewSource = new CollectionViewSource { Source = LogItems };
-            _logItemsViewSource.Filter+=LogItemsViewSourceOnFilter;
+            _logItemsViewSource.Filter+=LogItemsViewSourceOnFilter;            
             Loggers = new ObservableCollection<LoggerViewModel>();
             LogLevels = new ObservableCollection<LogLevelViewModel>();
             Loggers.Add(loggerViewModelProvider.Root);
@@ -43,6 +48,11 @@ namespace github.trondr.LogViewer.Library.Module.ViewModels
             SearchFilter = Properties.Settings.Default.SearchFilter;
             LogItemIsSelected = false;
             SelectedLogItem = null;
+        }
+
+        private void LogItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+        {
+            ScrollToBottom?.Invoke();            
         }
 
         private Task Update()
@@ -85,16 +95,7 @@ namespace github.trondr.LogViewer.Library.Module.ViewModels
             {
                 MainWindow.Closing += MainWindow_Closing;
                 _callBackRegistered = true;
-            }
-            //_fileLogItemReceiver.LogFileName = @"C:\Users\Public\SKALA\Logs\Ito.Tools.SharedFolder.Client\Ito.Tools.SharedFolder.Client.eta410.log";
-            //_fileLogItemReceiver.Terminate();
-            //_fileLogItemReceiver.ShowFromBeginning = true;
-            //_fileLogItemReceiver.Initialize();
-            //_fileLogItemReceiver.Attach(this);   
-            
-            //_randomLogItemReceiver.Terminate();
-            //_randomLogItemReceiver.Initialize();
-            //_randomLogItemReceiver.Attach(this);
+            }            
         }
 
         public ICollectionView LogItemsView { get{return _logItemsViewSource.View;} }
@@ -155,6 +156,8 @@ namespace github.trondr.LogViewer.Library.Module.ViewModels
             get { return (bool) GetValue(LogItemIsSelectedProperty); }
             set { SetValue(LogItemIsSelectedProperty, value); }
         }
+
+        public event Action ScrollToBottom;
 
         private void Exit()
         {

@@ -70,6 +70,7 @@ namespace github.trondr.LogViewer.Library.Module.ViewModels
         public string SearchFilter { get; set; }
         public LogItemViewModel SelectedLogItem { get; set; }
         public bool LogItemIsSelected { get; set; }
+        public event Action ScrollToBottom;
         public ICommand ClearSearchFilterCommand { get; set; }
     }
 }
