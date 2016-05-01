@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using log4net;
 using log4net.Appender;
@@ -12,6 +13,7 @@ namespace github.trondr.LogViewer.Tests.ManualTests.FileLogTests
     {
         private readonly string _logFile;
         private bool _stop;
+        private string _logDirectory;
         // ReSharper disable once UnusedMember.Local
         private TestFileLogGenerator()
         {
@@ -20,6 +22,7 @@ namespace github.trondr.LogViewer.Tests.ManualTests.FileLogTests
         public TestFileLogGenerator(string logFile)
         {
             _logFile = Environment.ExpandEnvironmentVariables(logFile);
+            _logDirectory = Path.GetDirectoryName(_logFile);
         }
 
         public void Start()
@@ -30,7 +33,7 @@ namespace github.trondr.LogViewer.Tests.ManualTests.FileLogTests
             while(!_stop)
             {                
                 i++;
-                logger.Info("File test message " + i);
+                logger.Info("File test message " + i);                
                 Thread.Sleep(500);
             }
         }

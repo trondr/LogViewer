@@ -129,6 +129,7 @@
     <Compile Include="ManualTests\TcpLogTests\TcpLogManualTests.cs" />
     <Compile Include="IntegrationTests\StandardUser\ExampleStandardUserIntegrationTests.cs" />
     <Compile Include="IntegrationTests\StandardUser\StandardUserImpersonationTests.cs" />
+    <Compile Include="UnitTests\AutoMapperConfigurationTests.cs" />
     <Compile Include="UnitTests\BootStrapperModuleTests.cs" />
     <Compile Include="UnitTests\EventLogItemConnectionFactoryTests.cs" />
     <Compile Include="UnitTests\EventLogItemConnectionStringParserTests.cs" />
