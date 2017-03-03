@@ -1,6 +1,6 @@
 # LogViewer
 =========================
-LogViewerogViewer is a log4j log viewer
+LogViewer is a log4j log viewer
 
 ## Minimum Build Requirements
 

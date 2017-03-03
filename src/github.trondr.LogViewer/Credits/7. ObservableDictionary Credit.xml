@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<CreditInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ProductName>ObservableDictionary</ProductName>
-  <ProductHome>http://drwpf.com/blog/2007/09/16/can-i-bind-my-itemscontrol-to-a-dictionary/</ProductHome>
-  <CreditText>LogViewer uses the ObseravbleDictionary class in WPF data binding.</CreditText>
-</CreditInfo>

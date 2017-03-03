@@ -1,5 +1,0 @@
-﻿Help
-License
-Credits
-OpenLogs /connectionStrings="['file://C:\Users\Public\Logs\github.trondr.LogViewer\github.trondr.LogViewer.eta410.log';'file://C:\Users\Public\SKALA\Logs\Ito.Tools.SharedFolder.Service.Console\Ito.Tools.SharedFolder.Service.Console.eta410.log';'random']"
-OpenLogs /connectionStrings="['file://C:\Users\Public\Logs\github.trondr.LogViewer\github.trondr.LogViewer.eta410.log';'file://C:\Users\Public\SKALA\Logs\Ito.Tools.SharedFolder.Service.Console\Ito.Tools.SharedFolder.Service.Console.eta410.log']"
