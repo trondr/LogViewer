@@ -101,11 +101,9 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <ListView x:Name="_logItemsListView" Grid.Column="0" Grid.Row="0" ItemsSource="{Binding LogItemsView}" Margin="2,2,2,2" SelectedItem="{Binding Path=SelectedLogItem}">
-                <!--<ScrollViewer>-->
-                    <i:Interaction.Behaviors>
-                        <behaviours:AutoScrollBehavior />
-                    </i:Interaction.Behaviors>
-                <!--</ScrollViewer>-->
+                <i:Interaction.Behaviors>
+                    <behaviours:AutoScrollBehavior />
+                </i:Interaction.Behaviors>
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}" >
                         <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True"/>
@@ -181,25 +179,5 @@
         </Grid>
 
     </Grid>
-    <!--<DockPanel d:DataContext="{d:DesignInstance Type=viewModels:DesignTimeMainViewModel, IsDesignTimeCreatable=True}" Margin="5" >
-        <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Loaded">
-                <i:InvokeCommandAction Command="{Binding LoadCommand}" />
-            </i:EventTrigger>
-            <i:EventTrigger EventName="UnLoaded">
-                <i:InvokeCommandAction Command="{Binding UnLoadCommand}" />
-            </i:EventTrigger>
-        </i:Interaction.Triggers>
-        <DockPanel DockPanel.Dock="Left">
-            <DockPanel Dock="Top" Margin="2">
-                <Label Content="{Binding Path=ProductDescriptionLabelText, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Width="{Binding Path=MaxLabelWidth, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBox Text="{Binding Path=ProductDescription, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-            </DockPanel>
-            <DockPanel Dock="Bottom" Margin="2">
-                <Button Command="{Binding ExitCommand}" Width="50">OK</Button>                
-            </DockPanel>
-            <Label></Label>
-        </DockPanel>
-    </DockPanel>-->
 </UserControl>
 
