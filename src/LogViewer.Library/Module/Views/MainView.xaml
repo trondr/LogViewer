@@ -9,6 +9,7 @@
              xmlns:views="clr-namespace:LogViewer.Library.Module.Views"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:behaviours="clr-namespace:LogViewer.Library.Module.Behaviours"
              mc:Ignorable="d" 
              d:DesignHeight="330" d:DesignWidth="500">
     <UserControl.Resources>
@@ -100,6 +101,11 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <ListView x:Name="_logItemsListView" Grid.Column="0" Grid.Row="0" ItemsSource="{Binding LogItemsView}" Margin="2,2,2,2" SelectedItem="{Binding Path=SelectedLogItem}">
+                <!--<ScrollViewer>-->
+                    <i:Interaction.Behaviors>
+                        <behaviours:AutoScrollBehavior />
+                    </i:Interaction.Behaviors>
+                <!--</ScrollViewer>-->
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}" >
                         <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True"/>
