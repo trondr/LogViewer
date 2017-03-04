@@ -127,8 +127,6 @@
     <Compile Include="Infrastructure\CommandProvider.cs" />
     <Compile Include="Infrastructure\ILoggingConfiguration.cs" />
     <Compile Include="Infrastructure\LoggingConfiguration.cs" />
-    <Compile Include="Module\Commands\Example\IExampleCommandProvider.cs" />
-    <Compile Include="Module\Commands\Example\ExampleCommandProvider.cs" />
     <Compile Include="Infrastructure\ApplicationInfoHelper.cs" />
     <Compile Include="Infrastructure\CommandDefinition.cs" />
     <Compile Include="Infrastructure\LifeStyles\SingletonAttribute.cs" />
