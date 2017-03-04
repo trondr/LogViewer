@@ -183,6 +183,9 @@
     <EmbeddedResource Include="Credits\09. Json.NET Credit.xml" />
     <EmbeddedResource Include="Credits\10. RhinoMocks Credit.xml" />
     <EmbeddedResource Include="Credits\11. Nunit Credit.xml" />
+    <EmbeddedResource Include="Credits\12. ObservableDictionary Credit.xml" />
+    <EmbeddedResource Include="Credits\13. Log2Console Credit.xml" />
+    <EmbeddedResource Include="Credits\14. AutoScrollBehaviour Credit.xml" />
     <Content Include="Debug.txt" />
     <EmbeddedResource Include="License\00. LogViewer License.xml" />
     <EmbeddedResource Include="License\01. Castle Project License.xml" />
@@ -195,6 +198,8 @@
     <EmbeddedResource Include="License\09. Json.NET License.xml" />
     <EmbeddedResource Include="License\10. RhinoMocks License.xml" />
     <EmbeddedResource Include="License\11. NUnit License.xml" />
+    <EmbeddedResource Include="License\12 ObservableDictionary License.xml" />
+    <EmbeddedResource Include="License\13 Log2Console License.xml" />
     <Content Include="NCmdLiner.ico" />
     <Content Include="References.txt" />
   </ItemGroup>

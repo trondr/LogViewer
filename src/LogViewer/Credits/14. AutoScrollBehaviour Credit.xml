@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CreditInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ProductName>AutoScrollBehavior</ProductName>
+  <ProductHome>http://stackoverflow.com/questions/8370209/how-to-scroll-to-the-bottom-of-a-scrollviewer-automatically-with-xaml-and-bindin</ProductHome>
+  <CreditText>LogViewer uses the AutoScrollBehavior class to provide auto scrolling of log item list view.</CreditText>
+</CreditInfo>
