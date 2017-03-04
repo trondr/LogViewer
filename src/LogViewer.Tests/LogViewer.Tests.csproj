@@ -108,7 +108,7 @@
     <Compile Include="UnitTests\ContainerRegistrationTests\Infrastructure\TraceLogAspectRegistrationTests.cs" />
     <Compile Include="UnitTests\ContainerRegistrationTests\Infrastructure\TypedFactoryComponentSelectorRegistrationTests.cs" />
     <Compile Include="UnitTests\ContainerRegistrationTests\Module\DeleteThisExampleCommandDefinitionRegistrationTests.cs" />
-    <Compile Include="UnitTests\ContainerRegistrationTests\Module\ExampleCommandProviderRegistrationTests.cs" />
+    <Compile Include="UnitTests\ContainerRegistrationTests\Module\OpenLogCommandProviderRegistrationTests.cs" />
     <Compile Include="UnitTests\ContainerRegistrationTests\Module\MainWindowViewModelRegistrationTests.cs" />
     <Compile Include="Common\TestCategory.cs" />
     <Compile Include="UnitTests\ContainerRegistrationTests\Module\MappingRegistrationTests.cs" />
