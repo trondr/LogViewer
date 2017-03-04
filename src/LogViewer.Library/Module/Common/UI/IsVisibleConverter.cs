@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace LogViewer.Library.Module.ViewModels
+namespace LogViewer.Library.Module.Common.UI
 {
     public class IsVisibleConverter: IMultiValueConverter
     {

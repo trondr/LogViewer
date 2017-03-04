@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LogViewer.Library.Module.Model;
+using LogViewer.Library.Module.Services;
 using LogViewer.Library.Module.ViewModels;
 
 namespace LogViewer.Library.Module.Mapping

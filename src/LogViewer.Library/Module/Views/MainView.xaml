@@ -12,7 +12,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="330" d:DesignWidth="500">
     <UserControl.Resources>
-        <viewModels:Brush2ColorConverter x:Key="Brush2ColorConverter" />
+        <ui:Brush2ColorConverter x:Key="Brush2ColorConverter" />
         <Style TargetType="TreeViewItem">
             <Setter Property="IsExpanded" Value="True" />
         </Style>

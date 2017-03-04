@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using LogViewer.Library.Infrastructure.LifeStyles;
+using LogViewer.Library.Module.ViewModels;
 
-namespace LogViewer.Library.Module.ViewModels
+namespace LogViewer.Library.Module.Services
 {
     [Singleton]
     public class LoggerViewModelProvider: ILoggerViewModelProvider

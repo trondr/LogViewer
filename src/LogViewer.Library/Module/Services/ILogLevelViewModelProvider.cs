@@ -1,4 +1,6 @@
-﻿namespace LogViewer.Library.Module.ViewModels
+﻿using LogViewer.Library.Module.ViewModels;
+
+namespace LogViewer.Library.Module.Services
 {
     public interface ILogLevelViewModelProvider
     {

@@ -1,7 +1,7 @@
 using System.Windows.Media;
 using LogViewer.Library.Module.Model;
 
-namespace LogViewer.Library.Module.ViewModels
+namespace LogViewer.Library.Module.Services
 {
     public interface ILogLevelSettings
     {

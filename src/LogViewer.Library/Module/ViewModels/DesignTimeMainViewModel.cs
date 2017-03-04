@@ -6,6 +6,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using LogViewer.Library.Module.Common.UI;
+using LogViewer.Library.Module.Services;
 
 namespace LogViewer.Library.Module.ViewModels
 {

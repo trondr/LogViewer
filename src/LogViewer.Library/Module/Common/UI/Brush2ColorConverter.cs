@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace LogViewer.Library.Module.ViewModels
+namespace LogViewer.Library.Module.Common.UI
 {
     public class Brush2ColorConverter : IValueConverter
     {

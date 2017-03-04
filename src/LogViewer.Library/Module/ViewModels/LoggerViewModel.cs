@@ -1,73 +1,58 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
+using GalaSoft.MvvmLight;
+using LogViewer.Library.Module.Common.UI;
 
 namespace LogViewer.Library.Module.ViewModels
 {
-    public class LoggerViewModel: DependencyObject
+    public class LoggerViewModel : ViewModelBase, ILoggerViewModel
     {
+        private ObservableCollection<LoggerViewModel> _children;
+        private string _displayName;
+        private bool _isVisible;
+        private string _name;
+        private LoggerViewModel _parent;
+
         public LoggerViewModel(string logger)
         {
             Name = logger;
-            var index = logger.LastIndexOf(".");
-            if(index > 0)
-            {
-                DisplayName = logger.Substring(index + 1, logger.Length - index - 1);
-            }
-            else
-            {
-                DisplayName = Name;
-            }
-            Children = new ObservableCollection<LoggerViewModel>();
+            var index = logger.LastIndexOf(".", StringComparison.Ordinal);
+            DisplayName = index > 0 ? logger.Substring(index + 1, logger.Length - index - 1) : Name;            
             IsVisible = true;
         }
 
-        public static readonly DependencyProperty NameProperty = DependencyProperty.Register(
-            "Name", typeof (string), typeof (LoggerViewModel), new PropertyMetadata(default(string)));
-
-        public string Name
+        public ObservableCollection<LoggerViewModel> Children
         {
-            get { return (string) GetValue(NameProperty); }
-            set { SetValue(NameProperty, value); }
+            get { return _children ?? (Children = new ObservableCollection<LoggerViewModel>()); }
+            set { this.SetProperty(ref _children, value); }
         }
-        
-        public static readonly DependencyProperty DisplayNameProperty = DependencyProperty.Register(
-            "DisplayName", typeof (string), typeof (LoggerViewModel), new PropertyMetadata(default(string)));
 
         public string DisplayName
         {
-            get { return (string) GetValue(DisplayNameProperty); }
-            set { SetValue(DisplayNameProperty, value); }
+            get { return _displayName; }
+            set { this.SetProperty(ref _displayName, value); }
         }
-
-        public static readonly DependencyProperty ParentProperty = DependencyProperty.Register(
-            "Parent", typeof (LoggerViewModel), typeof (LoggerViewModel), new PropertyMetadata(default(LoggerViewModel)));
-
-        public LoggerViewModel Parent
-        {
-            get { return (LoggerViewModel) GetValue(ParentProperty); }
-            set { SetValue(ParentProperty, value); }
-        }
-
-        public ObservableCollection<LoggerViewModel> Children { get; set; }
-
-        public static readonly DependencyProperty IsVisibleProperty = DependencyProperty.Register(
-            "IsVisible", typeof (bool), typeof (LoggerViewModel), new FrameworkPropertyMetadata(default(bool),PropertyChangedCallback));
 
         public bool IsVisible
         {
-            get { return (bool) GetValue(IsVisibleProperty); }
-            set { SetValue(IsVisibleProperty, value); }
+            get { return _isVisible; }
+            set { this.SetProperty(ref _isVisible, value, () =>
+            {                
+                Children.ToList().ForEach(model => model.IsVisible = value);
+            }); }
+        }
+        
+        public string Name
+        {
+            get { return _name; }
+            set { this.SetProperty(ref _name, value); }
         }
 
-        private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        public LoggerViewModel Parent
         {
-            var loggerViewModel = (LoggerViewModel)dependencyObject;
-            if ((bool)dependencyPropertyChangedEventArgs.NewValue != (bool)dependencyPropertyChangedEventArgs.OldValue)
-            {                
-                loggerViewModel.Children.Select(model => model.IsVisible = (bool)dependencyPropertyChangedEventArgs.NewValue).ToList();
-            }
- 
+            get { return _parent; }
+            set { this.SetProperty(ref _parent, value); }
         }
     }
 }

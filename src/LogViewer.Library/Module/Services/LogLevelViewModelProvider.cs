@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using LogViewer.Library.Infrastructure.LifeStyles;
 using LogViewer.Library.Module.Model;
+using LogViewer.Library.Module.ViewModels;
 
-namespace LogViewer.Library.Module.ViewModels
+namespace LogViewer.Library.Module.Services
 {
     [Singleton]
     public class LogLevelViewModelProvider : ILogLevelViewModelProvider

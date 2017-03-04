@@ -1,75 +1,68 @@
 ﻿using System;
-using System.Windows;
+using GalaSoft.MvvmLight;
 using LogViewer.Library.Module.Common.Collection;
+using LogViewer.Library.Module.Common.UI;
 
 namespace LogViewer.Library.Module.ViewModels
 {
     
-    public class LogItemViewModel : DependencyObject
+    public class LogItemViewModel : ViewModelBase, ILogItemViewModel
     {
-        public static readonly DependencyProperty TimeProperty = DependencyProperty.Register(
-            "Time", typeof (DateTime), typeof (LogItemViewModel), new PropertyMetadata(default(DateTime)));
-
-        public DateTime Time
-        {
-            get { return (DateTime) GetValue(TimeProperty); }
-            set { SetValue(TimeProperty, value); }
-        }
-
-        public static readonly DependencyProperty LogLevelProperty = DependencyProperty.Register(
-            "LogLevel", typeof (LogLevelViewModel), typeof (LogItemViewModel), new PropertyMetadata(default(LogLevelViewModel)));
-
-        public LogLevelViewModel LogLevel
-        {
-            get { return (LogLevelViewModel) GetValue(LogLevelProperty); }
-            set { SetValue(LogLevelProperty, value); }
-        }
-
-        public static readonly DependencyProperty LoggerProperty = DependencyProperty.Register(
-            "Logger", typeof (LoggerViewModel), typeof (LogItemViewModel), new PropertyMetadata(default(LoggerViewModel)));
-
-        public LoggerViewModel Logger
-        {
-            get { return (LoggerViewModel) GetValue(LoggerProperty); }
-            set { SetValue(LoggerProperty, value); }
-        }
-
-        public static readonly DependencyProperty ThreadIdProperty = DependencyProperty.Register(
-            "ThreadId", typeof (string), typeof (LogItemViewModel), new PropertyMetadata(default(string)));
-
-        public string ThreadId
-        {
-            get { return (string) GetValue(ThreadIdProperty); }
-            set { SetValue(ThreadIdProperty, value); }
-        }
-
-        public static readonly DependencyProperty MessageProperty = DependencyProperty.Register(
-            "Message", typeof (string), typeof (LogItemViewModel), new PropertyMetadata(default(string)));
-
-        public string Message
-        {
-            get { return (string) GetValue(MessageProperty); }
-            set { SetValue(MessageProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsVisibleProperty = DependencyProperty.Register(
-            "IsVisible", typeof (bool), typeof (LogItemViewModel), new PropertyMetadata(default(bool)));
-
-        public bool IsVisible
-        {
-            get { return (bool) GetValue(IsVisibleProperty); }
-            set { SetValue(IsVisibleProperty, value); }
-        }
-        
-        public ObservableDictionary<string, string> Properties { get; set; }
-
-        public static readonly DependencyProperty ExceptionStringProperty = DependencyProperty.Register(
-            "ExceptionString", typeof (string), typeof (LogItemViewModel), new PropertyMetadata(default(string)));
+        private string _exceptionString;
+        private bool _isVisible;
+        private LoggerViewModel _logger;
+        private LogLevelViewModel _logLevel;
+        private string _message;
+        private ObservableDictionary<string, string> _properties;
+        private string _threadId;
+        private DateTime _time;
 
         public string ExceptionString
         {
-            get { return (string) GetValue(ExceptionStringProperty); }
-            set { SetValue(ExceptionStringProperty, value); }
+            get { return _exceptionString; }
+            set { this.SetProperty(ref _exceptionString, value); }
+        }
+
+        public bool IsVisible
+        {
+            get { return _isVisible; }
+            set { this.SetProperty(ref _isVisible, value); }
+        }
+
+        public LoggerViewModel Logger
+        {
+            get { return _logger; }
+            set { this.SetProperty(ref _logger, value); }
+        }
+
+        public LogLevelViewModel LogLevel
+        {
+            get { return _logLevel; }
+            set { this.SetProperty(ref _logLevel, value); }
+        }
+
+        public string Message
+        {
+            get { return _message; }
+            set { this.SetProperty(ref _message, value); }
+        }
+
+        public ObservableDictionary<string, string> Properties
+        {
+            get { return _properties; }
+            set { this.SetProperty(ref _properties, value); }
+        }
+
+        public string ThreadId
+        {
+            get { return _threadId; }
+            set { this.SetProperty(ref _threadId, value); }
+        }
+
+        public DateTime Time
+        {
+            get { return _time; }
+            set { this.SetProperty(ref _time, value); }
         }
     }
 }
