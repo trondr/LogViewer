@@ -1,0 +1,11 @@
+namespace LogViewer.Library.Module.Services
+{
+    public interface ILogItemConnectionStringParser
+    {
+        bool CanParse(string connectionString);
+
+        ILogItemConnection Parse(string connectionString);
+
+        string HelpString { get; set; }
+    }
+}

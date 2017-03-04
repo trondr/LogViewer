@@ -6,7 +6,7 @@
   <PropertyGroup>    
     <ProductName>LogViewer</ProductName>
     <ProductCompany>github.trondr</ProductCompany>
-    <ProductDescription>LogViewerogViewer is a log4j log viewer</ProductDescription>
+    <ProductDescription>github.trondr LogViewer description</ProductDescription>
     <ProductCopyright>Copyright &#169; github.trondr $([System.DateTime]::Now.Year)</ProductCopyright>
     <ProductProjectName>$(ProductName)</ProductProjectName>
 
@@ -182,10 +182,10 @@
       <Output TaskParameter="Value" PropertyName="AssemblyVersionU" />
     </CreateProperty>
     <AssemblyInfo CodeLanguage="CS"
-       OutputFile="$(SrcDirectory)\github.trondr.LogViewer\Properties\AssemblyInfo.cs"
+       OutputFile="$(SrcDirectory)\LogViewer\Properties\AssemblyInfo.cs"
        AssemblyDescription="$(ProductDescription)"
        AssemblyCompany="$(ProductCompany)"
-       AssemblyProduct="github.trondr.LogViewer"
+       AssemblyProduct="LogViewer"
        AssemblyCopyright="$(ProductCopyright)"
        CLSCompliant="false"
        AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision).$(RevisionHash)"
@@ -194,10 +194,10 @@
 	  />
 	  
 	<AssemblyInfo CodeLanguage="CS"
-       OutputFile="$(SrcDirectory)\github.trondr.LogViewer.Gui\Properties\AssemblyInfo.cs"
+       OutputFile="$(SrcDirectory)\LogViewer.Gui\Properties\AssemblyInfo.cs"
        AssemblyDescription="$(ProductDescription)"
        AssemblyCompany="$(ProductCompany)"
-       AssemblyProduct="github.trondr.LogViewer.Gui"
+       AssemblyProduct="LogViewer.Gui"
        AssemblyCopyright="$(ProductCopyright)"
        CLSCompliant="false"
        AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision).$(RevisionHash)"
@@ -206,10 +206,10 @@
 	  />
 	  
     <AssemblyInfo CodeLanguage="CS"
-       OutputFile="$(SrcDirectory)\github.trondr.LogViewer.Library\Properties\AssemblyInfo.cs"
+       OutputFile="$(SrcDirectory)\LogViewer.Library\Properties\AssemblyInfo.cs"
        AssemblyDescription="$(ProductDescription)"
        AssemblyCompany="$(ProductCompany)"
-       AssemblyProduct="github.trondr.LogViewer.Library"
+       AssemblyProduct="LogViewer.Library"
        AssemblyCopyright="$(ProductCopyright)"
        CLSCompliant="false"
        AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision).$(RevisionHash)"
@@ -218,10 +218,10 @@
 	  />
 
     <AssemblyInfo CodeLanguage="CS"
-      OutputFile="$(SrcDirectory)\github.trondr.LogViewer.Tests\Properties\AssemblyInfo.cs"
+      OutputFile="$(SrcDirectory)\LogViewer.Tests\Properties\AssemblyInfo.cs"
       AssemblyDescription="$(ProductDescription)"
       AssemblyCompany="$(ProductCompany)"
-      AssemblyProduct="github.trondr.LogViewer.Tests"
+      AssemblyProduct="LogViewer.Tests"
       AssemblyCopyright="$(ProductCopyright)"
       CLSCompliant="false"
       AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision).$(RevisionHash)"
@@ -234,13 +234,13 @@
   <!--Compile-->
   
   <Target Name="Compile" DependsOnTargets="Version">
-    <MSBuild Projects="$(SrcDirectory)\github.trondr.LogViewer.Library\github.trondr.LogViewer.Library.csproj" Properties="Configuration=Release;" />
-    <MSBuild Projects="$(SrcDirectory)\github.trondr.LogViewer\github.trondr.LogViewer.csproj" Properties="Configuration=Release;" />
-	<MSBuild Projects="$(SrcDirectory)\github.trondr.LogViewer.Gui\github.trondr.LogViewer.Gui.csproj" Properties="Configuration=Release;" />
+    <MSBuild Projects="$(SrcDirectory)\LogViewer.Library\LogViewer.Library.csproj" Properties="Configuration=Release;" />
+    <MSBuild Projects="$(SrcDirectory)\LogViewer\LogViewer.csproj" Properties="Configuration=Release;" />
+	<MSBuild Projects="$(SrcDirectory)\LogViewer.Gui\LogViewer.Gui.csproj" Properties="Configuration=Release;" />
   </Target>
 
   <Target Name="CompileTests" DependsOnTargets="Compile">
-    <MSBuild Projects="$(SrcDirectory)\github.trondr.LogViewer.Tests\github.trondr.LogViewer.Tests.csproj" Properties="Configuration=Release"/>
+    <MSBuild Projects="$(SrcDirectory)\LogViewer.Tests\LogViewer.Tests.csproj" Properties="Configuration=Release"/>
   </Target>
 
   <!--Prepare for test-->
@@ -263,7 +263,7 @@
 
   <!-- Run Unit tests -->
   <Target Name="UnitTests" DependsOnTargets="CompileTests;DownloadNunit">
-    <CreateItem Include="$(BinDirectory)\Release\github.trondr.LogViewer.Tests\github.trondr.LogViewer.Tests.dll">
+    <CreateItem Include="$(BinDirectory)\Release\LogViewer.Tests\LogViewer.Tests.dll">
       <Output TaskParameter="Include" ItemName="TestAssembly" />
     </CreateItem>
 
@@ -271,7 +271,7 @@
   </Target>
 
   <Target Name="IntegrationTests" DependsOnTargets="CompileTests;DownloadNunit">
-    <CreateItem Include="$(BinDirectory)\Release\github.trondr.LogViewer.Tests\github.trondr.LogViewer.Tests.dll">
+    <CreateItem Include="$(BinDirectory)\Release\LogViewer.Tests\LogViewer.Tests.dll">
       <Output TaskParameter="Include" ItemName="TestAssembly" />
     </CreateItem>
     <NUnit Assemblies="@(TestAssembly)" IncludeCategory="IntegrationTests" ToolPath="$(ToolsDirectory)\NUnit"/>
@@ -283,7 +283,7 @@
                Password="TestPw.19" 
                Domain="$(USERDOMAIN)" 
                FileName="$(ToolsDirectory)\NUnit\nunit-console.exe" 
-               Arguments="/nologo &quot;$(BinDirectory)\Release\github.trondr.LogViewer.Tests\github.trondr.LogViewer.Tests.dll&quot; /include=AdminUserIntegrationTests"/>    
+               Arguments="/nologo &quot;$(BinDirectory)\Release\LogViewer.Tests\LogViewer.Tests.dll&quot; /include=AdminUserIntegrationTests"/>    
   </Target>
 
   <!-- Run integration tests under the security context of a user NOT member of a privileged group -->
@@ -292,52 +292,118 @@
                Password="TestPw.19"
                Domain="$(USERDOMAIN)"
                FileName="$(ToolsDirectory)\NUnit\nunit-console.exe"
-               Arguments="/nologo &quot;$(BinDirectory)\Release\github.trondr.LogViewer.Tests\github.trondr.LogViewer.Tests.dll&quot; /include=StandardUserIntegrationTests"/>
+               Arguments="/nologo &quot;$(BinDirectory)\Release\LogViewer.Tests\LogViewer.Tests.dll&quot; /include=StandardUserIntegrationTests"/>
   </Target>
 
-  <Target Name="CompileSetup" DependsOnTargets="UnitTests">
-    <MSBuild Projects="$(SrcDirectory)\github.trondr.LogViewer.Setup\github.trondr.LogViewer.Setup.wixproj" Properties="Configuration=Release"/>    
+  <Target Name="CompileSetup" DependsOnTargets="SignExeAndDll">
+    <MSBuild Projects="$(SrcDirectory)\LogViewer.Setup\LogViewer.Setup.wixproj" Properties="Configuration=Release"/>    
   </Target>
   
   <ItemGroup>
-    <ReleaseFiles Include="$(BinDirectory)\Release\$(ProductName)\**\*.exe" Exclude="$(BinDirectory)\Release\$(ProductName)\**\Libs\**" />
-    <ReleaseFiles Include="$(BinDirectory)\Release\$(ProductName)\**\*.dll" Exclude="$(BinDirectory)\Release\$(ProductName)\**\Libs\**" />
-    <ReleaseFiles Include="$(BinDirectory)\Release\$(ProductName)\**\*.pdb" Exclude="$(BinDirectory)\Release\$(ProductName)\**\Libs\**" />
-    <ReleaseFiles Include="$(BinDirectory)\Release\$(ProductName)\**\*.config" Exclude="$(BinDirectory)\Release\$(ProductName)\**\Libs\**" />
+    <SignExeAndDllFiles Include="$(BinDirectory)\Release\LogViewer\**\*.exe" />
+    <SignExeAndDllFiles Include="$(BinDirectory)\Release\LogViewer\**\*.dll" />
+	
+    <SignExeAndDllFiles Include="$(BinDirectory)\Release\LogViewer.Library\**\*.exe" />
+    <SignExeAndDllFiles Include="$(BinDirectory)\Release\LogViewer.Library\**\*.dll" />
+	
   </ItemGroup>
   
-  <Target Name="Deploy" DependsOnTargets="CompileSetup">
+  <Target Name="SignExeAndDll" DependsOnTargets="UnitTests" >
+  
+	<!--
+	
+	Ref http://stackoverflow.com/questions/17710357/how-do-i-securely-store-a-pfx-password-to-use-in-msbuild
+	
+	1. Log in as the build user
+	2. Run certmgr.msc
+	3. Right-click Certificates - Current User / Personal / Certificates, and select All Tasks / Import...
+	4. Select your .pfx file, enter the password, and click Next and Finish
+	5. Double-click on the imported certificate
+	6. In the Details page, the thumbprint algorithm should be sha1
+	7. Copy the thumbprint, it looks something like 12 34 56 78 90 ab cd ef 12 34 56 78 90 ab cd ef 12 34 56 78
+	8. Update the PfxSha1Thumbprint parameter below with the looked up sha1 thumbprint
+	9. Optionally also update the Description parameter.
+
+	-->
+	<SignTool 
+		PfxSha1Thumbprint="b34e1136986f0f1e8d7fd7b9adffa0be7e1f8688"
+		TimeStampServer="http://timestamp.comodoca.com/authenticode;http://timestamp.verisign.com/scripts/timstamp.dll;http://timestamp.globalsign.com/scripts/timstamp.dll"
+		Description="LogViewer Description"
+		SignFiles="@(SignExeAndDllFiles)"
+		ContinueBuildOnFailure="True"
+	/>
+  </Target>
+  
+  
+  <ItemGroup>
+    <SignMsiFiles Include="$(BinDirectory)\Release\LogViewer.Setup\**\*.msi" />    
+  </ItemGroup>
+    
+  <Target Name="SignMsi" DependsOnTargets="CompileSetup">
+	<!--
+	
+	Ref http://stackoverflow.com/questions/17710357/how-do-i-securely-store-a-pfx-password-to-use-in-msbuild
+	
+	1. Log in as the build user
+	2. Run certmgr.msc
+	3. Right-click Certificates - Current User / Personal / Certificates, and select All Tasks / Import...
+	4. Select your .pfx file, enter the password, and click Next and Finish
+	5. Double-click on the imported certificate
+	6. In the Details page, the thumbprint algorithm should be sha1
+	7. Copy the thumbprint, it looks something like 12 34 56 78 90 ab cd ef 12 34 56 78 90 ab cd ef 12 34 56 78
+	8. Update the PfxSha1Thumbprint parameter below with the looked up sha1 thumbprint
+	9. Optionally also update the Description parameter.
+	
+	-->
+  
+	<SignTool 
+		PfxSha1Thumbprint="b34e1136986f0f1e8d7fd7b9adffa0be7e1f8688"
+		TimeStampServer="http://timestamp.comodoca.com/authenticode;http://timestamp.verisign.com/scripts/timstamp.dll;http://timestamp.globalsign.com/scripts/timstamp.dll"
+		Description="LogViewer Description"
+		SignFiles="@(SignMsiFiles)"
+		ContinueBuildOnFailure="True"
+	/>
+  </Target>
+
+  <ItemGroup>
+    <ReleaseFiles Include="$(BinDirectory)\Release\LogViewer\**\*.exe" Exclude="$(BinDirectory)\Release\LogViewer\**\Libs\**" />
+    <ReleaseFiles Include="$(BinDirectory)\Release\LogViewer\**\*.dll" Exclude="$(BinDirectory)\Release\LogViewer\**\Libs\**" />
+    <ReleaseFiles Include="$(BinDirectory)\Release\LogViewer\**\*.pdb" Exclude="$(BinDirectory)\Release\LogViewer\**\Libs\**" />
+    <ReleaseFiles Include="$(BinDirectory)\Release\LogViewer\**\*.config" Exclude="$(BinDirectory)\Release\LogViewer\**\Libs\**" />
+  </ItemGroup>  
+  
+  <Target Name="Deploy" DependsOnTargets="SignMsi">
     
     <Zip Files="@(ReleaseFiles)"
          WorkingDirectory="$(BinDirectory)\Release\$(ProductName)"
-         ZipFileName="$(BinDirectory)\Release\github.trondr.LogViewer.$(AssemblyVersion).zip"
+         ZipFileName="$(BinDirectory)\Release\LogViewer.$(AssemblyVersion).zip"
          ZipLevel="9"
          />
-    <Message Text="github.trondr.LogViewer.$(AssemblyVersion) relase zip complete" Importance="normal" />
+    <Message Text="LogViewer.$(AssemblyVersion) relase zip complete" Importance="normal" />
 
    <ItemGroup>
-      <SetupFiles Include="$(BinDirectory)\Release\github.trondr.LogViewer.Setup\en-us\github.trondr.LogViewer.$(AssemblyVersion).msi" />
+      <SetupFiles Include="$(BinDirectory)\Release\LogViewer.Setup\en-us\LogViewer.$(AssemblyVersion).msi" />
    </ItemGroup>
  	
     <Zip Files="@(SetupFiles)"
-         WorkingDirectory="$(BinDirectory)\Release\github.trondr.LogViewer.Setup\en-us"
-         ZipFileName="$(BinDirectory)\Release\github.trondr.LogViewer.$(AssemblyVersion).msi.zip"
+         WorkingDirectory="$(BinDirectory)\Release\LogViewer.Setup\en-us"
+         ZipFileName="$(BinDirectory)\Release\LogViewer.$(AssemblyVersion).msi.zip"
          ZipLevel="9"
          />
-    <Message Text="github.trondr.LogViewer.$(AssemblyVersion).msi zip complete" Importance="normal" />
+    <Message Text="LogViewer.$(AssemblyVersion).msi zip complete" Importance="normal" />
 
     <Zip Files="@(SourceFiles)"
          WorkingDirectory="$(MSBuildProjectDirectory)"
-         ZipFileName="$(BinDirectory)\Release\github.trondr.LogViewer.Source.$(AssemblyVersion).zip"
+         ZipFileName="$(BinDirectory)\Release\LogViewer.Source.$(AssemblyVersion).zip"
          ZipLevel="9"
          />
-    <Message Text="github.trondr.LogViewer.Source.$(AssemblyVersion) zip complete" Importance="normal" />    
+    <Message Text="LogViewer.Source.$(AssemblyVersion) zip complete" Importance="normal" />    
 	
 	  <ResolveScriptInstallPackage
       ScriptInstallPackageSourcePath="$(SrcDirectory)\github.trondr LogViewer"
       ScriptInstallPackageTargetPath="$(BinDirectory)\Release\github.trondr LogViewer $(AssemblyVersion)"
-      SourceMsiFile="$(BinDirectory)\Release\github.trondr.LogViewer.Setup\en-us\github.trondr.LogViewer.$(AssemblyVersion).msi"
-      TargetMsiFile="$(BinDirectory)\Release\github.trondr LogViewer $(AssemblyVersion)\VendorInstall\github.trondr.LogViewer.$(AssemblyVersion).msi"
+      SourceMsiFile="$(BinDirectory)\Release\LogViewer.Setup\en-us\LogViewer.$(AssemblyVersion).msi"
+      TargetMsiFile="$(BinDirectory)\Release\github.trondr LogViewer $(AssemblyVersion)\VendorInstall\LogViewer.$(AssemblyVersion).msi"
       VendorInstallIni="$(BinDirectory)\Release\github.trondr LogViewer $(AssemblyVersion)\VendorInstall\VendorInstall.ini"
       PackageDefinitionSms="$(BinDirectory)\Release\github.trondr LogViewer $(AssemblyVersion)\PackageDefinition.sms"
       PackageDefinitionName="LogViewer"
