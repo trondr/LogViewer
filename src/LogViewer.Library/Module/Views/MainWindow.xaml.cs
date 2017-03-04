@@ -3,6 +3,7 @@ using System.Windows;
 using Common.Logging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Threading;
 using LogViewer.Library.Infrastructure;
 using LogViewer.Library.Module.Messages;
 using LogViewer.Library.Module.ViewModels;
@@ -48,6 +49,7 @@ namespace LogViewer.Library.Module.Views
             if(Messenger == null)
                 throw new NullReferenceException($"Messenger has not been initialized. Has {typeof(IMessenger).Namespace} been registered with the container?");
             Messenger?.Register<CloseWindowMessage>(this, message => Close());
+            DispatcherHelper.Initialize();
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs routedEventArgs)

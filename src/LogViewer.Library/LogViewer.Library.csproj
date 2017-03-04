@@ -136,10 +136,10 @@
     <Compile Include="Infrastructure\ToDoPriority.cs" />
     <Compile Include="Module\Common\UI\CommandHandler.cs" />
     <Compile Include="Module\Common\UI\ViewModelBaseExtensions.cs" />
-    <Compile Include="Module\Mapping\ExampleMapping.cs" />
     <Compile Include="Module\Mapping\LogItemTypeMapperProfile.cs" />
     <Compile Include="Module\Messages\CloseWindowMessage.cs" />
     <Compile Include="Module\Messages\ConnectionStringsMessage.cs" />
+    <Compile Include="Module\Messages\RequestConnectionStringsMessage.cs" />
     <Compile Include="Module\Model\ILogItem.cs" />
     <Compile Include="Module\Model\ILogItemFactory.cs" />
     <Compile Include="Module\Model\LogItem.cs" />

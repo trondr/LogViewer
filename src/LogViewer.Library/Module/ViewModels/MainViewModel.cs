@@ -10,6 +10,7 @@ using Common.Logging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Threading;
 using LogViewer.Library.Infrastructure;
 using LogViewer.Library.Module.Common.UI;
 using LogViewer.Library.Module.Messages;
@@ -82,6 +83,7 @@ namespace LogViewer.Library.Module.ViewModels
                     }
                 }
             });
+            MessengerInstance.Send(new RequestConnectionStringsMessage());
             LoadStatus = LoadStatus.Loaded;
             return Task.FromResult(true);
         }
@@ -276,7 +278,7 @@ namespace LogViewer.Library.Module.ViewModels
 
                 try
                 {
-                    Dispatcher.CurrentDispatcher.Invoke(() =>
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
                     {
                         var logItemViewModel = _typeMapper.Map<LogItemViewModel>(item);
                         LogItems.Add(logItemViewModel);
@@ -291,10 +293,11 @@ namespace LogViewer.Library.Module.ViewModels
 
         public void Notify(LogItem logItem)
         {
-             var item = logItem;
-            Dispatcher.CurrentDispatcher.Invoke(() =>
+            var item = logItem;
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                LogItems.Add(_typeMapper.Map<LogItemViewModel>(item));
+                var logItemViewModel = _typeMapper.Map<LogItemViewModel>(item);
+                LogItems.Add(logItemViewModel);
             });
         }
     }
