@@ -43,7 +43,8 @@ namespace LogViewer.Library.Infrastructure
         
         public T Map<T>(object source)
         {
-            return Mapper.Map<T>(source);            
+            var destination = Mapper.Map<T>(source);
+            return destination;
         }
 
         private IMapper ConfigureAndCreateMapper()
@@ -85,8 +86,7 @@ namespace LogViewer.Library.Infrastructure
         {
             foreach (var profile in _typeMapperProfiles)
             {
-                mapperConfiguration.AddProfile(profile);
-                //((MapperConfiguration)mapperConfiguration).AssertConfigurationIsValid(profile.ProfileName);
+                mapperConfiguration.AddProfile(profile);                
             }
         }
     }
