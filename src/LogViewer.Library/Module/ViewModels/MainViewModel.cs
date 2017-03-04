@@ -173,32 +173,15 @@ namespace LogViewer.Library.Module.ViewModels
         public ObservableCollection<LogItemViewModel> LogItems
         {
             get
-            {
-                if (_logItems == null)
-                {
-                    LogItems = new ObservableCollection<LogItemViewModel>();
-                    LogItems.CollectionChanged += LogItemsOnCollectionChanged;
-                }
-                return _logItems;
+            {                
+                return _logItems ?? (LogItems = new ObservableCollection<LogItemViewModel>());
             }
             set { this.SetProperty(ref _logItems, value); }
         }
-
-        private void LogItemsOnCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            ScrollToBottom?.Invoke();
-        }
-
+        
         public ObservableCollection<LoggerViewModel> Loggers
         {
-            get
-            {
-                if (_loggers == null)
-                {
-                    Loggers = new ObservableCollection<LoggerViewModel>() { _loggerViewModelProvider.Root };
-                }
-                return _loggers ?? (_loggers = new ObservableCollection<LoggerViewModel>());
-            }
+            get { return _loggers ?? (_loggers = new ObservableCollection<LoggerViewModel>() {_loggerViewModelProvider.Root});}
             set { this.SetProperty(ref _loggers, value); }
         }
 
@@ -262,9 +245,7 @@ namespace LogViewer.Library.Module.ViewModels
         {
             get { return _logItemIsSelected; }
             set { this.SetProperty(ref _logItemIsSelected, value); }
-        }
-
-        public event Action ScrollToBottom;
+        }        
         
         public void Notify(LogItem[] logItems)
         {

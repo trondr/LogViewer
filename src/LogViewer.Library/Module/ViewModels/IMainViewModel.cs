@@ -18,7 +18,6 @@ namespace LogViewer.Library.Module.ViewModels
         bool IsBusy { get; set; }
         string SearchFilter { get; set; }
         LogItemViewModel SelectedLogItem {get;set; }
-        bool LogItemIsSelected {get;set; }        
-        event Action ScrollToBottom;
+        bool LogItemIsSelected {get;set; }                
     }
 }
