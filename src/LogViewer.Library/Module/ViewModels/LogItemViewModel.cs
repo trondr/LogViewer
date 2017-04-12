@@ -16,6 +16,7 @@ namespace LogViewer.Library.Module.ViewModels
         private ObservableDictionary<string, string> _properties;
         private string _threadId;
         private DateTime _time;
+        private string _sourceCode;
 
         public string ExceptionString
         {
@@ -63,6 +64,12 @@ namespace LogViewer.Library.Module.ViewModels
         {
             get { return _time; }
             set { this.SetProperty(ref _time, value); }
+        }
+
+        public string SourceCode
+        {
+            get { return _sourceCode; }
+            set { this.SetProperty(ref _sourceCode, value); }
         }
     }
 }

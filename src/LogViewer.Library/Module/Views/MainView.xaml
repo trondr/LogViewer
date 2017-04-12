@@ -10,6 +10,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:behaviours="clr-namespace:LogViewer.Library.Module.Behaviours"
+             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
              mc:Ignorable="d" 
              d:DesignHeight="330" d:DesignWidth="500">
     <UserControl.Resources>
@@ -19,7 +20,7 @@
         </Style>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     </UserControl.Resources>
-    <Grid d:DataContext="{d:DesignInstance Type=viewModels:DesignTimeMainViewModel, IsDesignTimeCreatable=True}">
+    <Grid x:Name="MainViweGrid" d:DataContext="{d:DesignInstance Type=viewModels:DesignTimeMainViewModel, IsDesignTimeCreatable=True}">
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="Loaded">
                 <i:InvokeCommandAction Command="{Binding LoadCommand}" />
@@ -149,33 +150,46 @@
 
             <GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="5" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"/>
 
-            <Grid Grid.Row="2" Grid.Column="0" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <TabControl Grid.Row="2" Grid.Column="0">
+                <TabItem Header="Message Details">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="0" Content="Message Details" FontWeight="Bold"></Label>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Message Details" FontWeight="Bold"></Label>
 
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Time:" Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=SelectedLogItem.Time}"  Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Time:" Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=SelectedLogItem.Time}"  Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
 
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="LogLevel:" Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
-                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=SelectedLogItem.LogLevel.Level}"  Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="LogLevel:" Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=SelectedLogItem.LogLevel.Level}"  Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
 
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="Logger:" Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
-                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Path=SelectedLogItem.Logger.Name}"  Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Logger:" Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Path=SelectedLogItem.Logger.Name}"  Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
 
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="Message:"  Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
-                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=SelectedLogItem.Message}"  Margin="5,0,5,0" BorderThickness="0" IsReadOnly="True" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
-            </Grid>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Message:"  Margin="5,0,5,0" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
+                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=SelectedLogItem.Message}"  Margin="5,0,5,0" BorderThickness="0" IsReadOnly="True" Visibility="{Binding Path=LogItemIsSelected, Converter={StaticResource BoolToVisibility}}" />
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Source Code">
+                    <ui:CodeTextEditor DataContext="{Binding DataContext,ElementName=MainViweGrid}"
+                        SyntaxHighlighting="C#"                         
+                        Text2="{Binding SelectedLogItem.SourceCode,Mode=TwoWay,diag:PresentationTraceSources.TraceLevel=High}"
+                        />
+                </TabItem>
+            </TabControl>
+            
+            
+            
         </Grid>
 
     </Grid>

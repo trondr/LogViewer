@@ -25,7 +25,10 @@ namespace LogViewer.Library.Module.Mapping
                 .ForMember(model => model.ThreadId, expression => expression.MapFrom(item => item.ThreadId))
                 .ForMember(model => model.Message, expression => expression.MapFrom(item => item.Message))
                 .ForMember(model => model.ExceptionString, expression => expression.MapFrom(item => item.ExceptionString))
-                .ForMember(model => model.IsVisible, expression => expression.Ignore());
+                .ForMember(model => model.IsVisible, expression => expression.Ignore())
+                .ForMember(model => model.SourceCode, expression => expression.Ignore()
+                );
+
         }
     }
 }

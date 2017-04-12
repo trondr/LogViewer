@@ -56,7 +56,10 @@ namespace LogViewer.Library.Module.Services
             try
             {
                 using (var reader = new XmlTextReader(logItemString, XmlNodeType.Element, Context))
-                    return Parse(reader, defaultLogger);
+                {
+                    var logItem = Parse(reader, defaultLogger);
+                    return logItem;
+                }
             }
             catch (Exception e)
             {
@@ -84,9 +87,13 @@ namespace LogViewer.Library.Module.Services
             }
             logMsg.Logger = logItemXmlReader.GetAttribute("logger");
             var logLevelString = logItemXmlReader.GetAttribute("level");
-            var logLevel = LogLevel.None;
+            LogLevel logLevel;
+            logMsg.LogLevel = LogLevel.None; 
             var sucessFullConversion = Enum.TryParse<LogLevel>(logLevelString,true, out logLevel);
-            logMsg.LogLevel = logLevel;
+            if (sucessFullConversion)
+            {
+                logMsg.LogLevel = logLevel;
+            }
             logMsg.ThreadId = logItemXmlReader.GetAttribute("thread");
             long timeStamp;
             if (long.TryParse(logItemXmlReader.GetAttribute("timestamp"), out timeStamp))
@@ -109,6 +116,16 @@ namespace LogViewer.Library.Module.Services
                             break;
 
                         case "log4j:locationInfo":
+                            logMsg.CallSiteClass = logItemXmlReader.GetAttribute("class");
+                            logMsg.CallSiteMethod = logItemXmlReader.GetAttribute("method");
+                            logMsg.SourceFileName = logItemXmlReader.GetAttribute("file");
+                            // ReSharper disable once TooWideLocalVariableScope
+                            uint sourceFileLine;
+                            var parsedOk = uint.TryParse(logItemXmlReader.GetAttribute("line"), out sourceFileLine);
+                            if (parsedOk)
+                            {
+                                logMsg.SourceFileLineNr = sourceFileLine;
+                            }
                             break;
 
                         case "log4j:properties":
@@ -118,7 +135,7 @@ namespace LogViewer.Library.Module.Services
                             {
                                 var name = logItemXmlReader.GetAttribute("name");
                                 var value = logItemXmlReader.GetAttribute("value");
-                                logMsg.Properties[name] = value;
+                                if (name != null) logMsg.Properties[name] = value;
                                 logItemXmlReader.Read();
                             }
                             break;

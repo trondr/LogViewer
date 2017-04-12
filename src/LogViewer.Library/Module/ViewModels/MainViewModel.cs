@@ -83,8 +83,8 @@ namespace LogViewer.Library.Module.ViewModels
                     }
                 }
             });
-            MessengerInstance.Send(new RequestConnectionStringsMessage());
             LoadStatus = LoadStatus.Loaded;
+            MessengerInstance.Send(new RequestConnectionStringsMessage());            
             return Task.FromResult(true);
         }
 
@@ -262,6 +262,7 @@ namespace LogViewer.Library.Module.ViewModels
                     DispatcherHelper.CheckBeginInvokeOnUI(() =>
                     {
                         var logItemViewModel = _typeMapper.Map<LogItemViewModel>(item);
+                        logItemViewModel.SourceCode = GetSourceCode(item);
                         LogItems.Add(logItemViewModel);
                     });
                 }
@@ -278,8 +279,15 @@ namespace LogViewer.Library.Module.ViewModels
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
                 var logItemViewModel = _typeMapper.Map<LogItemViewModel>(item);
+                logItemViewModel.SourceCode = GetSourceCode(item);
                 LogItems.Add(logItemViewModel);
             });
+        }
+
+        private string GetSourceCode(LogItem logItem)
+        {
+            var sourceCode = $"//{logItem.SourceFileName} : {logItem.CallSiteClass} : {logItem.CallSiteMethod} : {logItem.SourceFileLineNr}";
+            return sourceCode;
         }
     }
 }

@@ -13,5 +13,6 @@ namespace LogViewer.Library.Module.ViewModels
         ObservableDictionary<string, string> Properties { get; set; }
         string ThreadId { get; set; }
         DateTime Time { get; set; }
+        string SourceCode { get; set; }
     }
 }
