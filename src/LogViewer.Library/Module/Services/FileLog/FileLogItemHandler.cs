@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Timers;
 using Common.Logging;
 using LogViewer.Library.Module.Model;
 
@@ -11,12 +12,13 @@ namespace LogViewer.Library.Module.Services.FileLog
     {
         private readonly ILog4JLogItemParser _log4JLogItemParser;        
         private readonly ILog _logger;
-        private ILogItemNotifiable _logItemNotifiable = null;
+        private ILogItemNotifiable _logItemNotifiable;
         private long _lastFileLength;
-        private FileSystemWatcher _fileSystemWatcher;
-        private string _fullLoggerName;        
+        private FileSystemWatcher _fileSystemWatcher;                
         private bool _showFromBeginning;
-        private ILogItemConnection _connection;
+
+        private string _defaultLoggerName;
+        private Timer _timer;
 
         public FileLogItemHandler(ILog4JLogItemParser log4JLogItemParser, ILog logger)
         {
@@ -24,19 +26,11 @@ namespace LogViewer.Library.Module.Services.FileLog
             _logger = logger;
         }
 
-        public ILogItemConnection Connection
-        {
-            get { return _connection; }
-            set
-            {                
-                _connection = value;                
-            }
-        }
+        public ILogItemConnection Connection { get; set; }
 
         public void Initialize()
         {
-            var connection = GetConnection();
-            ComputeFullLoggerName();
+            var connection = GetConnection();            
             StartMonitoringLogFile(connection.FileName);
         }
 
@@ -74,26 +68,42 @@ namespace LogViewer.Library.Module.Services.FileLog
             _fileSystemWatcher.Deleted += OnFileDeleted;
             _fileSystemWatcher.Renamed += OnFileRenamed;
             _fileSystemWatcher.EnableRaisingEvents = true;
+
+            //Ref issue discussed in https://blogs.technet.microsoft.com/asiasupp/2010/12/14/file-date-modified-property-are-not-updating-while-modifying-a-file-without-closing-it/
+            //Issue is effectively disabling flush to disk even if 'ImmediateFlush' is configured in log4net. It seems that checking for file existence is enough to trigger an actual flush.
+            _timer = new Timer(500);            
+            _timer.Elapsed += (sender, args) => { File.Exists(logFileName);  };
+            _timer.Start();
         }
 
         private long CalculateLastFileLength()
         {
             var connection = GetConnection();
-            if (File.Exists(connection.FileName))
+            var lastFileLength = ShowFromBeginning ? 0 : GetFileLength(connection.FileName);
+            return lastFileLength;            
+        }
+        
+        private long GetFileLength(string fileName)
+        {
+            long fileLength = 0;
+            if (File.Exists(fileName))
             {
-                using (var fileStream = new FileStream(connection.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     using (var sr = new StreamReader(fileStream))
                     {
-                        return ShowFromBeginning ? 0 : sr.BaseStream.Length;
+                        fileLength = sr.BaseStream.Length;
                     }
                 }
             }
-            return 0;
+            return fileLength;
         }
 
         private void StopMonitoringLogFile()
         {
+            _timer?.Stop();
+            _timer?.Dispose();
+            _timer = null;
             if (_fileSystemWatcher != null)
             {
                 _fileSystemWatcher.EnableRaisingEvents = false;
@@ -106,18 +116,28 @@ namespace LogViewer.Library.Module.Services.FileLog
             _lastFileLength = 0;
         }
 
-        public string DefaultLoggerName { get; set; }
+        public string DefaultLoggerName
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_defaultLoggerName))
+                {
+                    var connection = GetConnection();
+                    var fileName = Path.GetFileName(connection.FileName);
+                    var underscoredFileName = fileName?.Replace('.', '_');
+                    _defaultLoggerName = $"FileLogger.{underscoredFileName}";
+                }
+                return _defaultLoggerName;
+            }
+            set { _defaultLoggerName = value; }
+        }
 
         public bool ShowFromBeginning
         {
             get { return _showFromBeginning; }
             set
             {
-                _showFromBeginning = value;
-                if (_showFromBeginning && _lastFileLength == 0)
-                {
-                    ReadFile();
-                }
+                _showFromBeginning = value;                
             }
         }
 
@@ -178,7 +198,7 @@ namespace LogViewer.Library.Module.Services.FileLog
                 // This condition allows us to process events that spread over multiple lines
                 if (line.Contains("</log4j:event>"))
                 {
-                    var logMsg = _log4JLogItemParser.Parse(logItemString.ToString(), _fullLoggerName);
+                    var logMsg = _log4JLogItemParser.Parse(logItemString.ToString(), DefaultLoggerName);
                     logItems.Add(logMsg);
                     logItemString.Clear();
                     logItemString = new StringBuilder();
@@ -212,24 +232,14 @@ namespace LogViewer.Library.Module.Services.FileLog
 
             ReadFile();
         }
-
-        private void ComputeFullLoggerName()
-        {
-            var connection = GetConnection();
-            var fileName = Path.GetFileName(connection.FileName);
-            _fullLoggerName = string.Format("FileLogger.{0}",
-                string.IsNullOrEmpty(DefaultLoggerName) && !string.IsNullOrEmpty(fileName)
-                    ? fileName.Replace('.', '_')
-                    : DefaultLoggerName);
-
-        }
-
+        
         IFileLogItemConnection GetConnection()
         {
             var connection = Connection as IFileLogItemConnection;
             ValidateConnection(connection);
             return connection;
         }
+
         private void ValidateConnection(IFileLogItemConnection eventLogConnection)
         {
             if (eventLogConnection == null) throw new ArgumentNullException(nameof(eventLogConnection));
