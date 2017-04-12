@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
@@ -262,7 +263,8 @@ namespace LogViewer.Library.Module.ViewModels
                     DispatcherHelper.CheckBeginInvokeOnUI(() =>
                     {
                         var logItemViewModel = _typeMapper.Map<LogItemViewModel>(item);
-                        logItemViewModel.SourceCode = GetSourceCode(item);
+                        //logItemViewModel.SourceCode = GetSourceCode(item);
+                        //logItemViewModel.SourceCodeLine = item.SourceFileLineNr;
                         LogItems.Add(logItemViewModel);
                     });
                 }
@@ -279,15 +281,27 @@ namespace LogViewer.Library.Module.ViewModels
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
                 var logItemViewModel = _typeMapper.Map<LogItemViewModel>(item);
-                logItemViewModel.SourceCode = GetSourceCode(item);
+                //logItemViewModel.SourceCode = GetSourceCode(item);
+                //logItemViewModel.SourceCodeLine = item.SourceFileLineNr;
                 LogItems.Add(logItemViewModel);
             });
         }
 
-        private string GetSourceCode(LogItem logItem)
-        {
-            var sourceCode = $"//{logItem.SourceFileName} : {logItem.CallSiteClass} : {logItem.CallSiteMethod} : {logItem.SourceFileLineNr}";
-            return sourceCode;
-        }
+        //private string GetSourceCode(LogItem logItem)
+        //{
+        //    var sourceCode = $"//{logItem.SourceFileName} : {logItem.CallSiteClass} : {logItem.CallSiteMethod} : {logItem.SourceFileLineNr}";
+        //    if (File.Exists(logItem.SourceFileName))
+        //    {
+        //        using (var sr = new StreamReader(logItem.SourceFileName))
+        //        {
+        //            sourceCode += Environment.NewLine + sr.ReadToEnd();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        sourceCode = $"//Source code file not found: {logItem.SourceFileName} : {logItem.CallSiteClass} : {logItem.CallSiteMethod} : {logItem.SourceFileLineNr}";
+        //    }
+        //    return sourceCode;
+        //}
     }
 }

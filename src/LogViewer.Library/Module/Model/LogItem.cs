@@ -14,7 +14,7 @@ namespace LogViewer.Library.Module.Model
         public string CallSiteClass { get; set; }
         public string CallSiteMethod { get; set; }
         public string SourceFileName { get; set; }
-        public uint SourceFileLineNr { get; set; }
+        public uint SourceFileLineNr { get; set; } = 1;
         public Dictionary<string, string> Properties = new Dictionary<string, string>();
     }
 }

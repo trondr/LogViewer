@@ -9,11 +9,15 @@ namespace LogViewer.Library.Module.Mapping
     {
         private readonly ILogLevelViewModelProvider _logLevelViewModelProvider;
         private readonly ILoggerViewModelProvider _loggerViewModelProvider;
+        private readonly ISourceCodeInfoProvider _sourceCodeInfoProvider;
 
-        public LogItemTypeMapperProfile(ILogLevelViewModelProvider logLevelViewModelProvider,ILoggerViewModelProvider loggerViewModelProvider)
+        public LogItemTypeMapperProfile(ILogLevelViewModelProvider logLevelViewModelProvider,
+            ILoggerViewModelProvider loggerViewModelProvider, 
+            ISourceCodeInfoProvider sourceCodeInfoProvider)
         {
             _logLevelViewModelProvider = logLevelViewModelProvider;
             _loggerViewModelProvider = loggerViewModelProvider;
+            _sourceCodeInfoProvider = sourceCodeInfoProvider;
         }
 
         protected override void Configure()
@@ -26,9 +30,16 @@ namespace LogViewer.Library.Module.Mapping
                 .ForMember(model => model.Message, expression => expression.MapFrom(item => item.Message))
                 .ForMember(model => model.ExceptionString, expression => expression.MapFrom(item => item.ExceptionString))
                 .ForMember(model => model.IsVisible, expression => expression.Ignore())
-                .ForMember(model => model.SourceCode, expression => expression.Ignore()
+                .ForMember(model => model.SourceCode, expression => expression.MapFrom(item => _sourceCodeInfoProvider.GetSourceCode(item.SourceFileName)))
+                .ForMember(model => model.SourceCodeDetails, expression => expression.MapFrom(item => GetSourceCodeDetails(item)))
+                .ForMember(model => model.SourceCodeLine, expression => expression.MapFrom(item => item.SourceFileLineNr)
                 );
+        }
 
+        private string GetSourceCodeDetails(LogItem item)
+        {
+            var sourceCodeDetails = $"File: '{item.SourceFileName}', Class: '{item.CallSiteClass}' Method: '{item.CallSiteMethod}' Line: '{item.SourceFileLineNr}'";
+            return sourceCodeDetails;
         }
     }
 }

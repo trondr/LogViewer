@@ -181,17 +181,22 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Source Code">
-                    <ui:CodeTextEditor DataContext="{Binding DataContext,ElementName=MainViweGrid}"
-                        SyntaxHighlighting="C#"                         
-                        Text2="{Binding SelectedLogItem.SourceCode,Mode=TwoWay,diag:PresentationTraceSources.TraceLevel=High}"
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding SelectedLogItem.SourceCodeDetails}" FontWeight="Bold" Margin="5"/>
+                        <ui:CodeTextEditor Grid.Row="1" DataContext="{Binding DataContext,ElementName=MainViweGrid}"
+                            SyntaxHighlighting="C#"                         
+                            Text2="{Binding SelectedLogItem.SourceCode.Code,Mode=TwoWay}"
+                            CurrentLine="{Binding SelectedLogItem.SourceCodeLine,Mode=TwoWay}"
+                            ShowLineNumbers="True"
                         />
+                    </Grid>
                 </TabItem>
             </TabControl>
-            
-            
-            
         </Grid>
-
     </Grid>
 </UserControl>
 

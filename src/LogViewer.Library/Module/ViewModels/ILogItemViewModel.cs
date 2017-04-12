@@ -1,5 +1,6 @@
 ﻿using System;
 using LogViewer.Library.Module.Common.Collection;
+using LogViewer.Library.Module.Services;
 
 namespace LogViewer.Library.Module.ViewModels
 {
@@ -13,6 +14,7 @@ namespace LogViewer.Library.Module.ViewModels
         ObservableDictionary<string, string> Properties { get; set; }
         string ThreadId { get; set; }
         DateTime Time { get; set; }
-        string SourceCode { get; set; }
+        SourceCodeInfo SourceCode { get; set; }
+        uint SourceCodeLine { get; set; }
     }
 }

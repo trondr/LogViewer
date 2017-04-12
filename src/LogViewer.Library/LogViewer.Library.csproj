@@ -138,6 +138,7 @@
     <Compile Include="Infrastructure\ToDoPriority.cs" />
     <Compile Include="Module\Common\UI\CodeTextEditor.cs" />
     <Compile Include="Module\Common\UI\CommandHandler.cs" />
+    <Compile Include="Module\Common\UI\HighlightCurrentLineBackgroundRenderer.cs" />
     <Compile Include="Module\Common\UI\ViewModelBaseExtensions.cs" />
     <Compile Include="Module\Mapping\LogItemTypeMapperProfile.cs" />
     <Compile Include="Module\Messages\CloseWindowMessage.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Module\Model\ILogItemFactory.cs" />
     <Compile Include="Module\Model\LogItem.cs" />
     <Compile Include="Module\Model\LogLevel.cs" />
+    <Compile Include="Module\Services\ISourceCodeInfoProvider.cs" />
     <Compile Include="Module\Services\DuplicateConnectionStringException.cs" />
     <Compile Include="Module\Services\EventLog\EventLogItemConnection.cs" />
     <Compile Include="Module\Services\EventLog\EventLogItemConnectionStringParser.cs" />
@@ -187,6 +189,8 @@
     <Compile Include="Module\Services\RemotingLog\RemotingLogItemConnection.cs" />
     <Compile Include="Module\Services\RemotingLog\RemotingLogItemConnectionStringParser.cs" />
     <Compile Include="Module\Services\RemotingLog\RemotingLogItemHandler.cs" />
+    <Compile Include="Module\Services\SourceCodeInfo.cs" />
+    <Compile Include="Module\Services\SourceCodeInfoProvider.cs" />
     <Compile Include="Module\Services\TcpLog\IpVersion.cs" />
     <Compile Include="Module\Services\TcpLog\ITcpLogItemConnection.cs" />
     <Compile Include="Module\Services\TcpLog\ITcpLogItemConnectionFactory.cs" />

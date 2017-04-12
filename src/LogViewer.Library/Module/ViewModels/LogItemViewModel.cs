@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight;
 using LogViewer.Library.Module.Common.Collection;
 using LogViewer.Library.Module.Common.UI;
+using LogViewer.Library.Module.Services;
 
 namespace LogViewer.Library.Module.ViewModels
 {
@@ -16,7 +17,9 @@ namespace LogViewer.Library.Module.ViewModels
         private ObservableDictionary<string, string> _properties;
         private string _threadId;
         private DateTime _time;
-        private string _sourceCode;
+        private SourceCodeInfo _sourceCode;
+        private uint _sourceCodeLine = 1;
+        private string _sourceCodeDetails;
 
         public string ExceptionString
         {
@@ -66,10 +69,22 @@ namespace LogViewer.Library.Module.ViewModels
             set { this.SetProperty(ref _time, value); }
         }
 
-        public string SourceCode
+        public SourceCodeInfo SourceCode
         {
             get { return _sourceCode; }
             set { this.SetProperty(ref _sourceCode, value); }
+        }
+
+        public uint SourceCodeLine
+        {
+            get { return _sourceCodeLine; }
+            set { this.SetProperty(ref _sourceCodeLine, value); }
+        }
+
+        public string SourceCodeDetails
+        {
+            get { return _sourceCodeDetails; }
+            set { this.SetProperty(ref _sourceCodeDetails, value); }
         }
     }
 }
