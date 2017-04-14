@@ -3,10 +3,10 @@
 <?define ProductName="LogViewer" ?>
 <?define ProductFeature="LogViewer" ?>
 <?define ProductProjectName="LogViewer" ?>
-<?define PackageDescription="github.trondr LogViewer" ?>
+<?define PackageDescription="github.com.trondr LogViewer" ?>
 <?define ProductUpgradeCode="{cd7c5ff3-3ab2-4903-99a8-18e03770c6fd}" ?>
 <?define PackageKeywords="LogViewer" ?>
-<?define CompanyName="github.trondr" ?>
+<?define CompanyName="github.com.trondr" ?>
 <?define ProductExeBaseName="LogViewer" ?>
 <?define ProductLibraryBaseName="LogViewer.Library" ?>
 <?define ProductExeReleaseFolder="..\..\bin\release\LogViewer" ?>

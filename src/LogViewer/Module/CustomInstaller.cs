@@ -9,7 +9,7 @@ namespace LogViewer.Module
     [RunInstaller(true)]
     public partial class CustomInstaller : System.Configuration.Install.Installer
     {
-        private string _commandId = "github.trondr.LogViewer";
+        private string _commandId = "github.com.trondr.LogViewer";
 
         public CustomInstaller()
         {
@@ -20,10 +20,10 @@ namespace LogViewer.Module
         {            
 
 
-            this.Context.LogMessage("Adding github.trondr.LogViewer to File Explorer context menu...");
+            this.Context.LogMessage("Adding github.com.trondr.LogViewer to File Explorer context menu...");
             string exeFile = ExeFile();
-            new WindowsExplorerContextMenuInstaller().Install(_commandId, "Open log in github.trondr.LogViewer...", exeFile, "OpenLogs /connectionStrings=\"['file://%1']\"");
-            this.Context.LogMessage("Finnished adding github.trondr.LogViewer to File Explorer context menu.");
+            new WindowsExplorerContextMenuInstaller().Install(_commandId, "Open log in LogViewer...", exeFile, "OpenLogs /connectionStrings=\"['file://%1']\"");
+            this.Context.LogMessage("Finnished adding github.com.trondr.LogViewer to File Explorer context menu.");
 
             base.Install(stateSaver);
         }
@@ -44,9 +44,9 @@ namespace LogViewer.Module
         public override void Uninstall(IDictionary savedState)
         {
             //Example: Removing previously installed command from windows explorer contect menu
-            this.Context.LogMessage("Removing github.trondr.LogViewer from File Explorer context menu...");
+            this.Context.LogMessage("Removing github.com.trondr.LogViewer from File Explorer context menu...");
             new WindowsExplorerContextMenuInstaller().UnInstall(_commandId);
-            this.Context.LogMessage("Finished removing github.trondr.LogViewer from File Explorer context menu.");
+            this.Context.LogMessage("Finished removing github.com.trondr.LogViewer from File Explorer context menu.");
             base.Uninstall(savedState);
         }     
     }

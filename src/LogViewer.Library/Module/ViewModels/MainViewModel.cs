@@ -1,12 +1,9 @@
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Common.Logging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -25,6 +22,7 @@ namespace LogViewer.Library.Module.ViewModels
         private readonly ILogLevelViewModelProvider _logLevelViewModelProvider;
         private readonly ILoggerViewModelProvider _loggerViewModelProvider;
         private readonly ITypeMapper _typeMapper;
+        private readonly ILogViewerConfiguration _configuration;
         private readonly ILogItemConnectionProvider _logItemConnectionProvider;
         private readonly ILogItemHandlerFactory _logItemHandlerFactory;
         private readonly ILog _logger;
@@ -48,6 +46,7 @@ namespace LogViewer.Library.Module.ViewModels
             ILoggerViewModelProvider loggerViewModelProvider,
             ITypeMapper typeMapper,
             IMessenger messenger,
+            ILogViewerConfiguration configuration,
             ILogItemConnectionProvider logItemConnectionProvider,
             ILogItemHandlerFactory logItemHandlerFactory,
             ILog logger
@@ -56,6 +55,7 @@ namespace LogViewer.Library.Module.ViewModels
             _logLevelViewModelProvider = logLevelViewModelProvider;
             _loggerViewModelProvider = loggerViewModelProvider;
             _typeMapper = typeMapper;
+            _configuration = configuration;
             _logItemConnectionProvider = logItemConnectionProvider;
             _logItemHandlerFactory = logItemHandlerFactory;
             _logger = logger;
@@ -63,55 +63,60 @@ namespace LogViewer.Library.Module.ViewModels
 
         public Task LoadAsync()
         {
-            if (LoadStatus == LoadStatus.Loaded || LoadStatus == LoadStatus.Loading || LoadStatus == LoadStatus.UnLoading )
-                return Task.FromResult(true);            
-            LoadStatus = LoadStatus.Loading;
-            _logger.Info($"Loading {this.GetType().Name}");   
-            SearchFilter = Properties.Settings.Default.SearchFilter;
-            MessengerInstance.Register<ConnectionStringsMessage>(this, message =>
+            return Task.Run(() =>
             {
-                var logItemNotifiable = this as ILogItemNotifiable;
-                var logItemConnections = _logItemConnectionProvider.GetLogItemConnections(message.ConnectionStrings).ToList();
-                foreach (var logItemConnection in logItemConnections)
-                {
-                    _logItemHandlers = _logItemHandlerFactory.GetLogItemHandlers(logItemConnection);
-                    foreach (var logItemHandler in _logItemHandlers)
-                    {
-                        logItemHandler.Connection = logItemConnection;
-                        logItemHandler.ShowFromBeginning = true;
-                        logItemHandler.Initialize();
-                        logItemHandler.Attach(logItemNotifiable);
-                    }
-                }
+                if (LoadStatus == LoadStatus.Loaded || LoadStatus == LoadStatus.Loading || LoadStatus == LoadStatus.UnLoading)
+                    return;
+                LoadStatus = LoadStatus.Loading;
+                DispatcherHelper.CheckBeginInvokeOnUI(() => SearchFilter = Properties.Settings.Default.SearchFilter);
+                LoadStatus = LoadStatus.Loaded;
+                ConfigureAndAttachLogItemHandlers(_configuration.ConnectionStrings);
             });
-            LoadStatus = LoadStatus.Loaded;
-            MessengerInstance.Send(new RequestConnectionStringsMessage());            
-            return Task.FromResult(true);
+        }
+
+        private void ConfigureAndAttachLogItemHandlers(string[] connectionStrings)
+        {
+            _logger.Info($"Connection string count: '{connectionStrings?.Length}'");
+            var logItemNotifiable = this as ILogItemNotifiable;
+            var logItemConnections = _logItemConnectionProvider.GetLogItemConnections(connectionStrings).ToList();
+            foreach (var logItemConnection in logItemConnections)
+            {
+                _logger.Info($"Getting log item handler for log item connection '{logItemConnection.Value}'");
+                _logItemHandlers = _logItemHandlerFactory.GetLogItemHandlers(logItemConnection);
+                foreach (var logItemHandler in _logItemHandlers)
+                {
+                    logItemHandler.Connection = logItemConnection;
+                    logItemHandler.ShowFromBeginning = true;
+                    logItemHandler.Initialize();
+                    _logger.Info($"Attaching log item handler of type '{logItemHandler.GetType().Name}' to user interface.");
+                    DispatcherHelper.CheckBeginInvokeOnUI(() => logItemHandler.Attach(logItemNotifiable));
+                }
+            }
         }
 
         public Task UnloadAsync()
         {
-            if (LoadStatus == LoadStatus.NotLoaded || LoadStatus == LoadStatus.Loading || LoadStatus == LoadStatus.UnLoading )
-                return Task.FromResult(true);
-            
-            LoadStatus = LoadStatus.UnLoading;
-            _logger.Info($"Unloading {this.GetType().Name}"); 
-            Properties.Settings.Default.SearchFilter = SearchFilter;
-            Properties.Settings.Default.Save();   
-            
-                                
-            LoadStatus = LoadStatus.NotLoaded;
-            MessengerInstance.Unregister<ConnectionStringsMessage>(this);
-
-            if (_logItemHandlers != null)
+            return Task.Run(() =>
             {
-                foreach (var logItemHandler in _logItemHandlers)
+                if (LoadStatus == LoadStatus.NotLoaded || LoadStatus == LoadStatus.Loading || LoadStatus == LoadStatus.UnLoading)
+                    return;
+
+                LoadStatus = LoadStatus.UnLoading;
+                _logger.Info($"Unloading {GetType().Name}");
+                Properties.Settings.Default.SearchFilter = SearchFilter;
+                Properties.Settings.Default.Save();
+                
+                LoadStatus = LoadStatus.NotLoaded;
+                
+                if (_logItemHandlers != null)
                 {
-                    logItemHandler.Detach();
-                    logItemHandler.Terminate();
+                    foreach (var logItemHandler in _logItemHandlers)
+                    {
+                        logItemHandler.Detach();
+                        logItemHandler.Terminate();
+                    }
                 }
-            }
-            return Task.FromResult(true);
+            });            
         }
 
         public ICommand ExitCommand
@@ -124,16 +129,16 @@ namespace LogViewer.Library.Module.ViewModels
 
         public ICommand LoadCommand
         {
-            get { return _loadCommand ?? (_loadCommand = new RelayCommand(async () => await LoadAsync())); }
+            get { return _loadCommand ?? (_loadCommand = new RelayCommand(() => LoadAsync().ConfigureAwait(continueOnCapturedContext: false))); }
             set { _loadCommand = value; }
         }
 
         public ICommand UnLoadCommand
         {
-            get { return _unLoadCommand ?? (_unLoadCommand = new RelayCommand(async () => await UnloadAsync())); }
+            get { return _unLoadCommand ?? (_unLoadCommand = new RelayCommand(async () => await UnloadAsync().ConfigureAwait(continueOnCapturedContext: false))); }
             set { _unLoadCommand = value; }
         }
-        
+
         public ICollectionView LogItemsView
         {
             get
@@ -150,39 +155,39 @@ namespace LogViewer.Library.Module.ViewModels
         private void LogitemsViewSourceOnFilter(object sender, FilterEventArgs filterEventArgs)
         {
             var logItem = (LogItemViewModel)filterEventArgs.Item;
-            if(!logItem.Logger.IsVisible || !logItem.LogLevel.IsVisible)
+            if (!logItem.Logger.IsVisible || !logItem.LogLevel.IsVisible)
             {
                 filterEventArgs.Accepted = false;
             }
             else
             {
-                if(string.IsNullOrEmpty(SearchFilter))
+                if (string.IsNullOrEmpty(SearchFilter))
                 {
                     filterEventArgs.Accepted = true;
                 }
-                else if(logItem.Message.Contains(SearchFilter))
+                else if (logItem.Message.Contains(SearchFilter))
                 {
                     filterEventArgs.Accepted = true;
                 }
                 else
                 {
                     filterEventArgs.Accepted = false;
-                }                
+                }
             }
         }
 
         public ObservableCollection<LogItemViewModel> LogItems
         {
             get
-            {                
+            {
                 return _logItems ?? (LogItems = new ObservableCollection<LogItemViewModel>());
             }
             set { this.SetProperty(ref _logItems, value); }
         }
-        
+
         public ObservableCollection<LoggerViewModel> Loggers
         {
-            get { return _loggers ?? (_loggers = new ObservableCollection<LoggerViewModel>() {_loggerViewModelProvider.Root});}
+            get { return _loggers ?? (_loggers = new ObservableCollection<LoggerViewModel>() { _loggerViewModelProvider.Root }); }
             set { this.SetProperty(ref _loggers, value); }
         }
 
@@ -201,7 +206,7 @@ namespace LogViewer.Library.Module.ViewModels
                     LogLevels = new ObservableCollection<LogLevelViewModel> { traceLogLevel, debugLogLevel, infoLogLevel, warnLogLevel, errorLogLevel, fatalLogLevel };
                 }
                 return _logLevels;
-            }            
+            }
             set { this.SetProperty(ref _logLevels, value); }
         }
 
@@ -220,7 +225,7 @@ namespace LogViewer.Library.Module.ViewModels
 
         public ICommand ClearSearchFilterCommand
         {
-            get { return _clearSearchFilterCommand ?? (_clearSearchFilterCommand = new RelayCommand(() => { SearchFilter = string.Empty;})); }
+            get { return _clearSearchFilterCommand ?? (_clearSearchFilterCommand = new RelayCommand(() => { SearchFilter = string.Empty; })); }
             set { _clearSearchFilterCommand = value; }
         }
 
@@ -233,7 +238,7 @@ namespace LogViewer.Library.Module.ViewModels
         public string SearchFilter
         {
             get { return _searchFilter ?? (SearchFilter = Properties.Settings.Default.SearchFilter); }
-            set { this.SetProperty(ref _searchFilter, value, () => {LogItemsView.Refresh();}); }
+            set { this.SetProperty(ref _searchFilter, value, () => { LogItemsView.Refresh(); }); }
         }
 
         public LogItemViewModel SelectedLogItem
@@ -246,14 +251,14 @@ namespace LogViewer.Library.Module.ViewModels
         {
             get { return _logItemIsSelected; }
             set { this.SetProperty(ref _logItemIsSelected, value); }
-        }        
-        
+        }
+
         public void Notify(LogItem[] logItems)
         {
             foreach (var logItem in logItems)
             {
                 var item = logItem;
-                if(LoadStatus != LoadStatus.Loaded)
+                if (LoadStatus != LoadStatus.Loaded)
                 {
                     break;
                 }
@@ -263,15 +268,13 @@ namespace LogViewer.Library.Module.ViewModels
                     DispatcherHelper.CheckBeginInvokeOnUI(() =>
                     {
                         var logItemViewModel = _typeMapper.Map<LogItemViewModel>(item);
-                        //logItemViewModel.SourceCode = GetSourceCode(item);
-                        //logItemViewModel.SourceCodeLine = item.SourceFileLineNr;
                         LogItems.Add(logItemViewModel);
                     });
                 }
                 catch (TaskCanceledException)
                 {
                     //Swallow
-                }                
+                }
             }
         }
 
@@ -281,27 +284,8 @@ namespace LogViewer.Library.Module.ViewModels
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
                 var logItemViewModel = _typeMapper.Map<LogItemViewModel>(item);
-                //logItemViewModel.SourceCode = GetSourceCode(item);
-                //logItemViewModel.SourceCodeLine = item.SourceFileLineNr;
                 LogItems.Add(logItemViewModel);
             });
         }
-
-        //private string GetSourceCode(LogItem logItem)
-        //{
-        //    var sourceCode = $"//{logItem.SourceFileName} : {logItem.CallSiteClass} : {logItem.CallSiteMethod} : {logItem.SourceFileLineNr}";
-        //    if (File.Exists(logItem.SourceFileName))
-        //    {
-        //        using (var sr = new StreamReader(logItem.SourceFileName))
-        //        {
-        //            sourceCode += Environment.NewLine + sr.ReadToEnd();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        sourceCode = $"//Source code file not found: {logItem.SourceFileName} : {logItem.CallSiteClass} : {logItem.CallSiteMethod} : {logItem.SourceFileLineNr}";
-        //    }
-        //    return sourceCode;
-        //}
     }
 }

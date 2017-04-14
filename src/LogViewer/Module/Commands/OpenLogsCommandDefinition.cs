@@ -5,12 +5,12 @@ using NCmdLiner.Attributes;
 
 namespace LogViewer.Module.Commands
 {
-    public class OpenLogCommandDefinition: CommandDefinition
+    public class OpenLogsCommandDefinition: CommandDefinition
     {        
         private readonly IOpenLogCommandProvider _openLogCommandProvider;
         private readonly ILog _logger;
 
-        public OpenLogCommandDefinition(IOpenLogCommandProvider openLogCommandProvider, ILog logger)
+        public OpenLogsCommandDefinition(IOpenLogCommandProvider openLogCommandProvider, ILog logger)
         {            
             _openLogCommandProvider = openLogCommandProvider;
             _logger = logger;

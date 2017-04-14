@@ -34,10 +34,10 @@ namespace LogViewer.Library.Module.Common.UI
                 return;
 
             textView.EnsureVisualLines();
-            var currentLine = _editor.Document.GetLineByNumber((int)_editor.CurrentLine);
+            var currentLine = _editor.Document.GetLineByNumber((int)_editor.CurrentLine -1);
             foreach (var rect in BackgroundGeometryBuilder.GetRectsForSegment(textView, currentLine))
             {
-                var brush = new SolidColorBrush(Color.FromArgb(87, 255, 247, 0));
+                var brush = new SolidColorBrush(Color.FromArgb(150, 255, 255, 0));
                 var newRect = new Rect(new Point(rect.Location.X + textView.ScrollOffset.X, rect.Location.Y), new Size(textView.ActualWidth, rect.Height));
                 drawingContext.DrawRectangle(brush, null, newRect);
             }

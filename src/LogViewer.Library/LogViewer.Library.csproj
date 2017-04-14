@@ -148,6 +148,7 @@
     <Compile Include="Module\Model\ILogItemFactory.cs" />
     <Compile Include="Module\Model\LogItem.cs" />
     <Compile Include="Module\Model\LogLevel.cs" />
+    <Compile Include="Module\Services\ILogViewerConfiguration.cs" />
     <Compile Include="Module\Services\ISourceCodeInfoProvider.cs" />
     <Compile Include="Module\Services\DuplicateConnectionStringException.cs" />
     <Compile Include="Module\Services\EventLog\EventLogItemConnection.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Module\Services\Log4JLogItemParser.cs" />
     <Compile Include="Module\Services\LogItemConnectionProvider.cs" />
     <Compile Include="Module\Services\LogLevelInfo.cs" />
+    <Compile Include="Module\Services\LogViewerConfiguration.cs" />
     <Compile Include="Module\Services\LogViewerException.cs" />
     <Compile Include="Module\Services\RandomLog\IRandomLogItemConnection.cs" />
     <Compile Include="Module\Services\RandomLog\IRandomLogItemConnectionFactory.cs" />

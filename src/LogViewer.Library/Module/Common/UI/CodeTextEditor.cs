@@ -2,15 +2,14 @@
 using System.Runtime.CompilerServices;
 using System.Windows;
 using ICSharpCode.AvalonEdit;
-using LogViewer.Library.Annotations;
+using LogViewer.Library.Properties;
 
 namespace LogViewer.Library.Module.Common.UI
 {
     public class CodeTextEditor : TextEditor, INotifyPropertyChanged
     {
         public CodeTextEditor()
-        {
-            CurrentLine = 1;
+        {            
             this.TextArea.TextView.BackgroundRenderers.Add(
                 new HighlightCurrentLineBackgroundRenderer(this));
         }

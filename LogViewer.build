@@ -5,7 +5,7 @@
   
   <PropertyGroup>    
     <ProductName>LogViewer</ProductName>
-    <ProductCompany>github.trondr</ProductCompany>
+    <ProductCompany>github.com.trondr</ProductCompany>
     <ProductDescription>github.trondr LogViewer description</ProductDescription>
     <ProductCopyright>Copyright &#169; github.trondr $([System.DateTime]::Now.Year)</ProductCopyright>
     <ProductProjectName>$(ProductName)</ProductProjectName>
