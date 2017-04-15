@@ -125,8 +125,8 @@
     <Compile Include="Infrastructure\LifeStyles\TrancientAttribute.cs" />
     <Compile Include="Infrastructure\TypeMapper.cs" />
     <Compile Include="Module\Behaviours\AutoScrollBehavior.cs" />
-    <Compile Include="Module\Commands\OpenLog\IOpenLogCommandProvider.cs" />
-    <Compile Include="Module\Commands\OpenLog\OpenLogCommandProvider.cs" />
+    <Compile Include="Module\Commands\OpenLog\IOpenLogsCommandProvider.cs" />
+    <Compile Include="Module\Commands\OpenLog\OpenLogsCommandProvider.cs" />
     <Compile Include="Module\Common\Collection\ObservableDictionary.cs" />
     <Compile Include="Module\Common\Install\IWindowsExplorerContextMenuInstaller.cs" />
     <Compile Include="Module\Common\Install\WindowsExplorerContextMenuInstaller.cs" />

@@ -10,13 +10,17 @@ namespace LogViewer.Library.Module.Common.UI
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {            
             var solidColorBrush = (SolidColorBrush)value;
-            return solidColorBrush.Color;            
+            return solidColorBrush?.Color;            
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {            
-            var color = (Color)value;
-            return new SolidColorBrush{Color = color};
+        {
+            if (value != null)
+            {
+                var color = (Color)value;
+                return new SolidColorBrush{Color = color};
+            }
+            return null;
         }
     }
 }

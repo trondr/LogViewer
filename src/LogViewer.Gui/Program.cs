@@ -47,7 +47,7 @@ namespace LogViewer.Gui
             {
                 throw new FileNotFoundException("Failed to derive console executable from entry assembly. Entry assembly is null.");
             }
-            var consoleExe = assembly.Location.Replace(".Gui.exe",".exe");
+            var consoleExe = assembly.Location?.Replace(".Gui.exe",".exe");
             if(!File.Exists(consoleExe))
             {
                 throw new FileNotFoundException("Failed to derive console executable from entry assembly. Entry assembly is null.");

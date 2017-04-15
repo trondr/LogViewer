@@ -33,25 +33,25 @@ namespace LogViewer.Library.Module.Services.WinDebugLog
         [StructLayout(LayoutKind.Sequential)]
         private struct SecurityDescriptor
         {
-            public byte revision;
-            public byte size;
-            public short control;
-            public IntPtr owner;
-            public IntPtr group;
-            public IntPtr sacl;
-            public IntPtr dacl;
+            private readonly byte revision;
+            private readonly byte size;
+            private readonly short control;
+            private readonly IntPtr owner;
+            private readonly IntPtr group;
+            private readonly IntPtr sacl;
+            private readonly IntPtr dacl;
         }
 
         [StructLayout(LayoutKind.Sequential)]
         private struct SecurityAttributes
         {
-            public int nLength;
-            public IntPtr lpSecurityDescriptor;
-            public int bInheritHandle;
+            private readonly int nLength;
+            private readonly IntPtr lpSecurityDescriptor;
+            private readonly int bInheritHandle;
         }
 
         [Flags]
-        private enum PageProtection : uint
+        internal enum PageProtection : uint
         {
             NoAccess = 0x01,
             Readonly = 0x02,
@@ -69,8 +69,7 @@ namespace LogViewer.Library.Module.Services.WinDebugLog
 
         private const int WaitObject0 = 0;
         private const uint Infinite = 0xFFFFFFFF;
-        private const int ErrorAlreadyExists = 183;
-
+        
         private const uint SecurityDescriptorRevision = 1;
 
         private const uint SectionMapRead = 0x0004;
@@ -173,7 +172,7 @@ namespace LogViewer.Library.Module.Services.WinDebugLog
                 if (!createdNew)
                     throw new ApplicationException("There is already an instance of 'DbMon.NET' running.");
 
-                SecurityDescriptor sd = new SecurityDescriptor();
+                var sd = new SecurityDescriptor();
 
                 // Initialize the security descriptor.
                 if (!InitializeSecurityDescriptor(ref sd, SecurityDescriptorRevision))
@@ -187,7 +186,7 @@ namespace LogViewer.Library.Module.Services.WinDebugLog
                     throw CreateApplicationException("Failed to initializes the security descriptor");
                 }
 
-                SecurityAttributes sa = new SecurityAttributes();
+                var sa = new SecurityAttributes();
 
                 // Create the event for slot 'DBWIN_BUFFER_READY'
                 _mAckEvent = CreateEvent(ref sa, false, false, "DBWIN_BUFFER_READY");
@@ -236,13 +235,13 @@ namespace LogViewer.Library.Module.Services.WinDebugLog
                 // Everything after the first DWORD is our debugging text
                 var sharedMemoryOffset = _mSharedMem.ToInt64();
                 var debuggingTextMemoryOffset =  sharedMemoryOffset + sizeOfInt;
-                IntPtr pString = new IntPtr(debuggingTextMemoryOffset);
+                var pString = new IntPtr(debuggingTextMemoryOffset);
 
                 while (true)
                 {
                     SetEvent(_mAckEvent);
 
-                    int ret = WaitForSingleObject(_mReadyEvent, Infinite);
+                    var ret = WaitForSingleObject(_mReadyEvent, Infinite);
 
                     // if we have no capture set it means that someone
                     // called 'Stop()' and is now waiting for us to exit
@@ -269,14 +268,12 @@ namespace LogViewer.Library.Module.Services.WinDebugLog
 
         private static void FireOnOutputDebugString(int pid, string text)
         {
-            // Raise event if we have any listeners
-            if (OnOutputDebugString == null)
-                return;
 
 #if !DEBUG
 			try {
 #endif
-            OnOutputDebugString(pid, text);
+            // Raise event if we have any listeners
+            OnOutputDebugString?.Invoke(pid, text);
 #if !DEBUG
 			} catch (Exception ex) {
 				Console.WriteLine("An 'OnOutputDebugString' handler failed to execute: " + ex.ToString());

@@ -40,11 +40,7 @@ namespace LogViewer.Library.Module.Common.Collection
     [Serializable]
     public class ObservableDictionary<TKey, TValue> :
         IDictionary<TKey, TValue>,
-        ICollection<KeyValuePair<TKey, TValue>>,
-        IEnumerable<KeyValuePair<TKey, TValue>>,
         IDictionary,
-        ICollection,
-        IEnumerable,
         ISerializable,
         IDeserializationCallback,
         INotifyCollectionChanged,
@@ -56,28 +52,28 @@ namespace LogViewer.Library.Module.Common.Collection
 
         public ObservableDictionary()
         {
-            _keyedEntryCollection = new KeyedDictionaryEntryCollection<TKey>();
+            KeyedEntryCollection = new KeyedDictionaryEntryCollection<TKey>();
         }
 
         public ObservableDictionary(IDictionary<TKey, TValue> dictionary)
         {
-            _keyedEntryCollection = new KeyedDictionaryEntryCollection<TKey>();
+            KeyedEntryCollection = new KeyedDictionaryEntryCollection<TKey>();
 
-            foreach (KeyValuePair<TKey, TValue> entry in dictionary)
-                DoAddEntry((TKey)entry.Key, (TValue)entry.Value);
+            foreach (var entry in dictionary)
+                DoAddEntry(entry.Key, entry.Value);
         }
 
         public ObservableDictionary(IEqualityComparer<TKey> comparer)
         {
-            _keyedEntryCollection = new KeyedDictionaryEntryCollection<TKey>(comparer);
+            KeyedEntryCollection = new KeyedDictionaryEntryCollection<TKey>(comparer);
         }
 
         public ObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer)
         {
-            _keyedEntryCollection = new KeyedDictionaryEntryCollection<TKey>(comparer);
+            KeyedEntryCollection = new KeyedDictionaryEntryCollection<TKey>(comparer);
 
-            foreach (KeyValuePair<TKey, TValue> entry in dictionary)
-                DoAddEntry((TKey)entry.Key, (TValue)entry.Value);
+            foreach (var entry in dictionary)
+                DoAddEntry(entry.Key, entry.Value);
         }
 
         #endregion public
@@ -99,12 +95,12 @@ namespace LogViewer.Library.Module.Common.Collection
 
         public IEqualityComparer<TKey> Comparer
         {
-            get { return _keyedEntryCollection.Comparer; }
+            get { return KeyedEntryCollection.Comparer; }
         }
 
         public int Count
         {
-            get { return _keyedEntryCollection.Count; }
+            get { return KeyedEntryCollection.Count; }
         }
 
         public Dictionary<TKey, TValue>.KeyCollection Keys
@@ -114,7 +110,7 @@ namespace LogViewer.Library.Module.Common.Collection
 
         public TValue this[TKey key]
         {
-            get { return (TValue)_keyedEntryCollection[key].Value; }
+            get { return (TValue)KeyedEntryCollection[key].Value; }
             set { DoSetEntry(key, value); }
         }
 
@@ -134,7 +130,7 @@ namespace LogViewer.Library.Module.Common.Collection
                 if (_dictionaryCacheVersion != _version)
                 {
                     _dictionaryCache.Clear();
-                    foreach (DictionaryEntry entry in _keyedEntryCollection)
+                    foreach (var entry in KeyedEntryCollection)
                         _dictionaryCache.Add((TKey)entry.Key, (TValue)entry.Value);
                     _dictionaryCacheVersion = _version;
                 }
@@ -162,7 +158,7 @@ namespace LogViewer.Library.Module.Common.Collection
 
         public bool ContainsKey(TKey key)
         {
-            return _keyedEntryCollection.Contains(key);
+            return KeyedEntryCollection.Contains(key);
         }
 
         public bool ContainsValue(TValue value)
@@ -182,8 +178,8 @@ namespace LogViewer.Library.Module.Common.Collection
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            bool result = _keyedEntryCollection.Contains(key);
-            value = result ? (TValue)_keyedEntryCollection[key].Value : default(TValue);
+            var result = KeyedEntryCollection.Contains(key);
+            value = result ? (TValue)KeyedEntryCollection[key].Value : default(TValue);
             return result;
         }
 
@@ -193,18 +189,18 @@ namespace LogViewer.Library.Module.Common.Collection
 
         protected virtual bool AddEntry(TKey key, TValue value)
         {
-            _keyedEntryCollection.Add(new DictionaryEntry(key, value));
+            KeyedEntryCollection.Add(new DictionaryEntry(key, value));
             return true;
         }
 
         protected virtual bool ClearEntries()
         {
             // check whether there are entries to clear
-            bool result = (Count > 0);
+            var result = (Count > 0);
             if (result)
             {
                 // if so, clear the dictionary
-                _keyedEntryCollection.Clear();
+                KeyedEntryCollection.Clear();
             }
             return result;
         }
@@ -212,47 +208,45 @@ namespace LogViewer.Library.Module.Common.Collection
         protected int GetIndexAndEntryForKey(TKey key, out DictionaryEntry entry)
         {
             entry = new DictionaryEntry();
-            int index = -1;
-            if (_keyedEntryCollection.Contains(key))
+            var index = -1;
+            if (KeyedEntryCollection.Contains(key))
             {
-                entry = _keyedEntryCollection[key];
-                index = _keyedEntryCollection.IndexOf(entry);
+                entry = KeyedEntryCollection[key];
+                index = KeyedEntryCollection.IndexOf(entry);
             }
             return index;
         }
 
         protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
         {
-            if (CollectionChanged != null)
-                CollectionChanged(this, args);
+            CollectionChanged?.Invoke(this, args);
         }
 
         protected virtual void OnPropertyChanged(string name)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         protected virtual bool RemoveEntry(TKey key)
         {
             // remove the entry
-            return _keyedEntryCollection.Remove(key);
+            return KeyedEntryCollection.Remove(key);
         }
 
         protected virtual bool SetEntry(TKey key, TValue value)
         {
-            bool keyExists = _keyedEntryCollection.Contains(key);
+            var keyExists = KeyedEntryCollection.Contains(key);
 
             // if identical key/value pair already exists, nothing to do
-            if (keyExists && value.Equals((TValue)_keyedEntryCollection[key].Value))
+            if (keyExists && value.Equals((TValue)KeyedEntryCollection[key].Value))
                 return false;
 
             // otherwise, remove the existing entry
             if (keyExists)
-                _keyedEntryCollection.Remove(key);
+                KeyedEntryCollection.Remove(key);
 
             // add the new entry
-            _keyedEntryCollection.Add(new DictionaryEntry(key, value));
+            KeyedEntryCollection.Add(new DictionaryEntry(key, value));
 
             return true;
         }
@@ -268,7 +262,7 @@ namespace LogViewer.Library.Module.Common.Collection
                 _version++;
 
                 DictionaryEntry entry;
-                int index = GetIndexAndEntryForKey(key, out entry);
+                var index = GetIndexAndEntryForKey(key, out entry);
                 FireEntryAddedNotifications(entry, index);
             }
         }
@@ -285,9 +279,9 @@ namespace LogViewer.Library.Module.Common.Collection
         private bool DoRemoveEntry(TKey key)
         {
             DictionaryEntry entry;
-            int index = GetIndexAndEntryForKey(key, out entry);
+            var index = GetIndexAndEntryForKey(key, out entry);
 
-            bool result = RemoveEntry(key);
+            var result = RemoveEntry(key);
             if (result)
             {
                 _version++;
@@ -301,7 +295,7 @@ namespace LogViewer.Library.Module.Common.Collection
         private void DoSetEntry(TKey key, TValue value)
         {
             DictionaryEntry entry;
-            int index = GetIndexAndEntryForKey(key, out entry);
+            var index = GetIndexAndEntryForKey(key, out entry);
 
             if (SetEntry(key, value))
             {
@@ -328,10 +322,10 @@ namespace LogViewer.Library.Module.Common.Collection
             FirePropertyChangedNotifications();
 
             // fire CollectionChanged notification
-            if (index > -1)
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, new KeyValuePair<TKey, TValue>((TKey)entry.Key, (TValue)entry.Value), index));
-            else
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            OnCollectionChanged(index > -1
+                ? new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,
+                    new KeyValuePair<TKey, TValue>((TKey) entry.Key, (TValue) entry.Value), index)
+                : new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         private void FireEntryRemovedNotifications(DictionaryEntry entry, int index)
@@ -340,10 +334,10 @@ namespace LogViewer.Library.Module.Common.Collection
             FirePropertyChangedNotifications();
 
             // fire CollectionChanged notification
-            if (index > -1)
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, new KeyValuePair<TKey, TValue>((TKey)entry.Key, (TValue)entry.Value), index));
-            else
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            OnCollectionChanged(index > -1
+                ? new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
+                    new KeyValuePair<TKey, TValue>((TKey) entry.Key, (TValue) entry.Value), index)
+                : new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         private void FirePropertyChangedNotifications()
@@ -387,7 +381,7 @@ namespace LogViewer.Library.Module.Common.Collection
 
         bool IDictionary<TKey, TValue>.ContainsKey(TKey key)
         {
-            return _keyedEntryCollection.Contains(key);
+            return KeyedEntryCollection.Contains(key);
         }
 
         bool IDictionary<TKey, TValue>.TryGetValue(TKey key, out TValue value)
@@ -407,7 +401,7 @@ namespace LogViewer.Library.Module.Common.Collection
 
         TValue IDictionary<TKey, TValue>.this[TKey key]
         {
-            get { return (TValue)_keyedEntryCollection[key].Value; }
+            get { return (TValue)KeyedEntryCollection[key].Value; }
             set { DoSetEntry(key, value); }
         }
 
@@ -427,7 +421,7 @@ namespace LogViewer.Library.Module.Common.Collection
 
         bool IDictionary.Contains(object key)
         {
-            return _keyedEntryCollection.Contains((TKey)key);
+            return KeyedEntryCollection.Contains((TKey)key);
         }
 
         IDictionaryEnumerator IDictionary.GetEnumerator()
@@ -447,7 +441,7 @@ namespace LogViewer.Library.Module.Common.Collection
 
         object IDictionary.this[object key]
         {
-            get { return _keyedEntryCollection[(TKey)key].Value; }
+            get { return KeyedEntryCollection[(TKey)key].Value; }
             set { DoSetEntry((TKey)key, (TValue)value); }
         }
 
@@ -482,31 +476,31 @@ namespace LogViewer.Library.Module.Common.Collection
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> kvp)
         {
-            return _keyedEntryCollection.Contains(kvp.Key);
+            return KeyedEntryCollection.Contains(kvp.Key);
         }
 
         void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int index)
         {
             if (array == null)
             {
-                throw new ArgumentNullException("CopyTo() failed:  array parameter was null");
+                throw new ArgumentNullException(nameof(array),"CopyTo() failed:  array parameter was null");
             }
             if ((index < 0) || (index > array.Length))
             {
-                throw new ArgumentOutOfRangeException("CopyTo() failed:  index parameter was outside the bounds of the supplied array");
+                throw new ArgumentOutOfRangeException(nameof(index), "CopyTo() failed:  index parameter was outside the bounds of the supplied array");
             }
-            if ((array.Length - index) < _keyedEntryCollection.Count)
+            if ((array.Length - index) < KeyedEntryCollection.Count)
             {
                 throw new ArgumentException("CopyTo() failed:  supplied array was too small");
             }
 
-            foreach (DictionaryEntry entry in _keyedEntryCollection)
+            foreach (var entry in KeyedEntryCollection)
                 array[index++] = new KeyValuePair<TKey, TValue>((TKey)entry.Key, (TValue)entry.Value);
         }
 
         int ICollection<KeyValuePair<TKey, TValue>>.Count
         {
-            get { return _keyedEntryCollection.Count; }
+            get { return KeyedEntryCollection.Count; }
         }
 
         bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
@@ -525,22 +519,22 @@ namespace LogViewer.Library.Module.Common.Collection
 
         void ICollection.CopyTo(Array array, int index)
         {
-            ((ICollection)_keyedEntryCollection).CopyTo(array, index);
+            ((ICollection)KeyedEntryCollection).CopyTo(array, index);
         }
 
         int ICollection.Count
         {
-            get { return _keyedEntryCollection.Count; }
+            get { return KeyedEntryCollection.Count; }
         }
 
         bool ICollection.IsSynchronized
         {
-            get { return ((ICollection)_keyedEntryCollection).IsSynchronized; }
+            get { return ((ICollection)KeyedEntryCollection).IsSynchronized; }
         }
 
         object ICollection.SyncRoot
         {
-            get { return ((ICollection)_keyedEntryCollection).SyncRoot; }
+            get { return ((ICollection)KeyedEntryCollection).SyncRoot; }
         }
 
         #endregion ICollection
@@ -569,11 +563,11 @@ namespace LogViewer.Library.Module.Common.Collection
         {
             if (info == null)
             {
-                throw new ArgumentNullException("info");
+                throw new ArgumentNullException(nameof(info));
             }
 
-            Collection<DictionaryEntry> entries = new Collection<DictionaryEntry>();
-            foreach (DictionaryEntry entry in _keyedEntryCollection)
+            var entries = new Collection<DictionaryEntry>();
+            foreach (var entry in KeyedEntryCollection)
                 entries.Add(entry);
             info.AddValue("entries", entries);
         }
@@ -586,9 +580,9 @@ namespace LogViewer.Library.Module.Common.Collection
         {
             if (_siInfo != null)
             {
-                Collection<DictionaryEntry> entries = (Collection<DictionaryEntry>)
+                var entries = (Collection<DictionaryEntry>)
                     _siInfo.GetValue("entries", typeof(Collection<DictionaryEntry>));
-                foreach (DictionaryEntry entry in entries)
+                foreach (var entry in entries)
                     AddEntry((TKey)entry.Key, (TValue)entry.Value);
             }
         }
@@ -631,7 +625,8 @@ namespace LogViewer.Library.Module.Common.Collection
 
             #region public
 
-            public KeyedDictionaryEntryCollection() : base() { }
+            public KeyedDictionaryEntryCollection()
+            { }
 
             public KeyedDictionaryEntryCollection(IEqualityComparer<TKey1> comparer) : base(comparer) { }
 
@@ -662,7 +657,7 @@ namespace LogViewer.Library.Module.Common.Collection
         #region Enumerator
 
         [Serializable, StructLayout(LayoutKind.Sequential)]
-        public struct Enumerator<TKey1, TValue1> : IEnumerator<KeyValuePair<TKey1, TValue1>>, IDisposable, IDictionaryEnumerator, IEnumerator
+        public struct Enumerator<TKey1, TValue1> : IEnumerator<KeyValuePair<TKey1, TValue1>>, IDictionaryEnumerator
         {
             #region constructors
 
@@ -706,9 +701,9 @@ namespace LogViewer.Library.Module.Common.Collection
             {
                 ValidateVersion();
                 _index++;
-                if (_index < _dictionary._keyedEntryCollection.Count)
+                if (_index < _dictionary.KeyedEntryCollection.Count)
                 {
-                    _current = new KeyValuePair<TKey1, TValue1>((TKey1)_dictionary._keyedEntryCollection[_index].Key, (TValue1)_dictionary._keyedEntryCollection[_index].Value);
+                    _current = new KeyValuePair<TKey1, TValue1>((TKey1)_dictionary.KeyedEntryCollection[_index].Key, (TValue1)_dictionary.KeyedEntryCollection[_index].Value);
                     return true;
                 }
                 _index = -2;
@@ -799,11 +794,11 @@ namespace LogViewer.Library.Module.Common.Collection
 
             #region fields
 
-            private ObservableDictionary<TKey1, TValue1> _dictionary;
-            private int _version;
+            private readonly ObservableDictionary<TKey1, TValue1> _dictionary;
+            private readonly int _version;
             private int _index;
             private KeyValuePair<TKey1, TValue1> _current;
-            private bool _isDictionaryEntryEnumerator;
+            private readonly bool _isDictionaryEntryEnumerator;
 
             #endregion fields
         }
@@ -814,15 +809,15 @@ namespace LogViewer.Library.Module.Common.Collection
 
         #region fields
 
-        protected KeyedDictionaryEntryCollection<TKey> _keyedEntryCollection;
+        protected KeyedDictionaryEntryCollection<TKey> KeyedEntryCollection;
 
-        private int _countCache = 0;
-        private Dictionary<TKey, TValue> _dictionaryCache = new Dictionary<TKey, TValue>();
-        private int _dictionaryCacheVersion = 0;
-        private int _version = 0;
+        private int _countCache;
+        private readonly Dictionary<TKey, TValue> _dictionaryCache = new Dictionary<TKey, TValue>();
+        private int _dictionaryCacheVersion;
+        private int _version;
 
         [NonSerialized]
-        private SerializationInfo _siInfo = null;
+        private readonly SerializationInfo _siInfo;
 
         #endregion fields
     }

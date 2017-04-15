@@ -12,6 +12,6 @@ namespace LogViewer.Infrastructure.ContainerExtensions
         }
         public const int DefaultPriority = 100;
 
-        public int Priority { get; private set; }
+        public int Priority { get; }
     }
 }

@@ -10,7 +10,7 @@ namespace LogViewer.Library.Module.Common.UI
     {
         public CodeTextEditor()
         {            
-            this.TextArea.TextView.BackgroundRenderers.Add(
+            TextArea.TextView.BackgroundRenderers.Add(
                 new HighlightCurrentLineBackgroundRenderer(this));
         }
 

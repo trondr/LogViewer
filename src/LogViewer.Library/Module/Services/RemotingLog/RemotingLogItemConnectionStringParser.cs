@@ -1,19 +1,16 @@
 using System;
 using System.Text.RegularExpressions;
-using Common.Logging;
 
 namespace LogViewer.Library.Module.Services.RemotingLog
 {
     public class RemotingLogItemConnectionStringParser : IRemotingLogItemConnectionStringParser
     {
         private readonly IRemotingLogItemConnectionFactory _remotingLogItemConnectionFactory;
-        private readonly ILog _logger;
         private readonly Regex _connectionStringRegex = new Regex(@"^remoting:(.+?):(\d+)$", RegexOptions.IgnoreCase);
 
-        public RemotingLogItemConnectionStringParser(IRemotingLogItemConnectionFactory remotingLogItemConnectionFactory, ILog logger)
+        public RemotingLogItemConnectionStringParser(IRemotingLogItemConnectionFactory remotingLogItemConnectionFactory)
         {
             _remotingLogItemConnectionFactory = remotingLogItemConnectionFactory;
-            _logger = logger;
         }
 
         public bool CanParse(string connectionString)

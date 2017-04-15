@@ -4,7 +4,6 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using Common.Logging;
 using LogViewer.Library.Module.Services.TcpLog;
 
 namespace LogViewer.Library.Module.Services.UdpLog
@@ -14,25 +13,22 @@ namespace LogViewer.Library.Module.Services.UdpLog
         public ILogItemConnection Connection { get; set; }
         private ILogItemNotifiable _logItemNotifiable;
         private readonly ILog4JLogItemParser _log4JLogItemParser;
-        private readonly ILog _logger;
         private Thread _worker;
         private IPEndPoint _remoteEndPoint;
         private UdpClient _udpClient;
 
-        public UdpLogItemHandler(ILog4JLogItemParser log4JLogItemParser, ILog logger)
+        public UdpLogItemHandler(ILog4JLogItemParser log4JLogItemParser)
         {
             _log4JLogItemParser = log4JLogItemParser;
-            _logger = logger;
         }
 
 
         public void Initialize()
         {
-            if ((_worker != null) && _worker.IsAlive)
+            if (_worker != null && _worker.IsAlive)
                 return;
             var connection = GetConnection();
             var ipVersionFamily = connection.IpVersion == IpVersion.Ipv6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork;
-            var ipAddress = connection.IpVersion == IpVersion.Ipv6 ? IPAddress.IPv6Any : IPAddress.Any;
             
             // Init connection here, before starting the thread, to know the status now
             _remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);

@@ -7,7 +7,7 @@ using LogViewer.Library.Module.Model;
 
 namespace LogViewer.Library.Module.Services
 {
-    
+
     /// <summary>
     /// Source: http://log2console.codeplex.com/SourceControl/latest#src/Log2Console/Receiver/ReceiverFactory.cs
     /// </summary>
@@ -15,16 +15,13 @@ namespace LogViewer.Library.Module.Services
     public class Log4JLogItemParser : ILog4JLogItemParser
     {
         static readonly DateTime S1970 = new DateTime(1970, 1, 1);
-        
+
         public XmlReaderSettings Settings
         {
             get
             {
-                if(_xmlReaderSettings == null)
-                {
-                    _xmlReaderSettings = new XmlReaderSettings{CloseInput = false, ValidationType = ValidationType.None};
-                }
-                return _xmlReaderSettings;
+                return _xmlReaderSettings ?? (_xmlReaderSettings =
+                           new XmlReaderSettings {CloseInput = false, ValidationType = ValidationType.None});
             }
         }
         private XmlReaderSettings _xmlReaderSettings;
@@ -33,7 +30,7 @@ namespace LogViewer.Library.Module.Services
         {
             get
             {
-                if(_xmlParserContext == null)
+                if (_xmlParserContext == null)
                 {
                     var nt = new NameTable();
                     var nsmanager = new XmlNamespaceManager(nt);
@@ -44,11 +41,11 @@ namespace LogViewer.Library.Module.Services
             }
         }
         private XmlParserContext _xmlParserContext;
-        
+
         public LogItem Parse(Stream logItemStream, string defaultLogger)
         {
             using (var reader = XmlReader.Create(logItemStream, Settings, Context))
-            return Parse(reader, defaultLogger);
+                return Parse(reader, defaultLogger);
         }
 
         public LogItem Parse(string logItemString, string defaultLogger)
@@ -82,14 +79,14 @@ namespace LogViewer.Library.Module.Services
 
             logItemXmlReader.Read();
             if ((logItemXmlReader.MoveToContent() != XmlNodeType.Element) || (logItemXmlReader.Name != "log4j:event"))
-            { 
+            {
                 throw new Exception("The Log Event is not a valid log4j Xml block.");
             }
             logMsg.Logger = logItemXmlReader.GetAttribute("logger");
             var logLevelString = logItemXmlReader.GetAttribute("level");
             LogLevel logLevel;
-            logMsg.LogLevel = LogLevel.None; 
-            var sucessFullConversion = Enum.TryParse<LogLevel>(logLevelString,true, out logLevel);
+            logMsg.LogLevel = LogLevel.None;
+            var sucessFullConversion = Enum.TryParse(logLevelString, true, out logLevel);
             if (sucessFullConversion)
             {
                 logMsg.LogLevel = logLevel;

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -209,7 +208,7 @@ namespace LogViewer.Library.Module.ViewModels
 
         public ObservableCollection<LoggerViewModel> Loggers
         {
-            get { return _loggers ?? (_loggers = new ObservableCollection<LoggerViewModel>() { _loggerViewModelProvider.Root }); }
+            get { return _loggers ?? (_loggers = new ObservableCollection<LoggerViewModel> { _loggerViewModelProvider.Root }); }
             set { this.SetProperty(ref _loggers, value); }
         }
 

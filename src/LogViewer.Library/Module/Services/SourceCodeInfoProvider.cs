@@ -7,7 +7,7 @@ namespace LogViewer.Library.Module.Services
     [Singleton]
     public class SourceCodeInfoProvider : ISourceCodeInfoProvider
     {
-        Dictionary<string,SourceCodeInfo> _sourceCodeInfos = new Dictionary<string, SourceCodeInfo>();
+        readonly Dictionary<string,SourceCodeInfo> _sourceCodeInfos = new Dictionary<string, SourceCodeInfo>();
         
         public SourceCodeInfo GetSourceCode(string fileName)
         {

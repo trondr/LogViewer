@@ -14,8 +14,7 @@ namespace LogViewer.Library.Module.Services.FileLog
         private readonly ILog _logger;
         private ILogItemNotifiable _logItemNotifiable;
         private long _lastFileLength;
-        private FileSystemWatcher _fileSystemWatcher;                
-        private bool _showFromBeginning;
+        private FileSystemWatcher _fileSystemWatcher;
 
         private string _defaultLoggerName;
         private Timer _timer;
@@ -132,14 +131,7 @@ namespace LogViewer.Library.Module.Services.FileLog
             set { _defaultLoggerName = value; }
         }
 
-        public bool ShowFromBeginning
-        {
-            get { return _showFromBeginning; }
-            set
-            {
-                _showFromBeginning = value;                
-            }
-        }
+        public bool ShowFromBeginning { get; set; }
 
         private void ReadFile()
         {

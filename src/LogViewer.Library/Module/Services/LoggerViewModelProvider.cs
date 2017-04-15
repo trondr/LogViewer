@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LogViewer.Library.Infrastructure.LifeStyles;
@@ -56,18 +57,20 @@ namespace LogViewer.Library.Module.Services
                 if(_root == null)
                 {
                     _root = new LoggerViewModel("root");
-                    _loggers.Add(_root.Name, _root);
+                    lock (Synch)
+                    {
+                        _loggers.Add(_root.Name, _root);
+                    }
                 }
                 return _root;
             }
-            private set { _root = value; }
         }
 
         private string GetParent(string logger)
         {
             if(logger.Contains("."))
             {
-                return logger.Substring(0, logger.LastIndexOf("."));
+                return logger.Substring(0, logger.LastIndexOf(".", StringComparison.Ordinal));
             }
             return null;
         }

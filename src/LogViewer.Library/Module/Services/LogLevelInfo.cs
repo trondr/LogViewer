@@ -23,8 +23,8 @@ namespace LogViewer.Library.Module.Services
         {
             var info = obj as LogLevelInfo;
             if (info != null)
-                return (info == this);
-            return base.Equals(obj);
+                return info == this;
+            return false;            
         }
 
         public override int GetHashCode()
@@ -36,7 +36,7 @@ namespace LogViewer.Library.Module.Services
         {
             if (first == null) throw new ArgumentNullException(nameof(first));
             if (second == null) throw new ArgumentNullException(nameof(second));
-            return (first.Value == second.Value);
+            return first.Value == second.Value;
         }
 
         public static bool operator !=(LogLevelInfo first, LogLevelInfo second)

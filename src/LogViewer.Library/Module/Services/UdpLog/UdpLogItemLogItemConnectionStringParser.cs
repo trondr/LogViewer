@@ -1,7 +1,6 @@
 using System;
 using System.Net;
 using System.Text.RegularExpressions;
-using Common.Logging;
 using LogViewer.Library.Module.Services.TcpLog;
 
 namespace LogViewer.Library.Module.Services.UdpLog
@@ -10,13 +9,11 @@ namespace LogViewer.Library.Module.Services.UdpLog
     public class UdpLogItemLogItemConnectionStringParser : IUdpLogItemConnectionStringParser
     {
         private readonly IUdpLogItemConnectionFactory _udpLogItemConnectionFactory;
-        private readonly ILog _logger;
         private readonly Regex _connectionRegex = new Regex(@"^udp:(.+?):(\d+):(Ipv4|Ipv6)(|:2(?:2[4-9]|3\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d?|0)){3})$", RegexOptions.IgnoreCase);
 
-        public UdpLogItemLogItemConnectionStringParser(IUdpLogItemConnectionFactory udpLogItemConnectionFactory, ILog logger)
+        public UdpLogItemLogItemConnectionStringParser(IUdpLogItemConnectionFactory udpLogItemConnectionFactory)
         {
             _udpLogItemConnectionFactory = udpLogItemConnectionFactory;
-            _logger = logger;
         }
 
         public bool CanParse(string connectionString)

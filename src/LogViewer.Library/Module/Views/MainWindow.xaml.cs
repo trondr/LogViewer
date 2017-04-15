@@ -15,7 +15,7 @@ namespace LogViewer.Library.Module.Views
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         private MainWindowViewModel _viewModel;
 
@@ -30,14 +30,14 @@ namespace LogViewer.Library.Module.Views
             {
                 _viewModel = value;
                 if(_viewModel != null)
-                    this.DataContext = _viewModel;
+                    DataContext = _viewModel;
             }
         }
 
         public MainWindow()
         {
             InitializeComponent();
-            this.Title = ApplicationInfoHelper.ApplicationName + " " + ApplicationInfoHelper.ApplicationVersion;            
+            Title = ApplicationInfoHelper.ApplicationName + " " + ApplicationInfoHelper.ApplicationVersion;            
             Loaded += OnLoaded;
             Closing += OnClosing;
             Closed+=OnClosed;

@@ -89,7 +89,7 @@ namespace LogViewer.Library.Module.Behaviours
         private void ScrollViewerOnScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             // diff is exactly zero if the last item in the list is visible. This can occur because of scroll-bar drag, mouse-wheel, or keyboard event.
-            double diff = (_scrollViewer.VerticalOffset - (_scrollViewer.ExtentHeight - _scrollViewer.ViewportHeight));
+            var diff = (_scrollViewer.VerticalOffset - (_scrollViewer.ExtentHeight - _scrollViewer.ViewportHeight));
 
             // User just wheeled; this event is called immediately afterwards.
             if (_justWheeled && Math.Abs(diff) > 0.0001)

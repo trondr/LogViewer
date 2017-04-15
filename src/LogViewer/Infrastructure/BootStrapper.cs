@@ -12,6 +12,11 @@ namespace LogViewer.Infrastructure
         private readonly object _synch = new object();
         private bool _disposed;
 
+        ~BootStrapper()
+        {
+            Dispose(false);
+        }
+
         private ILog Logger
         {
             get
@@ -22,7 +27,7 @@ namespace LogViewer.Infrastructure
                     {
                         if (_logger == null)
                         {
-                            _logger = LogManager.GetLogger(this.GetType().FullName);
+                            _logger = LogManager.GetLogger(GetType().FullName);
                         }
                     }
                 }

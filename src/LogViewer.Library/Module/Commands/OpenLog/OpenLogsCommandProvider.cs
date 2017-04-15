@@ -6,13 +6,13 @@ using LogViewer.Library.Module.Views;
 
 namespace LogViewer.Library.Module.Commands.OpenLog
 {
-    public class OpenLogCommandProvider : CommandProvider, IOpenLogCommandProvider
+    public class OpenLogsCommandProvider : CommandProvider, IOpenLogsCommandProvider
     {
         private readonly MainWindow _mainWindow;
         private readonly ILogViewerConfiguration _configuration;             
         private readonly ILog _logger;
 
-        public OpenLogCommandProvider(
+        public OpenLogsCommandProvider(
             MainWindow mainWindow,
             ILogViewerConfiguration configuration,
             ILog logger

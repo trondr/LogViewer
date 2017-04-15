@@ -12,7 +12,7 @@ namespace LogViewer.Library.Module.Services.EventLog
         private System.Diagnostics.EventLog _eventLog;
         private string _baseLoggerName;
         private ILogItemNotifiable _logItemNotifiable;
-        private object _sync = new object();
+        private readonly object _sync = new object();
 
         public EventLogItemHandler(ILogItemFactory logItemFactory)
         {

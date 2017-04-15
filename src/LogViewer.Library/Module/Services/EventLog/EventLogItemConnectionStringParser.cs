@@ -1,19 +1,16 @@
 using System;
 using System.Text.RegularExpressions;
-using Common.Logging;
 
 namespace LogViewer.Library.Module.Services.EventLog
 {
     public class EventLogItemConnectionStringParser : IEventLogItemConnectionStringParser
     {
-        private readonly IEventLogItemConnectionFactory _eventLogItemConnectionFactory;
-        private readonly ILog _logger;
+        private readonly IEventLogItemConnectionFactory _eventLogItemConnectionFactory;        
         private readonly Regex _eventLogConnectionRegex = new Regex("^eventlog:(.+?):(.+?):(.+?)$", RegexOptions.IgnoreCase);
 
-        public EventLogItemConnectionStringParser(IEventLogItemConnectionFactory eventLogItemConnectionFactory, ILog logger)
+        public EventLogItemConnectionStringParser(IEventLogItemConnectionFactory eventLogItemConnectionFactory)
         {
-            _eventLogItemConnectionFactory = eventLogItemConnectionFactory;
-            _logger = logger;
+            _eventLogItemConnectionFactory = eventLogItemConnectionFactory;            
         }
 
         public bool CanParse(string connectionString)

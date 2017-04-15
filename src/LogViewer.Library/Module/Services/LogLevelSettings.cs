@@ -23,7 +23,7 @@ namespace LogViewer.Library.Module.Services
                 case LogLevel.Fatal:
                     return new SolidColorBrush {Color = Properties.Settings.Default.FatalColor};
                 default:
-                    throw new ArgumentOutOfRangeException("logLevel");
+                    throw new ArgumentOutOfRangeException(nameof(logLevel));
             }
         }
 
@@ -50,7 +50,7 @@ namespace LogViewer.Library.Module.Services
                     Properties.Settings.Default.FatalColor = color.Color;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("logLevel");
+                    throw new ArgumentOutOfRangeException(nameof(logLevel));
             }
         }
     }

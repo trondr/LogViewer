@@ -47,7 +47,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Reflection;
 using Common.Logging;
 
 namespace LogViewer.Library.Infrastructure
@@ -70,7 +69,7 @@ namespace LogViewer.Library.Infrastructure
                 if (_logger == null)
                 {
                     var stackFrame = new StackFrame(2);
-                    MethodBase method = stackFrame.GetMethod();
+                    var method = stackFrame.GetMethod();
                     if (method != null && method.DeclaringType != null)
                     {
                         _logger = LogManager.GetLogger(method.DeclaringType);
@@ -189,26 +188,23 @@ namespace LogViewer.Library.Infrastructure
         /// <param name="action">The action.</param>
         private static void Do(string tag, ToDoPriority toDoPriority, string author, string description, Action action = null)
         {
-            if (ToDo.IsToDoEnabled || toDoPriority == ToDoPriority.Critical || toDoPriority == ToDoPriority.High)
+            if (IsToDoEnabled || toDoPriority == ToDoPriority.Critical || toDoPriority == ToDoPriority.High)
             {
                 var stackTrace = new StackTrace();
-                string methodName = stackTrace.GetFrame(2).GetMethod().Name;
-                Type declaringType = stackTrace.GetFrame(2).GetMethod().DeclaringType;
+                var methodName = stackTrace.GetFrame(2).GetMethod().Name;
+                var declaringType = stackTrace.GetFrame(2).GetMethod().DeclaringType;
                 if (declaringType != null)
                 {
-                    string className = declaringType.FullName;
-                    int lineNumber = stackTrace.GetFrame(2).GetFileLineNumber();
-                    string fileName = stackTrace.GetFrame(2).GetFileName();
+                    var className = declaringType.FullName;
+                    var lineNumber = stackTrace.GetFrame(2).GetFileLineNumber();
+                    var fileName = stackTrace.GetFrame(2).GetFileName();
                     const string format = "{1} - Priority: {2}, Author: {3}, Description: {4}{0}At {5}.{6}, File: {7}, Line: {8}{0}";
-                    string message = string.Format(format, Environment.NewLine, tag, toDoPriority, author, description, className, methodName, fileName, lineNumber);
+                    var message = string.Format(format, Environment.NewLine, tag, toDoPriority, author, description, className, methodName, fileName, lineNumber);
                     Logger.Warn(message);
                 }
             }
             // Now Run the action.
-            if (action != null)
-            {
-                action();
-            }
+            action?.Invoke();
         }
     }
 }

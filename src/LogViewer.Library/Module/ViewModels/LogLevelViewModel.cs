@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 using GalaSoft.MvvmLight;
 using LogViewer.Library.Module.Common.UI;
 using LogViewer.Library.Module.Model;
@@ -16,7 +15,7 @@ namespace LogViewer.Library.Module.ViewModels
         {
             IsVisible = true;
             Level = LogLevel.Trace;
-            Color = new SolidColorBrush() {Color = Colors.LightSeaGreen};
+            Color = new SolidColorBrush {Color = Colors.LightSeaGreen};
         }
 
         public Brush Color

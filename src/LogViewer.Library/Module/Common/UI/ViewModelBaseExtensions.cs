@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using Common.Logging.Configuration;
 using GalaSoft.MvvmLight;
 
 namespace LogViewer.Library.Module.Common.UI
@@ -14,14 +13,14 @@ namespace LogViewer.Library.Module.Common.UI
     {
         public static void SetProperty<T>(this ViewModelBase viewModel, ref T member, T value, [CallerMemberName] string propertyName = null)
         {
-            if (object.Equals(member, value)) return;
+            if (Equals(member, value)) return;
             member = value;
             viewModel.RaisePropertyChanged(propertyName);
         }
 
         public static void SetProperty<T>(this ViewModelBase viewModel, ref T member, T value, Action action, [CallerMemberName] string propertyName = null)
         {
-            if (object.Equals(member, value)) return;
+            if (Equals(member, value)) return;
             member = value;
             action?.Invoke();
             viewModel.RaisePropertyChanged(propertyName);

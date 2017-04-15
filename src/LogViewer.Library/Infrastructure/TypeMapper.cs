@@ -15,7 +15,7 @@ namespace LogViewer.Library.Infrastructure
         private readonly IEnumerable<Profile> _typeMapperProfiles;
         private readonly ILog _logger;
         private IMapper _mapper;
-        private object _synch = new object();
+        private readonly object _synch = new object();
 
         public TypeMapper(IEnumerable<Profile> typeMapperProfiles, ILog logger)
         {
@@ -57,7 +57,7 @@ namespace LogViewer.Library.Infrastructure
 
         private void ValidateMapper(IMapper mapper)
         {
-            int numberOfValidationErrors = 0;
+            var numberOfValidationErrors = 0;
             foreach (var typeMap in mapper.ConfigurationProvider.GetAllTypeMaps())
             {
                 numberOfValidationErrors += ValidateTypeMap(mapper,typeMap);                                

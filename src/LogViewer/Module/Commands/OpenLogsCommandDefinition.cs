@@ -7,12 +7,12 @@ namespace LogViewer.Module.Commands
 {
     public class OpenLogsCommandDefinition: CommandDefinition
     {        
-        private readonly IOpenLogCommandProvider _openLogCommandProvider;
+        private readonly IOpenLogsCommandProvider _openLogsCommandProvider;
         private readonly ILog _logger;
 
-        public OpenLogsCommandDefinition(IOpenLogCommandProvider openLogCommandProvider, ILog logger)
+        public OpenLogsCommandDefinition(IOpenLogsCommandProvider openLogsCommandProvider, ILog logger)
         {            
-            _openLogCommandProvider = openLogCommandProvider;
+            _openLogsCommandProvider = openLogsCommandProvider;
             _logger = logger;
         }
 
@@ -22,7 +22,7 @@ namespace LogViewer.Module.Commands
             string[] connectionStrings  
             )
         {                        
-            return _openLogCommandProvider.OpenLogs(connectionStrings);
+            return _openLogsCommandProvider.OpenLogs(connectionStrings);
         }
     }
 }

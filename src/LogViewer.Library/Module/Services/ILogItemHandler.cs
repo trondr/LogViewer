@@ -1,5 +1,6 @@
 ﻿namespace LogViewer.Library.Module.Services
 {
+    // ReSharper disable once UnusedTypeParameter
     public interface ILogItemHandler<T> : ILogItemHandler where T : ILogItemConnection
     {
         

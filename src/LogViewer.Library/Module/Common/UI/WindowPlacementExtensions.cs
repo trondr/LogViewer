@@ -93,10 +93,10 @@ namespace LogViewer.Library.Module.Common.UI
 
             public Rect(int left, int top, int right, int bottom)
             {
-                this.Left = left;
-                this.Top = top;
-                this.Right = right;
-                this.Bottom = bottom;
+                Left = left;
+                Top = top;
+                Right = right;
+                Bottom = bottom;
             }
         }
         // POINT structure required by WINDOWPLACEMENT structure
@@ -109,8 +109,8 @@ namespace LogViewer.Library.Module.Common.UI
 
             public Point(int x, int y)
             {
-                this.X = x;
-                this.Y = y;
+                X = x;
+                Y = y;
             }
         }
         // WINDOWPLACEMENT stores the position, size, and state of a window

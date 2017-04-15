@@ -3,14 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:diag ="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              xmlns:ui="clr-namespace:LogViewer.Library.Module.Common.UI"
              xmlns:viewModels="clr-namespace:LogViewer.Library.Module.ViewModels"
-             xmlns:views="clr-namespace:LogViewer.Library.Module.Views"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:behaviours="clr-namespace:LogViewer.Library.Module.Behaviours"
-             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
              mc:Ignorable="d" 
              d:DesignHeight="330" d:DesignWidth="500">
     <UserControl.Resources>
@@ -123,7 +120,7 @@
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ListView x:Name="_logItemsListView" Grid.Column="0" Grid.Row="0" ItemsSource="{Binding LogItemsView}" Margin="2,2,2,2" SelectedItem="{Binding Path=SelectedLogItem}">
+            <ListView x:Name="LogItemsListView" Grid.Column="0" Grid.Row="0" ItemsSource="{Binding LogItemsView}" Margin="2,2,2,2" SelectedItem="{Binding Path=SelectedLogItem}">
                 <i:Interaction.Behaviors>
                     <behaviours:AutoScrollBehavior />
                 </i:Interaction.Behaviors>

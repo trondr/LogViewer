@@ -13,7 +13,7 @@ namespace LogViewer.Library.Module.Services.RandomLog
         private Timer _timer    ;
         private ILogItemNotifiable _logItemNotifiable;
         private static readonly List<LogLevel> LogLevels = Enum.GetValues(typeof(LogLevel)).Cast<LogLevel>().ToList();
-        private static Random _random = new Random();
+        private static readonly Random Random = new Random();
 
         
         public void Initialize()
@@ -51,7 +51,7 @@ namespace LogViewer.Library.Module.Services.RandomLog
 
         private static int GetRandomMax()
         {
-            return _random.Next(1,10);
+            return Random.Next(1,10);
         }
 
         private static LogItem GetRandomLogItem()
@@ -67,30 +67,30 @@ namespace LogViewer.Library.Module.Services.RandomLog
             return  logItem;
         }
 
-        private static readonly string[] _threadIds = new []{"1","2","3","4","5","6","7","8","9","10"};
+        private static readonly string[] ThreadIds = new []{"1","2","3","4","5","6","7","8","9","10"};
 
         private static string GetRandomThreadId()
         {
-            return _threadIds[_random.Next(0, 9)];
+            return ThreadIds[Random.Next(0, 9)];
         }
 
-        private static readonly string[] _messages = new[] { "Message 1" + Environment.NewLine + "Message 1 Next Line", "Message 2" + Environment.NewLine + "Message 2 Next Line", "Message 3" + Environment.NewLine + "Message 3 Next Line", "Message 1" + Environment.NewLine + "Message 1 Next Line", "Message 5" + Environment.NewLine + "Message 5 Next Line", "Message 6" + Environment.NewLine + "Message 6 Next Line", "Message 7" + Environment.NewLine + "Message 7 Next Line", "Message 8" + Environment.NewLine + "Message 8 Next Line", "Message 9" + Environment.NewLine + "Message 9 Next Line", "Message 10" + Environment.NewLine + "Message 10 Next Line" };
+        private static readonly string[] Messages = new[] { "Message 1" + Environment.NewLine + "Message 1 Next Line", "Message 2" + Environment.NewLine + "Message 2 Next Line", "Message 3" + Environment.NewLine + "Message 3 Next Line", "Message 1" + Environment.NewLine + "Message 1 Next Line", "Message 5" + Environment.NewLine + "Message 5 Next Line", "Message 6" + Environment.NewLine + "Message 6 Next Line", "Message 7" + Environment.NewLine + "Message 7 Next Line", "Message 8" + Environment.NewLine + "Message 8 Next Line", "Message 9" + Environment.NewLine + "Message 9 Next Line", "Message 10" + Environment.NewLine + "Message 10 Next Line" };
 
         private static string GetRandomMessage()
         {
-            return _messages[_random.Next(0, 9)];
+            return Messages[Random.Next(0, 9)];
         }
 
-        private static readonly string[] _loggers = new []{"Company.Product.Class1","Company.Product.Class2","Company.Product.Class3","Company.Product.Class4","Company.Product.Class5","Company.Product.Class1.SubClass1","Company.Product.Class2.SubClass2","Company.Product.Class3.SubClass3","Company.Product.Class4.SubClass4","Company.Product.Class5.SubClass5"};
+        private static readonly string[] Loggers = new []{"Company.Product.Class1","Company.Product.Class2","Company.Product.Class3","Company.Product.Class4","Company.Product.Class5","Company.Product.Class1.SubClass1","Company.Product.Class2.SubClass2","Company.Product.Class3.SubClass3","Company.Product.Class4.SubClass4","Company.Product.Class5.SubClass5"};
 
         private static string GetRandomLogger()
         {
-            return _loggers[_random.Next(0, 9)];
+            return Loggers[Random.Next(0, 9)];
         }
 
         private static LogLevel GetRandomLogLevel()
         {                        
-            return LogLevels[_random.Next(0, LogLevels.Count - 1)];
+            return LogLevels[Random.Next(0, LogLevels.Count - 1)];
         }
 
         public void Terminate()

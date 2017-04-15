@@ -1,6 +1,5 @@
 using System;
 using System.Text.RegularExpressions;
-using Common.Logging;
 
 namespace LogViewer.Library.Module.Services.TcpLog
 {
@@ -8,13 +7,11 @@ namespace LogViewer.Library.Module.Services.TcpLog
     public class TcpLogItemLogItemConnectionStringParser : ITcpLogItemConnectionStringParser
     {
         private readonly ITcpLogItemConnectionFactory _tcpLogItemConnectionFactory;
-        private readonly ILog _logger;
         private readonly Regex _connectionRegex = new Regex(@"^tcp:(.+?):(\d+):(Ipv4|Ipv6)$", RegexOptions.IgnoreCase);
 
-        public TcpLogItemLogItemConnectionStringParser(ITcpLogItemConnectionFactory tcpLogItemConnectionFactory, ILog logger)
+        public TcpLogItemLogItemConnectionStringParser(ITcpLogItemConnectionFactory tcpLogItemConnectionFactory)
         {
             _tcpLogItemConnectionFactory = tcpLogItemConnectionFactory;
-            _logger = logger;
         }
 
         public bool CanParse(string connectionString)
