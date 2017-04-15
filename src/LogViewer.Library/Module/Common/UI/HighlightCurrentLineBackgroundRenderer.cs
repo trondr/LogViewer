@@ -33,8 +33,11 @@ namespace LogViewer.Library.Module.Common.UI
             if (_editor.CurrentLine == 0)
                 return;
 
+            if (_editor.Document.LineCount < _editor.CurrentLine)
+                return;
+
             textView.EnsureVisualLines();
-            var currentLine = _editor.Document.GetLineByNumber((int)_editor.CurrentLine -1);
+            var currentLine = _editor.Document.GetLineByNumber((int)_editor.CurrentLine - 1);
             foreach (var rect in BackgroundGeometryBuilder.GetRectsForSegment(textView, currentLine))
             {
                 var brush = new SolidColorBrush(Color.FromArgb(150, 255, 255, 0));
