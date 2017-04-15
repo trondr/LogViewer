@@ -18,6 +18,13 @@
         <Style TargetType="TreeViewItem">
             <Setter Property="IsExpanded" Value="True" />
         </Style>
+        <Style x:Key="FadedImageStyle">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=IsEnabled}" Value="False">
+                    <Setter Property="Image.Opacity" Value="0.3" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     </UserControl.Resources>
     <Grid x:Name="MainViweGrid" d:DataContext="{d:DesignInstance Type=viewModels:DesignTimeMainViewModel, IsDesignTimeCreatable=True}">
@@ -44,18 +51,32 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
+                <RowDefinition Height="25" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="5" />
+                <RowDefinition Height="25" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <DockPanel Grid.Row="0" Grid.Column="0">
-                <Button DockPanel.Dock="Right" Content="X" Command="{Binding ClearSearchFilterCommand}" ToolTip="Clear message filter" Margin="2,2,2,2"/>
-                <TextBox Text="{Binding SearchFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" ToolTip="Message filter" Margin="2,2,2,2"/>
-            </DockPanel>
+            <Grid Grid.Row="0" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Command="{Binding ClearSearchFilterCommand}" ToolTip="Clear message filter" >
+                    <Image Source="../Resources/cross-64.png" Style="{StaticResource FadedImageStyle}"/>
+                </Button>
+                <xctk:WatermarkTextBox Grid.Column="0"
+                    Watermark="Filter messages"
+                    Text="{Binding SearchFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    VerticalAlignment="Center" 
+                    ToolTip="Message filter"
+                    >
+                </xctk:WatermarkTextBox>
+            </Grid>
 
-
-            <TreeView Grid.Column="0" Grid.Row="1" DockPanel.Dock="Top" ItemsSource="{Binding Loggers}" ToolTip="Logger name filter" Margin="2,2,2,2">
+            <Label Content="Filter loggers:" Grid.Column="0" Grid.Row="1"/>
+            <TreeView Grid.Column="0" Grid.Row="2" DockPanel.Dock="Top" ItemsSource="{Binding Loggers}" ToolTip="Logger name filter" Margin="2,2,2,2">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type viewModels:LoggerViewModel}">
                         <StackPanel>
@@ -67,9 +88,10 @@
                 </TreeView.ItemTemplate>
             </TreeView>
 
-            <GridSplitter Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="5" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"/>
+            <GridSplitter Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="5" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"/>
 
-            <TreeView Grid.Row="3" Grid.Column="0"  ItemsSource="{Binding LogLevels}" ToolTip="Log level filter" Margin="2,2,2,2">
+            <Label Grid.Row="4" Content="Filter log level:" Grid.Column="0" />
+            <TreeView Grid.Row="5" Grid.Column="0"  ItemsSource="{Binding LogLevels}" ToolTip="Log level filter" Margin="2,2,2,2">
                 <TreeView.ItemTemplate>
                     <DataTemplate>
                         <Grid>

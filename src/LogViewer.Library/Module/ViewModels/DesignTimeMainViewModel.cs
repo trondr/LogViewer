@@ -48,7 +48,7 @@ namespace LogViewer.Library.Module.ViewModels
                 Logger = logger3,
                 Message = "Some message with \n line shifts",                
             };      
-            SearchFilter = "some search text";
+            SearchFilter = string.Empty;
             LogItemIsSelected = true;
         }
 

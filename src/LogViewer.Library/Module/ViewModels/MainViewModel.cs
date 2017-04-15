@@ -247,7 +247,7 @@ namespace LogViewer.Library.Module.ViewModels
 
         public ICommand ClearSearchFilterCommand
         {
-            get { return _clearSearchFilterCommand ?? (_clearSearchFilterCommand = new RelayCommand(() => { SearchFilter = string.Empty; })); }
+            get { return _clearSearchFilterCommand ?? (_clearSearchFilterCommand = new RelayCommand(() => { SearchFilter = string.Empty; },() => !string.IsNullOrEmpty(SearchFilter))); }
             set { _clearSearchFilterCommand = value; }
         }
 
