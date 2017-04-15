@@ -81,7 +81,9 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\tools\NuGetPackages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -136,6 +138,7 @@
     <Compile Include="Infrastructure\LifeStyles\SingletonAttribute.cs" />
     <Compile Include="Infrastructure\ToDo.cs" />
     <Compile Include="Infrastructure\ToDoPriority.cs" />
+    <Compile Include="Module\Common\UI\ScreenBoundsConverter.cs" />
     <Compile Include="Module\Common\UI\CodeTextEditor.cs" />
     <Compile Include="Module\Common\UI\CommandHandler.cs" />
     <Compile Include="Module\Common\UI\HighlightCurrentLineBackgroundRenderer.cs" />
@@ -144,6 +147,9 @@
     <Compile Include="Module\Messages\CloseWindowMessage.cs" />
     <Compile Include="Module\Messages\ConnectionStringsMessage.cs" />
     <Compile Include="Module\Messages\RequestConnectionStringsMessage.cs" />
+    <Compile Include="Module\Messages\SaveWindowPositionMessage.cs" />
+    <Compile Include="Module\Messages\SetWindowPositionMessage.cs" />
+    <Compile Include="Module\Messages\WindowPosition.cs" />
     <Compile Include="Module\Model\ILogItem.cs" />
     <Compile Include="Module\Model\ILogItemFactory.cs" />
     <Compile Include="Module\Model\LogItem.cs" />
@@ -264,6 +270,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

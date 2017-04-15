@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -63,17 +64,41 @@ namespace LogViewer.Library.Module.ViewModels
 
         public Task LoadAsync()
         {
+            SetWindowPosition();
             return Task.Run(() =>
             {
                 if (LoadStatus == LoadStatus.Loaded || LoadStatus == LoadStatus.Loading || LoadStatus == LoadStatus.UnLoading)
                     return;
-                LoadStatus = LoadStatus.Loading;
+                LoadStatus = LoadStatus.Loading;                
+                MessengerInstance.Register<SaveWindowPositionMessage>(this, SaveWindowPosition);
                 DispatcherHelper.CheckBeginInvokeOnUI(() => SearchFilter = Properties.Settings.Default.SearchFilter);
                 LoadStatus = LoadStatus.Loaded;
                 ConfigureAndAttachLogItemHandlers(_configuration.ConnectionStrings);
             });
         }
 
+        private void SetWindowPosition()
+        {
+            var setWindowPositionMessage = new SetWindowPositionMessage();
+            setWindowPositionMessage.Position.Top = Properties.Settings.Default.Top;
+            setWindowPositionMessage.Position.Left = Properties.Settings.Default.Left;
+            setWindowPositionMessage.Position.Height = Properties.Settings.Default.Height;
+            setWindowPositionMessage.Position.Width = Properties.Settings.Default.Width;
+            setWindowPositionMessage.Position.Maximized = Properties.Settings.Default.Maximized;
+
+            MessengerInstance.Send(setWindowPositionMessage);
+        }
+
+        private void SaveWindowPosition(SaveWindowPositionMessage message)
+        {
+            Properties.Settings.Default.Top = message.Position.Top;
+            Properties.Settings.Default.Left = message.Position.Left;
+            Properties.Settings.Default.Height = message.Position.Height;
+            Properties.Settings.Default.Width = message.Position.Width;
+            Properties.Settings.Default.Maximized = message.Position.Maximized;
+            Properties.Settings.Default.Save();
+        }
+        
         private void ConfigureAndAttachLogItemHandlers(string[] connectionStrings)
         {
             _logger.Info($"Connection string count: '{connectionStrings?.Length}'");
@@ -116,6 +141,7 @@ namespace LogViewer.Library.Module.ViewModels
                         logItemHandler.Terminate();
                     }
                 }
+                MessengerInstance.Unregister<SaveWindowPositionMessage>(this);
             });            
         }
 
