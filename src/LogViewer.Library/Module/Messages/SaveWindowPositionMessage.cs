@@ -4,6 +4,6 @@ namespace LogViewer.Library.Module.Messages
 {
     public class SaveWindowPositionMessage : MessageBase
     {
-        public WindowPosition Position { get; set; } = new WindowPosition();
+        public string WindowPlacement { get; set; }
     }
 }

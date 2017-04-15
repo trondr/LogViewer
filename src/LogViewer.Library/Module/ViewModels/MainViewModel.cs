@@ -65,12 +65,13 @@ namespace LogViewer.Library.Module.ViewModels
         public Task LoadAsync()
         {
             SetWindowPosition();
+            MessengerInstance.Register<SaveWindowPositionMessage>(this, SaveWindowPosition);
+            
             return Task.Run(() =>
             {
                 if (LoadStatus == LoadStatus.Loaded || LoadStatus == LoadStatus.Loading || LoadStatus == LoadStatus.UnLoading)
                     return;
-                LoadStatus = LoadStatus.Loading;                
-                MessengerInstance.Register<SaveWindowPositionMessage>(this, SaveWindowPosition);
+                LoadStatus = LoadStatus.Loading;                                
                 DispatcherHelper.CheckBeginInvokeOnUI(() => SearchFilter = Properties.Settings.Default.SearchFilter);
                 LoadStatus = LoadStatus.Loaded;
                 ConfigureAndAttachLogItemHandlers(_configuration.ConnectionStrings);
@@ -79,23 +80,18 @@ namespace LogViewer.Library.Module.ViewModels
 
         private void SetWindowPosition()
         {
-            var setWindowPositionMessage = new SetWindowPositionMessage();
-            setWindowPositionMessage.Position.Top = Properties.Settings.Default.Top;
-            setWindowPositionMessage.Position.Left = Properties.Settings.Default.Left;
-            setWindowPositionMessage.Position.Height = Properties.Settings.Default.Height;
-            setWindowPositionMessage.Position.Width = Properties.Settings.Default.Width;
-            setWindowPositionMessage.Position.Maximized = Properties.Settings.Default.Maximized;
-
+            var storedWindowsPlacement = Properties.Settings.Default.WindowPlacement;
+            var setWindowPositionMessage = new SetWindowPositionMessage
+            {
+                WindowPlacement = storedWindowsPlacement
+            };
             MessengerInstance.Send(setWindowPositionMessage);
         }
 
         private void SaveWindowPosition(SaveWindowPositionMessage message)
         {
-            Properties.Settings.Default.Top = message.Position.Top;
-            Properties.Settings.Default.Left = message.Position.Left;
-            Properties.Settings.Default.Height = message.Position.Height;
-            Properties.Settings.Default.Width = message.Position.Width;
-            Properties.Settings.Default.Maximized = message.Position.Maximized;
+            var windowPlacement = message.WindowPlacement;
+            Properties.Settings.Default.WindowPlacement = windowPlacement;            
             Properties.Settings.Default.Save();
         }
         

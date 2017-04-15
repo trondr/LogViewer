@@ -38,7 +38,7 @@ namespace LogViewer.Library.Module.Common.UI
             foreach (var rect in BackgroundGeometryBuilder.GetRectsForSegment(textView, currentLine))
             {
                 var brush = new SolidColorBrush(Color.FromArgb(150, 255, 255, 0));
-                var newRect = new Rect(new Point(rect.Location.X + textView.ScrollOffset.X, rect.Location.Y), new Size(textView.ActualWidth, rect.Height));
+                var newRect = new Rect(new System.Windows.Point(rect.Location.X + textView.ScrollOffset.X, rect.Location.Y), new Size(textView.ActualWidth, rect.Height));
                 drawingContext.DrawRectangle(brush, null, newRect);
             }
         }

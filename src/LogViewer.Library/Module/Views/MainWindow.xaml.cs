@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Forms;
 using Common.Logging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
@@ -38,7 +37,7 @@ namespace LogViewer.Library.Module.Views
         public MainWindow()
         {
             InitializeComponent();
-            this.Title = ApplicationInfoHelper.ApplicationName + " " + ApplicationInfoHelper.ApplicationVersion;
+            this.Title = ApplicationInfoHelper.ApplicationName + " " + ApplicationInfoHelper.ApplicationVersion;            
             Loaded += OnLoaded;
             Closing += OnClosing;
             Closed+=OnClosed;
@@ -52,7 +51,9 @@ namespace LogViewer.Library.Module.Views
 
         private void OnClosing(object sender, CancelEventArgs e)
         {
-            var saveWindowPossitionMessage = GetSaveWindowPossitionMessage();
+            var saveWindowPossitionMessage = new SaveWindowPositionMessage();
+            var windowPlacement = this.GetPlacement();
+            saveWindowPossitionMessage.WindowPlacement = windowPlacement;
             Messenger?.Send(saveWindowPossitionMessage);            
         }
 
@@ -65,86 +66,12 @@ namespace LogViewer.Library.Module.Views
             if(Messenger == null)
                 throw new NullReferenceException($"Messenger has not been initialized. Has {typeof(IMessenger).Namespace} been registered with the container?");
             Messenger?.Register<CloseWindowMessage>(this, message => Close());
-            Messenger?.Register<SetWindowPositionMessage>(this, SetWindowPostion);
+            Messenger?.Register<SetWindowPositionMessage>(this, message =>
+            {
+                var windowPlacement = message.WindowPlacement;
+                this.SetPlacement(windowPlacement);                
+            });
             DispatcherHelper.Initialize();
-        }
-        
-        private void SetWindowPostion(SetWindowPositionMessage message)
-        {
-            var verifiedPostion = VerifyPosition(message.Position);
-
-            Top = verifiedPostion.Top;
-            Left = verifiedPostion.Left;
-            Height = verifiedPostion.Height > 0 ? verifiedPostion.Height : Height;
-            Width = verifiedPostion.Width > 0 ? verifiedPostion.Width : Width;
-            if (verifiedPostion.Maximized)
-            {
-                WindowState = WindowState.Maximized;
-            }
-        }
-
-        private WindowPosition VerifyPosition(WindowPosition position)
-        {
-            return position;
-            var screens = Screen.AllScreens;
-            var tempPostion = position;
-            foreach (var screen in screens)
-            {                
-                var formTopLeft = new System.Drawing.Point((int)tempPostion.Left, (int)tempPostion.Top);
-                if (screen.WorkingArea.Contains(formTopLeft))
-                {
-                    return position;
-                }
-                tempPostion.Left -= screen.Bounds.Width;
-                tempPostion.Top -= screen.Bounds.Height;
-            }
-            return WindowPosition.Default;
-
-
-            //var converter = new ScreenBoundsConverter(this);
-            //foreach (var screen in System.Windows.Forms.Screen.AllScreens)
-            //{
-            //    var bounds = converter.ConvertBounds(screen.Bounds);
-            //    var isWithinBounds = WindowPostionIsWithinBounds(position, bounds);
-            //    if (isWithinBounds)
-            //        return position;
-            //}
-            //return WindowPosition.Default;
-        }
-
-        private bool WindowPostionIsWithinBounds(WindowPosition position, Rect bounds)
-        {
-            if (position.Top < bounds.Top || position.Top > bounds.Height)
-            {
-                return false;
-            }
-            if (position.Left < bounds.Left || position.Left > bounds.Width)
-            {
-                return false;
-            }
-            return true;
-        }
-        
-        private SaveWindowPositionMessage GetSaveWindowPossitionMessage()
-        {
-            var saveWindowPossitionMessage = new SaveWindowPositionMessage();
-            if (WindowState == WindowState.Maximized)
-            {
-                saveWindowPossitionMessage.Position.Top = RestoreBounds.Top;
-                saveWindowPossitionMessage.Position.Left = RestoreBounds.Left;
-                saveWindowPossitionMessage.Position.Height = RestoreBounds.Height;
-                saveWindowPossitionMessage.Position.Width = RestoreBounds.Width;
-                saveWindowPossitionMessage.Position.Maximized = true;
-            }
-            else
-            {
-                saveWindowPossitionMessage.Position.Top = Top;
-                saveWindowPossitionMessage.Position.Left = Left;
-                saveWindowPossitionMessage.Position.Height = Height;
-                saveWindowPossitionMessage.Position.Width = Width;
-                saveWindowPossitionMessage.Position.Maximized = false;
-            }
-            return saveWindowPossitionMessage;
         }
     }
 }

@@ -138,7 +138,7 @@
     <Compile Include="Infrastructure\LifeStyles\SingletonAttribute.cs" />
     <Compile Include="Infrastructure\ToDo.cs" />
     <Compile Include="Infrastructure\ToDoPriority.cs" />
-    <Compile Include="Module\Common\UI\ScreenBoundsConverter.cs" />
+    <Compile Include="Module\Common\UI\WindowPlacementExtensions.cs" />
     <Compile Include="Module\Common\UI\CodeTextEditor.cs" />
     <Compile Include="Module\Common\UI\CommandHandler.cs" />
     <Compile Include="Module\Common\UI\HighlightCurrentLineBackgroundRenderer.cs" />
@@ -149,7 +149,6 @@
     <Compile Include="Module\Messages\RequestConnectionStringsMessage.cs" />
     <Compile Include="Module\Messages\SaveWindowPositionMessage.cs" />
     <Compile Include="Module\Messages\SetWindowPositionMessage.cs" />
-    <Compile Include="Module\Messages\WindowPosition.cs" />
     <Compile Include="Module\Model\ILogItem.cs" />
     <Compile Include="Module\Model\ILogItemFactory.cs" />
     <Compile Include="Module\Model\LogItem.cs" />

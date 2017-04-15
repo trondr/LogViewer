@@ -1,11 +1,6 @@
-using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Windows;
 using Common.Logging;
-using GalaSoft.MvvmLight.Messaging;
-using GalaSoft.MvvmLight.Threading;
 using LogViewer.Library.Infrastructure;
-using LogViewer.Library.Module.Messages;
 using LogViewer.Library.Module.Services;
 using LogViewer.Library.Module.Views;
 
@@ -35,7 +30,8 @@ namespace LogViewer.Library.Module.Commands.OpenLog
             _configuration.ConnectionStrings = connectionStrings;
             var application = new Application();            
             _logger.Info("Starting user interface...");
-            application.Run(_mainWindow);            
+            _mainWindow.WindowState = WindowState.Minimized;
+            application.Run(_mainWindow);
             return returnValue;
         }
     }
