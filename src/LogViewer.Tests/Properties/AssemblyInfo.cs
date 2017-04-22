@@ -15,12 +15,12 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyDescription("github.trondr LogViewer description")]
-[assembly: AssemblyCompany("github.trondr")]
+[assembly: AssemblyCompany("github.com.trondr")]
 [assembly: AssemblyProduct("LogViewer.Tests")]
 [assembly: AssemblyCopyright("Copyright © github.trondr 2017")]
 [assembly: CLSCompliant(false)]
-[assembly: AssemblyInformationalVersion("1.0.17063.4.b47c439")]
-[assembly: AssemblyVersion("1.0.17063.4")]
-[assembly: AssemblyFileVersion("1.0.17063.4")]
+[assembly: AssemblyInformationalVersion("1.0.17112.6.bf99ca8")]
+[assembly: AssemblyVersion("1.0.17112.6")]
+[assembly: AssemblyFileVersion("1.0.17112.6")]
 
 
