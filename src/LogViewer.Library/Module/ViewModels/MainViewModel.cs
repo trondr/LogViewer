@@ -1,9 +1,12 @@
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Common.Logging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -14,6 +17,7 @@ using LogViewer.Library.Module.Common.UI;
 using LogViewer.Library.Module.Messages;
 using LogViewer.Library.Module.Model;
 using LogViewer.Library.Module.Services;
+using Reactive.Bindings;
 
 namespace LogViewer.Library.Module.ViewModels
 {
@@ -40,6 +44,7 @@ namespace LogViewer.Library.Module.ViewModels
         private bool _isBusy;
         private ICommand _updateCommand;
         private ILogItemHandler[] _logItemHandlers;
+        private ReactiveProperty<string> _reactiveSearchFilter;
 
         public MainViewModel(
             ILogLevelViewModelProvider logLevelViewModelProvider,
@@ -259,7 +264,26 @@ namespace LogViewer.Library.Module.ViewModels
         public string SearchFilter
         {
             get { return _searchFilter ?? (SearchFilter = Properties.Settings.Default.SearchFilter); }
-            set { this.SetProperty(ref _searchFilter, value, () => { LogItemsView.Refresh(); }); }
+            set { this.SetProperty(ref _searchFilter, value, () =>
+            {
+                ReactiveSearchFilter.Value = _searchFilter;                
+            }); }
+        }
+
+        public ReactiveProperty<string> ReactiveSearchFilter
+        {
+            get
+            {
+                if (_reactiveSearchFilter == null)
+                {
+                    _reactiveSearchFilter = new ReactiveProperty<string>();
+                    ReactiveSearchFilter
+                        .Throttle(TimeSpan.FromMilliseconds(500))
+                        .ObserveOn(Dispatcher.CurrentDispatcher)
+                        .Subscribe(s => LogItemsView.Refresh());
+                }
+                return _reactiveSearchFilter;
+            }
         }
 
         public LogItemViewModel SelectedLogItem
