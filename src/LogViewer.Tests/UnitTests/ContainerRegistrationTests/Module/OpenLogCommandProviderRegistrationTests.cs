@@ -12,7 +12,7 @@ namespace LogViewer.Tests.UnitTests.ContainerRegistrationTests.Module
         public static void OpenLogCommandProviderRegistrationTest()
         {
             BootStrapperTestsHelper.CheckThatNumberOfResolvedServicesAre<IOpenLogsCommandProvider>(1);
-            BootStrapperTestsHelper.CheckThatResolvedServiceIsOfInstanceTypeName<IOpenLogsCommandProvider>("IOpenLogCommandProviderProxy");
+            BootStrapperTestsHelper.CheckThatResolvedServiceIsOfInstanceTypeName<IOpenLogsCommandProvider>("IOpenLogsCommandProviderProxy");
             BootStrapperTestsHelper.CheckThatResolvedServiceHasSingletonLifeCycle<IOpenLogsCommandProvider>();
         }
     }

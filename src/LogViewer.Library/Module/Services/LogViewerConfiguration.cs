@@ -9,8 +9,8 @@ namespace LogViewer.Library.Module.Services
 
         public string[] ConnectionStrings
         {
-            get => _connectionStrings ?? (_connectionStrings = new string[]{});
-            set => _connectionStrings = value;
+            get { return _connectionStrings ?? (_connectionStrings = new string[] { }); }
+            set { _connectionStrings = value; }
         }
     }
 }
