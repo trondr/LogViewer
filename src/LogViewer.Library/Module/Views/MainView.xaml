@@ -152,7 +152,7 @@
                 </ListView.Resources>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Width="Auto" Header="Time" DisplayMemberBinding="{Binding Path=Time, StringFormat={}{0:yyyy-MM-dd hh:mm:ss:ms}}"/>
+                        <GridViewColumn Width="Auto" Header="Time" DisplayMemberBinding="{Binding Path=Time, StringFormat={}{0:yyyy-MM-dd HH:mm:ss:ms}}"/>
                         <GridViewColumn Width="Auto" Header="Level" DisplayMemberBinding="{Binding Path=LogLevel.Level}"/>
                         <GridViewColumn Width="Auto" Header="Logger" DisplayMemberBinding="{Binding Path=Logger.Name}"/>
                         <GridViewColumn Width="Auto" Header="Thread" DisplayMemberBinding="{Binding Path=ThreadId}"/>
