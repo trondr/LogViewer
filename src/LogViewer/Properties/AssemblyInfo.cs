@@ -19,8 +19,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("LogViewer")]
 [assembly: AssemblyCopyright("Copyright © github.trondr 2017")]
 [assembly: CLSCompliant(false)]
-[assembly: AssemblyInformationalVersion("1.0.17112.6.bf99ca8")]
-[assembly: AssemblyVersion("1.0.17112.6")]
-[assembly: AssemblyFileVersion("1.0.17112.6")]
+[assembly: AssemblyInformationalVersion("1.0.17113.7.18b7aba")]
+[assembly: AssemblyVersion("1.0.17113.7")]
+[assembly: AssemblyFileVersion("1.0.17113.7")]
 
 
