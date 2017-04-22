@@ -21,32 +21,39 @@ namespace LogViewer.Module
 
 
             this.Context.LogMessage("Adding github.com.trondr.LogViewer to File Explorer context menu...");
-            string exeFile = ExeFile();
+            var exeFile = ExeFile();
             new WindowsExplorerContextMenuInstaller().Install(_commandId, "Open log in LogViewer...", exeFile, "OpenLogs /connectionStrings=\"['file://%1']\"");
-            this.Context.LogMessage("Finnished adding github.com.trondr.LogViewer to File Explorer context menu.");
+            Context.LogMessage("Finnished adding github.com.trondr.LogViewer to File Explorer context menu.");
 
             base.Install(stateSaver);
         }
 
-        private static string ExeFile()
+        private string ExeFile()
         {
-            var baseExeFile = Assembly.GetExecutingAssembly().Location;
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            var baseExeFile = executingAssembly.Location;
+            Context.LogMessage($"Base Exe file: {baseExeFile}"); 
             var baseExeFileWithoutExtension = Path.GetFileNameWithoutExtension(baseExeFile);
-            var guiExeFile = baseExeFileWithoutExtension + ".Gui.exe";
-            string exeFile = baseExeFile;
-            if(File.Exists(guiExeFile))
+            var baseExeFileDirectory = Path.GetDirectoryName(baseExeFile);
+            if (string.IsNullOrWhiteSpace(baseExeFileDirectory)) baseExeFileDirectory = string.Empty;
+            Context.LogMessage($"Exe directory: {baseExeFileDirectory}");
+            var exeFile = baseExeFile;
+            var guiExeFileBaseName = baseExeFileWithoutExtension + ".Gui.exe";
+            var guiExeFile = Path.Combine(baseExeFileDirectory, guiExeFileBaseName);
+            if (File.Exists(guiExeFile))
             {
                 exeFile = guiExeFile;
             }
+            Context.LogMessage($"Exe file: {exeFile}");
             return exeFile;
         }
 
         public override void Uninstall(IDictionary savedState)
         {
             //Example: Removing previously installed command from windows explorer contect menu
-            this.Context.LogMessage("Removing github.com.trondr.LogViewer from File Explorer context menu...");
+            Context.LogMessage("Removing github.com.trondr.LogViewer from File Explorer context menu...");
             new WindowsExplorerContextMenuInstaller().UnInstall(_commandId);
-            this.Context.LogMessage("Finished removing github.com.trondr.LogViewer from File Explorer context menu.");
+            Context.LogMessage("Finished removing github.com.trondr.LogViewer from File Explorer context menu.");
             base.Uninstall(savedState);
         }     
     }

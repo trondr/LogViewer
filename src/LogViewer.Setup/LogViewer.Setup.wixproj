@@ -16,10 +16,15 @@
     <OutputPath>$(MSBuildProjectDirectory)\..\..\bin\$(Configuration)\LogViewer.Setup</OutputPath>
     <IntermediateOutputPath>$(MSBuildProjectDirectory)\..\..\obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
+    <SuppressSpecificWarnings>
+    </SuppressSpecificWarnings>
+    <SuppressValidation>False</SuppressValidation>
+    <SuppressIces>ICE91</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>$(MSBuildProjectDirectory)\..\..\bin\$(Configuration)\LogViewer.Setup</OutputPath>
     <IntermediateOutputPath>$(MSBuildProjectDirectory)\..\..\obj\$(Configuration)\</IntermediateOutputPath>
+    <SuppressIces>ICE91</SuppressIces>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Components.wxs" />
@@ -65,6 +70,6 @@ del "$(TargetDir)..\$(TargetName)\Libs\LogViewer.Library%2a.%2a"
 mkdir "$(TargetDir)..\$(TargetName)\Libs\NMultiTool"
 xcopy "$(ProjectDir)..\..\tools\NMultiTool" "$(TargetDir)..\$(TargetName)\Libs\NMultiTool" /Y /E
 del "$(TargetDir)..\$(TargetName)\Libs\NMultiTool\(null)%2a"
-"$(ProjectDir)..\..\Tools\NMultiTool\NMultiTool.exe" Folder2Wxs /harvestFolder="$(TargetDir)..\$(TargetName)\Libs" /wxsFileName="$(ProjectDir)Components.wxs" /targetFolderId="TargetFolder" /componentGroupId="Components_WiXComponentGroup" /diskIds="[%271%27]" /addExecutables2AppsPath="False"</PreBuildEvent>
+"$(ProjectDir)..\..\Tools\NMultiTool\NMultiTool.exe" Folder2Wxs /harvestFolder="$(TargetDir)..\$(TargetName)\Libs" /wxsFileName="$(ProjectDir)Components.wxs" /targetFolderId="TargetFolder" /componentGroupId="Components_WiXComponentGroup" /diskIds="[%271%27]" /addExecutables2AppsPath="False" /enableKeyPath="False" /companyName="github.com.trondr" /applicationName="LogViewer"</PreBuildEvent>
   </PropertyGroup>
 </Project>

@@ -27,8 +27,8 @@
     <Package
       Id="*"
       InstallerVersion="200"
-      InstallPrivileges="elevated"
-      InstallScope="perMachine"
+      InstallPrivileges="limited"
+      InstallScope="perUser"
       Compressed="yes"
       Platform="x86"
       Description="$(var.PackageDescription)"
@@ -44,6 +44,10 @@
     <Property Id="ARPCOMMENTS">$(var.PackageDescription)</Property>
     <Property Id="ARPCONTACT">$(var.CompanyName)</Property>
 
+    <Property Id="ALLUSERS" Secure="yes"/>
+
+    <Condition Message="!(loc.LaunchCondition_AllUsers)">NOT ALLUSERS</Condition>
+    
     <PropertyRef Id ="NETFRAMEWORK45"/>
 
     <Condition Message="!(loc.DotNetFrameWorkConditionMessage)">Installed OR NETFRAMEWORK45</Condition>
@@ -73,7 +77,7 @@
     <Media Id="1" Cabinet="$(var.ProductProjectName)" EmbedCab="yes" CompressionLevel="high"/>
 
     <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFilesFolder">
+      <Directory Id="LocalAppDataFolder" Name="AppData">
         <Directory Id="CompanyFolder" Name="$(var.CompanyName)">
           <Directory Id="TargetBaseFolder" Name="$(var.TargetFolderName)">
             <Directory Id="TargetFolder" Name="!(bind.FileVersion.ProductDll)" ></Directory>
@@ -96,7 +100,7 @@
 
   <Fragment>
     <ComponentGroup Id="ProductComponents_WiXComponentGroup" Directory="TargetFolder">
-      <Component Id="ProductExe_WiXComponent" Guid="*">
+      <Component Id="ProductExe_WiXComponent" Guid="AF387BD6-53BC-4579-B71A-6BFEA2F46401">
         <CreateFolder/>
 
         <RemoveFolder Id="TargetFolder_WixRemoveFolder" On="uninstall" Directory="TargetFolder"/>
@@ -104,16 +108,17 @@
         <RemoveFolder Id="CompanyFolder_WixRemoveFolder" On="uninstall" Directory="CompanyFolder"/>
         <RemoveFile Id="TargetFolderFiles_WixRemoveFile" Name="*.*" On="uninstall" Directory="TargetFolder" />
 
-        <File Id="ProductExe" Name="$(var.ProductExeBaseName).exe" Source="$(var.ProductExeReleaseFolder)\$(var.ProductExeBaseName).exe" KeyPath="yes" />
+        <File Id="ProductExe" Name="$(var.ProductExeBaseName).exe" Source="$(var.ProductExeReleaseFolder)\$(var.ProductExeBaseName).exe" KeyPath="no" />
         <File Id="ProductExePdb" Name="$(var.ProductExeBaseName).pdb" Source="$(var.ProductExeReleaseFolder)\$(var.ProductExeBaseName).pdb" KeyPath="no"/>
         <File Id="ProductExeConfig" Name="$(var.ProductExeBaseName).exe.config" Source="$(var.ProductExeReleaseFolder)\$(var.ProductExeBaseName).exe.config" KeyPath="no" />
 
-        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\$(var.ProductExeBaseName).exe" />
-        <RegistryValue Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\$(var.ProductExeBaseName).exe" Value="[#ProductExe]" Type="string" Action="write" />
-        <RegistryValue Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\$(var.ProductExeBaseName).exe" Name="path" Value="[TargetFolder]" Type="string" Action="write" />
+        <RegistryKey Root="HKCU" Key="Software\github.com.trondr\LogViewer" >
+          <RegistryValue Name="Version" Value="[ProductVersion]" Type="string" KeyPath="yes" />
+        </RegistryKey>
+        
       </Component>
 
-      <Component Id="ProductGuiExe_WiXComponent" Guid="*">
+      <Component Id="ProductGuiExe_WiXComponent" Guid="AF387BD6-53BC-4579-B71A-6BFEA2F46402">
         <CreateFolder/>
 
         <RemoveFolder Id="TargetFolder2_WixRemoveFolder" On="uninstall" Directory="TargetFolder"/>
@@ -121,19 +126,24 @@
         <RemoveFolder Id="CompanyFolder2_WixRemoveFolder" On="uninstall" Directory="CompanyFolder"/>
         <RemoveFile Id="TargetFolderFiles2_WixRemoveFile" Name="*.*" On="uninstall" Directory="TargetFolder" />
 
-        <File Id="ProductGuiExe" Name="$(var.ProductExeBaseName).Gui.exe" Source="$(var.ProductExeReleaseFolder)\$(var.ProductExeBaseName).Gui.exe" KeyPath="yes" />
+        <File Id="ProductGuiExe" Name="$(var.ProductExeBaseName).Gui.exe" Source="$(var.ProductExeReleaseFolder)\$(var.ProductExeBaseName).Gui.exe" KeyPath="no" />
         <File Id="ProductGuiExePdb" Name="$(var.ProductExeBaseName).Gui.pdb" Source="$(var.ProductExeReleaseFolder)\$(var.ProductExeBaseName).Gui.pdb" KeyPath="no"/>
         <File Id="ProductGuiExeConfig" Name="$(var.ProductExeBaseName).Gui.exe.config" Source="$(var.ProductExeReleaseFolder)\$(var.ProductExeBaseName).Gui.exe.config" KeyPath="no" />
 
-        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\$(var.ProductExeBaseName).Gui.exe" />
-        <RegistryValue Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\$(var.ProductExeBaseName).Gui.exe" Value="[#ProductGuiExe]" Type="string" Action="write" />
-        <RegistryValue Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\$(var.ProductExeBaseName).Gui.exe" Name="path" Value="[TargetFolder]" Type="string" Action="write" />
+        <RegistryKey Root="HKCU" Key="Software\github.com.trondr\LogViewer" >
+          <RegistryValue Name="Version" Value="[ProductVersion]" Type="string" KeyPath="yes" />
+        </RegistryKey>
+        
       </Component>
 
-      <Component Id="ProductLibraryDll_WixComponent" Guid="*">
+      <Component Id="ProductLibraryDll_WixComponent" Guid="AF387BD6-53BC-4579-B71A-6BFEA2F46403">
         <CreateFolder/>
-        <File Id="ProductDll" Name="$(var.ProductLibraryBaseName).dll" Source="$(var.ProductLibraryReleaseFolder)\$(var.ProductLibraryBaseName).dll" KeyPath="yes" />
+        <File Id="ProductDll" Name="$(var.ProductLibraryBaseName).dll" Source="$(var.ProductLibraryReleaseFolder)\$(var.ProductLibraryBaseName).dll" KeyPath="no" />
         <File Id="ProductDllPdb" Name="$(var.ProductLibraryBaseName).pdb" Source="$(var.ProductLibraryReleaseFolder)\$(var.ProductLibraryBaseName).pdb" KeyPath="no"/>
+
+        <RegistryKey Root="HKCU" Key="Software\github.com.trondr\LogViewer">
+          <RegistryValue Name="Version" Value="[ProductVersion]" Type="string" KeyPath="yes" />
+        </RegistryKey>
       </Component>
     </ComponentGroup>
   </Fragment>
