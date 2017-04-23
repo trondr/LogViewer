@@ -5,7 +5,7 @@ using LogViewer.Library.Module.Common.UI;
 
 namespace LogViewer.Library.Module.ViewModels
 {
-    public interface IMainViewModel: ILoadable
+    public interface IMainViewModel : ILoadable
     {
         ICollectionView LogItemsView { get; }
         ObservableCollection<LogItemViewModel> LogItems { get; set; }
@@ -16,7 +16,8 @@ namespace LogViewer.Library.Module.ViewModels
         ICommand ClearSearchFilterCommand { get; set; }
         bool IsBusy { get; set; }
         string SearchFilter { get; set; }
-        LogItemViewModel SelectedLogItem {get;set; }
-        bool LogItemIsSelected {get;set; }                
+        LogItemViewModel SelectedLogItem { get; set; }
+        bool LogItemIsSelected { get; set; }
+        bool SearchIsCaseSensitive { get; set; }
     }
 }

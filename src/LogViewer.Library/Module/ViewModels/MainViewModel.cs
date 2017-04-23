@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -45,6 +46,7 @@ namespace LogViewer.Library.Module.ViewModels
         private ICommand _updateCommand;
         private ILogItemHandler[] _logItemHandlers;
         private ReactiveProperty<string> _reactiveSearchFilter;
+        private bool _searchIsCaseSensitive;
 
         public MainViewModel(
             ILogLevelViewModelProvider logLevelViewModelProvider,
@@ -63,7 +65,7 @@ namespace LogViewer.Library.Module.ViewModels
             _configuration = configuration;
             _logItemConnectionProvider = logItemConnectionProvider;
             _logItemHandlerFactory = logItemHandlerFactory;
-            _logger = logger;
+            _logger = logger;            
         }
 
         public Task LoadAsync()
@@ -75,6 +77,7 @@ namespace LogViewer.Library.Module.ViewModels
             {
                 if (LoadStatus == LoadStatus.Loaded || LoadStatus == LoadStatus.Loading || LoadStatus == LoadStatus.UnLoading)
                     return;
+                SearchIsCaseSensitive = Properties.Settings.Default.SearchIsCaseSensitive;
                 LoadStatus = LoadStatus.Loading;                                
                 DispatcherHelper.CheckBeginInvokeOnUI(() => SearchFilter = Properties.Settings.Default.SearchFilter);
                 LoadStatus = LoadStatus.Loaded;
@@ -129,6 +132,7 @@ namespace LogViewer.Library.Module.ViewModels
                 LoadStatus = LoadStatus.UnLoading;
                 _logger.Info($"Unloading {GetType().Name}");
                 Properties.Settings.Default.SearchFilter = SearchFilter;
+                Properties.Settings.Default.SearchIsCaseSensitive = SearchIsCaseSensitive;
                 Properties.Settings.Default.Save();
                 
                 LoadStatus = LoadStatus.NotLoaded;
@@ -191,7 +195,11 @@ namespace LogViewer.Library.Module.ViewModels
                 {
                     filterEventArgs.Accepted = true;
                 }
-                else if (logItem.Message.Contains(SearchFilter))
+                else if (SearchIsCaseSensitive && logItem.Message.Contains(SearchFilter))
+                {
+                    filterEventArgs.Accepted = true;
+                }
+                else if (!SearchIsCaseSensitive && CultureInfo.InvariantCulture.CompareInfo.IndexOf(logItem.Message, SearchFilter, CompareOptions.IgnoreCase) >= 0)
                 {
                     filterEventArgs.Accepted = true;
                 }
@@ -296,6 +304,16 @@ namespace LogViewer.Library.Module.ViewModels
         {
             get { return _logItemIsSelected; }
             set { this.SetProperty(ref _logItemIsSelected, value); }
+        }
+
+        public bool SearchIsCaseSensitive
+        {
+            get { return _searchIsCaseSensitive; }
+            set { this.SetProperty(ref _searchIsCaseSensitive, value, delegate
+            {
+                if(!string.IsNullOrWhiteSpace(SearchFilter))
+                    LogItemsView.Refresh();
+            }); }
         }
 
         public void Notify(LogItem[] logItems)

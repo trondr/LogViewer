@@ -59,17 +59,20 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="1" Command="{Binding ClearSearchFilterCommand}" ToolTip="Clear message filter" >
+                <xctk:WatermarkTextBox Grid.Column="0"
+                                       Watermark="Filter messages"
+                                       Text="{Binding SearchFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                       VerticalAlignment="Center" 
+                                       ToolTip="Message filter"
+                >
+                </xctk:WatermarkTextBox>
+                <CheckBox Content="Case Sensitive" IsChecked="{Binding SearchIsCaseSensitive}" Grid.Column="1" VerticalAlignment="Center" ToolTip="Enable case sensitive search"/>
+                <Button Grid.Column="2" Command="{Binding ClearSearchFilterCommand}" ToolTip="Clear message filter" >
                     <Image Source="../Resources/cross-64.png" Style="{StaticResource FadedImageStyle}"/>
                 </Button>
-                <xctk:WatermarkTextBox Grid.Column="0"
-                    Watermark="Filter messages"
-                    Text="{Binding SearchFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    VerticalAlignment="Center" 
-                    ToolTip="Message filter"
-                    >
-                </xctk:WatermarkTextBox>
+                
             </Grid>
 
             <Label Content="Filter loggers:" Grid.Column="0" Grid.Row="1"/>

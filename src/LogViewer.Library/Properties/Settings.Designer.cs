@@ -118,5 +118,17 @@ namespace LogViewer.Library.Properties {
                 this["WindowPlacement"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SearchIsCaseSensitive {
+            get {
+                return ((bool)(this["SearchIsCaseSensitive"]));
+            }
+            set {
+                this["SearchIsCaseSensitive"] = value;
+            }
+        }
     }
 }
