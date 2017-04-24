@@ -7,6 +7,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using LogViewer.Library.Module.Common.UI;
 using LogViewer.Library.Module.Services;
+using Reactive.Bindings;
 
 namespace LogViewer.Library.Module.ViewModels
 {
@@ -90,13 +91,11 @@ namespace LogViewer.Library.Module.ViewModels
                 LogLevel = errorLogLevel,
                 Logger = logger3,
                 Message = "Some message with \n line shifts",                
-            };      
-            SearchFilter = string.Empty;
+            };
+            SearchFilter = new ReactiveProperty<string> {Value = string.Empty};
             LogItemIsSelected = true;
         }
 
-        
-        
         public async Task LoadAsync()
         {
             await Task.FromResult(true);
@@ -117,8 +116,8 @@ namespace LogViewer.Library.Module.ViewModels
         public ObservableCollection<LogLevelViewModel> LogLevels { get; set; }
         public ICommand UpdateCommand { get; set; }
         public ICommand ClearSearchFilterCommand { get; set; }
-        public bool IsBusy { get; set; }
-        public string SearchFilter { get; set; }
+        public bool IsBusy { get; set; }        
+        public ReactiveProperty<string> SearchFilter { get; set; }
         public LogItemViewModel SelectedLogItem { get; set; }
         public bool LogItemIsSelected { get; set; }
 

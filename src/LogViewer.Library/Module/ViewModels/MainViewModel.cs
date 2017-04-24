@@ -38,8 +38,7 @@ namespace LogViewer.Library.Module.ViewModels
         private ObservableCollection<LogItemViewModel> _logItems;
         private ObservableCollection<LoggerViewModel> _loggers;
         private ObservableCollection<LogLevelViewModel> _logLevels;
-        private ICommand _clearSearchFilterCommand;
-        private string _searchFilter;
+        private ICommand _clearSearchFilterCommand;        
         private LogItemViewModel _selectedLogItem;
         private bool _logItemIsSelected;
         private bool _isBusy;
@@ -78,8 +77,7 @@ namespace LogViewer.Library.Module.ViewModels
                 if (LoadStatus == LoadStatus.Loaded || LoadStatus == LoadStatus.Loading || LoadStatus == LoadStatus.UnLoading)
                     return;
                 SearchIsCaseSensitive = Properties.Settings.Default.SearchIsCaseSensitive;
-                LoadStatus = LoadStatus.Loading;                                
-                DispatcherHelper.CheckBeginInvokeOnUI(() => SearchFilter = Properties.Settings.Default.SearchFilter);
+                LoadStatus = LoadStatus.Loading;                
                 LoadStatus = LoadStatus.Loaded;
                 ConfigureAndAttachLogItemHandlers(_configuration.ConnectionStrings);
             });
@@ -131,7 +129,7 @@ namespace LogViewer.Library.Module.ViewModels
 
                 LoadStatus = LoadStatus.UnLoading;
                 _logger.Info($"Unloading {GetType().Name}");
-                Properties.Settings.Default.SearchFilter = SearchFilter;
+                Properties.Settings.Default.SearchFilter = SearchFilter.Value;
                 Properties.Settings.Default.SearchIsCaseSensitive = SearchIsCaseSensitive;
                 Properties.Settings.Default.Save();
                 
@@ -191,15 +189,16 @@ namespace LogViewer.Library.Module.ViewModels
             }
             else
             {
-                if (string.IsNullOrEmpty(SearchFilter))
+                var searchFilter = SearchFilter.Value;
+                if (string.IsNullOrEmpty(searchFilter))
                 {
                     filterEventArgs.Accepted = true;
                 }
-                else if (SearchIsCaseSensitive && logItem.Message.Contains(SearchFilter))
+                else if (SearchIsCaseSensitive && logItem.Message.Contains(searchFilter))
                 {
                     filterEventArgs.Accepted = true;
                 }
-                else if (!SearchIsCaseSensitive && CultureInfo.InvariantCulture.CompareInfo.IndexOf(logItem.Message, SearchFilter, CompareOptions.IgnoreCase) >= 0)
+                else if (!SearchIsCaseSensitive && CultureInfo.InvariantCulture.CompareInfo.IndexOf(logItem.Message, searchFilter, CompareOptions.IgnoreCase) >= 0)
                 {
                     filterEventArgs.Accepted = true;
                 }
@@ -259,7 +258,7 @@ namespace LogViewer.Library.Module.ViewModels
 
         public ICommand ClearSearchFilterCommand
         {
-            get { return _clearSearchFilterCommand ?? (_clearSearchFilterCommand = new RelayCommand(() => { SearchFilter = string.Empty; },() => !string.IsNullOrEmpty(SearchFilter))); }
+            get { return _clearSearchFilterCommand ?? (_clearSearchFilterCommand = new RelayCommand(() => { SearchFilter.Value = string.Empty; },() => !string.IsNullOrEmpty(SearchFilter.Value))); }
             set { _clearSearchFilterCommand = value; }
         }
 
@@ -268,29 +267,30 @@ namespace LogViewer.Library.Module.ViewModels
             get { return _isBusy; }
             set { this.SetProperty(ref _isBusy, value); }
         }
-
-        public string SearchFilter
-        {
-            get { return _searchFilter ?? (SearchFilter = Properties.Settings.Default.SearchFilter); }
-            set { this.SetProperty(ref _searchFilter, value, () =>
-            {
-                ReactiveSearchFilter.Value = _searchFilter;                
-            }); }
-        }
-
-        public ReactiveProperty<string> ReactiveSearchFilter
+        
+        public ReactiveProperty<string> SearchFilter
         {
             get
             {
                 if (_reactiveSearchFilter == null)
                 {
-                    _reactiveSearchFilter = new ReactiveProperty<string>();
-                    ReactiveSearchFilter
+                    _reactiveSearchFilter = new ReactiveProperty<string>
+                        {
+                            Value = Properties.Settings.Default.SearchFilter
+                        };
+                    SearchFilter
                         .Throttle(TimeSpan.FromMilliseconds(500))
                         .ObserveOn(Dispatcher.CurrentDispatcher)
-                        .Subscribe(s => LogItemsView.Refresh());
+                        .Subscribe(s =>
+                        {                            
+                            LogItemsView.Refresh();
+                        });
                 }
                 return _reactiveSearchFilter;
+            }
+            set
+            {
+                this.SetProperty(ref _reactiveSearchFilter, value);
             }
         }
 
@@ -311,7 +311,7 @@ namespace LogViewer.Library.Module.ViewModels
             get { return _searchIsCaseSensitive; }
             set { this.SetProperty(ref _searchIsCaseSensitive, value, delegate
             {
-                if(!string.IsNullOrWhiteSpace(SearchFilter))
+                if(!string.IsNullOrWhiteSpace(SearchFilter.Value))
                     LogItemsView.Refresh();
             }); }
         }

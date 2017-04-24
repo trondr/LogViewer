@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Input;
 using LogViewer.Library.Module.Common.UI;
+using Reactive.Bindings;
 
 namespace LogViewer.Library.Module.ViewModels
 {
@@ -15,7 +16,7 @@ namespace LogViewer.Library.Module.ViewModels
         ICommand UpdateCommand { get; set; }
         ICommand ClearSearchFilterCommand { get; set; }
         bool IsBusy { get; set; }
-        string SearchFilter { get; set; }
+        ReactiveProperty<string> SearchFilter { get; set; }
         LogItemViewModel SelectedLogItem { get; set; }
         bool LogItemIsSelected { get; set; }
         bool SearchIsCaseSensitive { get; set; }
