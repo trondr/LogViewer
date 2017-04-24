@@ -61,6 +61,9 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
                 <xctk:WatermarkTextBox Grid.Column="0"
                                        Watermark="Filter messages"
                                        Text="{Binding SearchFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -68,11 +71,18 @@
                                        ToolTip="Message filter"
                 >
                 </xctk:WatermarkTextBox>
-                <CheckBox Content="Case Sensitive" IsChecked="{Binding SearchIsCaseSensitive}" Grid.Column="1" VerticalAlignment="Center" ToolTip="Enable case sensitive search"/>
+                <CheckBox Grid.Column="1" Grid.Row="0" Margin="5"
+                          IsChecked="{Binding SearchIsCaseSensitive}"  
+                          VerticalAlignment="Center"
+                          ToolTip="Enable case sensitive search"                          
+                    >
+                    <Image Source="../Resources/OOjs_UI_icon_case-sensitive-64.png" VerticalAlignment="Top"
+                           Style="{StaticResource FadedImageStyle}" Height="18" Width="18" />
+                </CheckBox>
                 <Button Grid.Column="2" Command="{Binding ClearSearchFilterCommand}" ToolTip="Clear message filter" >
                     <Image Source="../Resources/cross-64.png" Style="{StaticResource FadedImageStyle}"/>
                 </Button>
-                
+
             </Grid>
 
             <Label Content="Filter loggers:" Grid.Column="0" Grid.Row="1"/>

@@ -281,7 +281,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Module\Resources\OOjs_UI_icon_case-sensitive-64.png" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Module\Views\MainView.xaml">
       <SubType>Designer</SubType>

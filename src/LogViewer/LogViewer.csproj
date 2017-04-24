@@ -211,6 +211,9 @@
     <EmbeddedResource Include="Credits\12. ObservableDictionary Credit.xml" />
     <EmbeddedResource Include="Credits\13. Log2Console Credit.xml" />
     <EmbeddedResource Include="Credits\14. AutoScrollBehaviour Credit.xml" />
+    <EmbeddedResource Include="Credits\15. OOjs UI icons Credit.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="Debug.txt" />
     <EmbeddedResource Include="License\00. LogViewer License.xml" />
     <EmbeddedResource Include="License\01. Castle Project License.xml" />
@@ -225,6 +228,7 @@
     <EmbeddedResource Include="License\11. NUnit License.xml" />
     <EmbeddedResource Include="License\12 ObservableDictionary License.xml" />
     <EmbeddedResource Include="License\13 Log2Console License.xml" />
+    <EmbeddedResource Include="License\14 OOjs UI icons License.xml" />
     <Content Include="NCmdLiner.ico" />
     <Content Include="References.txt" />
   </ItemGroup>

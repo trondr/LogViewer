@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CreditInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ProductName>OOjs UI icons</ProductName>
+  <ProductHome>https://commons.wikimedia.org/wiki/OOjs_UI_icons</ProductHome>
+  <CreditText>LogViewer uses some OOjs UI icons from wiki media commons.</CreditText>
+</CreditInfo>
