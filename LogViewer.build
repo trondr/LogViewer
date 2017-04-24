@@ -417,4 +417,9 @@
   <Target Name="Build" DependsOnTargets="CompileSetup">
     <Message Text="$(ProductProjectName).$(AssemblyVersion) build complete" Importance="normal" />
   </Target>
+  
+  <Target Name="Dummy">
+     <Message Text="Dummy build - do nothing" Importance="normal" />
+  </Target>
+
 </Project>
